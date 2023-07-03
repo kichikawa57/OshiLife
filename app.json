@@ -1,4 +1,11 @@
 {
   "name": "react_native_example",
-  "displayName": "react_native_example"
+  "displayName": "react_native_example",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "d5f12c17-7e5e-447e-bafb-c92b4438f79b"
+      }
+    }
+  }
 }

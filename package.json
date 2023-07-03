@@ -7,11 +7,20 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "eslint '**/*.{ts,tsx}'",
+    "eslint:fix": "eslint --fix '**/*.{ts,tsx}'",
+    "format": "prettier \"**/*.+(js|ts|tsx)\"",
+    "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
+    "lints": "yarn eslint && yarn format && yarn tsc",
+    "lints:fix": "yarn eslint:fix && yarn format:fix",
+    "tsc": "tsc"
   },
   "dependencies": {
+    "dayjs": "^1.11.9",
     "react": "18.2.0",
-    "react-native": "0.72.1"
+    "react-native": "0.72.1",
+    "styled-components": "^6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -23,11 +32,18 @@
     "@types/metro-config": "^0.76.3",
     "@types/react": "^18.0.24",
     "@types/react-test-renderer": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "expo-dev-client": "^2.2.1",
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.76.5",
-    "prettier": "^2.4.1",
+    "prettier": "^2.8.8",
     "react-test-renderer": "18.2.0",
     "typescript": "4.8.4"
   },
