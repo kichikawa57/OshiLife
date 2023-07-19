@@ -1,8 +1,8 @@
 import React from "react";
 import type { FC } from "react";
 
-import { Home } from "./pages/Home";
+import { Router } from "./router";
 
 export const App: FC = () => {
-  return <Home />;
+  return <Router />;
 };

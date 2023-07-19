@@ -1,10 +1,10 @@
 {
-  "name": "react_native_example",
-  "displayName": "react_native_example",
+  "name": "OshiLife",
+  "displayName": "OshiLife",
   "expo": {
     "extra": {
       "eas": {
-        "projectId": "d5f12c17-7e5e-447e-bafb-c92b4438f79b"
+        "projectId": "4084c8fd-491e-48ab-a71b-c30faa60bdce"
       }
     }
   }

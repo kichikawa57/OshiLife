@@ -2,22 +2,22 @@ import styled from "styled-components/native";
 import { Animated } from "react-native";
 
 export const StyledView = styled(Animated.View)`
+  position: relative;
   flex: 1;
   align-items: center;
   justify-content: center;
-  position: relative;
 `;
 
 export const StyledDrawerView = styled(Animated.View)`
-  background-color: #ccc;
-  width: 80%;
-  height: 100%;
+  position: absolute;
   top: 0;
   left: 0;
-  position: absolute;
+  z-index: 1;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  width: 80%;
+  height: 100%;
+  background-color: #ccc;
 `;
 
 export const StyledText = styled.Text`

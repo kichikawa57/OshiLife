@@ -39,7 +39,6 @@ module.exports = {
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "object-property-newline": ["error"],
     "object-curly-spacing": ["error", "always"],
     "import/order": [
       "error",

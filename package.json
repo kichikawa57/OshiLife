@@ -1,5 +1,5 @@
 {
-  "name": "react_native_example",
+  "name": "oshilife",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,16 +10,31 @@
     "test": "jest",
     "eslint": "eslint '**/*.{ts,tsx}'",
     "eslint:fix": "eslint --fix '**/*.{ts,tsx}'",
+    "stylelint": "stylelint --ignore-path .gitignore \"app/**/*.+(ts|tsx)\"",
+    "stylelint:fix": "yarn stylelint -- --fix",
     "format": "prettier \"**/*.+(js|ts|tsx)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
     "lints": "yarn eslint && yarn format && yarn tsc",
     "lints:fix": "yarn eslint:fix && yarn format:fix",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4",
+    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@react-navigation/drawer": "^6.6.3",
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/stack": "^6.3.17",
+    "@rneui/base": "^0.0.0-edge.2",
+    "@rneui/themed": "^0.0.0-edge.2",
     "dayjs": "^1.11.9",
     "react": "18.2.0",
     "react-native": "0.72.1",
+    "react-native-gesture-handler": "^2.12.0",
+    "react-native-reanimated": "^3.4.0",
+    "react-native-safe-area-context": "^4.7.1",
+    "react-native-screens": "^3.22.1",
+    "react-native-vector-icons": "^10.0.0",
     "styled-components": "^6.0.2"
   },
   "devDependencies": {
@@ -28,6 +43,7 @@
     "@babel/runtime": "^7.20.0",
     "@react-native/eslint-config": "^0.72.2",
     "@react-native/metro-config": "^0.72.7",
+    "@stylelint/postcss-css-in-js": "^0.38.0",
     "@tsconfig/react-native": "^3.0.0",
     "@types/metro-config": "^0.76.3",
     "@types/react": "^18.0.24",
@@ -41,10 +57,17 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "expo-dev-client": "^2.2.1",
+    "husky": "^8.0.0",
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.76.5",
+    "postcss-syntax": "^0.36.2",
     "prettier": "^2.8.8",
     "react-test-renderer": "18.2.0",
+    "stylelint": "^15.10.2",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-recess-order": "^4.3.0",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-prettier": "^4.0.0",
     "typescript": "4.8.4"
   },
   "engines": {
