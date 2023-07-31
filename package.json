@@ -15,7 +15,7 @@
     "format": "prettier \"**/*.+(js|ts|tsx)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
     "lints": "yarn eslint && yarn format && yarn tsc",
-    "lints:fix": "yarn eslint:fix && yarn format:fix",
+    "lints:fix": "yarn eslint:fix && yarn format:fix && yarn stylelint:fix",
     "tsc": "tsc",
     "prepare": "husky install"
   },
@@ -29,13 +29,15 @@
     "@rneui/themed": "^0.0.0-edge.2",
     "dayjs": "^1.11.9",
     "react": "18.2.0",
+    "react-hook-form": "^7.45.2",
     "react-native": "0.72.1",
     "react-native-gesture-handler": "^2.12.0",
     "react-native-reanimated": "^3.4.0",
     "react-native-safe-area-context": "^4.7.1",
     "react-native-screens": "^3.22.1",
     "react-native-vector-icons": "^10.0.0",
-    "styled-components": "^6.0.2"
+    "styled-components": "^6.0.2",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

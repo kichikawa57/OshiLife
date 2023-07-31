@@ -15,7 +15,7 @@ const Stack = createStackNavigator<RoutingOfRoot>();
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="login">
         <Stack.Screen
           name="app"
           options={{
