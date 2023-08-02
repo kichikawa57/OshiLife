@@ -24,7 +24,7 @@ export const Button: FC<Omit<Props, "icon">> = ({
         paddingTop: 10,
         paddingBottom: 10,
         borderRadius: 20,
-        backgroundColor: colors[backgroundColor ? backgroundColor : "secondary"],
+        backgroundColor: colors[backgroundColor ? backgroundColor : "primary"],
       }}
       containerStyle={{
         width: "100%",

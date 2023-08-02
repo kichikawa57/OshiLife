@@ -15,7 +15,7 @@
     "format": "prettier \"**/*.+(js|ts|tsx)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
     "lints": "yarn eslint && yarn format && yarn tsc",
-    "lints:fix": "yarn eslint:fix && yarn format:fix && yarn stylelint:fix",
+    "lints:fix": "yarn eslint:fix && yarn format:fix && yarn stylelint:fix && yarn tsc",
     "tsc": "tsc",
     "prepare": "husky install"
   },
