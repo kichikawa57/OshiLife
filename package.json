@@ -14,8 +14,10 @@
     "stylelint:fix": "yarn stylelint -- --fix",
     "format": "prettier \"**/*.+(js|ts|tsx)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
-    "lints": "yarn eslint && yarn format && yarn tsc",
+    "lints": "yarn eslint && yarn format && yarn stylelint && yarn tsc",
     "lints:fix": "yarn eslint:fix && yarn format:fix && yarn stylelint:fix && yarn tsc",
+    "login": "eas login",
+    "build:dev": "eas build --profile development --platform ios",
     "tsc": "tsc",
     "prepare": "husky install"
   },

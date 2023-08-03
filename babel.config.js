@@ -9,7 +9,7 @@ module.exports = {
   overrides: [
     {
       include: ["./node_modules/@rneui", "./node_modules/@react-native"],
-      presets: ["@babel/preset-env", "module:metro-react-native-babel-preset"],
+      presets: ["module:metro-react-native-babel-preset"],
     },
   ],
 };
