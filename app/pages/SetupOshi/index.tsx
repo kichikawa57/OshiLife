@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 
 import { Input } from "../../components/Input";
 import { RoutingPropsOfRoot } from "../../router/types";
-import { CirclesToSelecteColor } from "../../components/CirclesToSelecteColor";
+import { CircleList } from "../../components/CircleForColor/CircleList";
 import { Button } from "../../components/Button";
 
 import { StyledButton, StyledButtonWrap, StyledForm, StyledInput, StyledWrap } from "./style";
@@ -41,7 +41,7 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
             control={control}
             name={"color"}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <CirclesToSelecteColor
+              <CircleList
                 title="推しの色を選択してください"
                 selectColor={value}
                 onClick={(color) => {

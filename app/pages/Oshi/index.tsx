@@ -1,11 +1,12 @@
 import React, { FC } from "react";
-import { Button, Icon } from "@rneui/themed";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfOshi } from "../../router/app/Oshi/types";
+import { ListItem } from "../../components/List";
+import { TrackButton } from "../../components/TrackButton";
 
-import { StyledText } from "./style";
+import { StyledList, StyledListWrap, StyledContentWrap, StyledWrap } from "./style";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -15,12 +16,31 @@ type Props = {
 
 export const Oshi: FC<Props> = ({ oshiRoute }) => {
   return (
-    <>
-      <StyledText>Oshi</StyledText>
-      <Button radius={"sm"} type="solid" onPress={() => oshiRoute.navigation.navigate("detail")}>
-        Date
-        <Icon name="save" color="white" />
-      </Button>
-    </>
+    <StyledWrap>
+      <StyledContentWrap>
+        <StyledListWrap>
+          <StyledList>
+            <ListItem
+              title="川村 和馬"
+              onPress={() => oshiRoute.navigation.navigate("detail")}
+              avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+              bottomDivider={true}
+            />
+            <ListItem
+              title="川村 和馬"
+              onPress={() => oshiRoute.navigation.navigate("detail")}
+              avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+              bottomDivider={true}
+            />
+            <ListItem
+              title="川村 和馬"
+              onPress={() => oshiRoute.navigation.navigate("detail")}
+              avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+            />
+          </StyledList>
+        </StyledListWrap>
+      </StyledContentWrap>
+      <TrackButton buttonText="追加" iconName="plus" />
+    </StyledWrap>
   );
 };

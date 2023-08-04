@@ -19,10 +19,10 @@ const { Navigator, Screen } = createStackNavigator<RoutingOfOshi>();
 export const Oshi: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
     <Navigator initialRouteName="top">
-      <Screen name="top">
+      <Screen name="top" options={{ headerTitle: "推し一覧" }}>
         {(props) => <OshiPage rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
-      <Screen name="detail">
+      <Screen name="detail" options={{ headerTitle: "川村和馬" }}>
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
     </Navigator>

@@ -12,6 +12,7 @@ module.exports = {
       rules: {
         "function-name-case": null,
         "function-no-unknown": null,
+        "value-keyword-case": null,
         "declaration-block-no-duplicate-properties": true,
         "color-hex-case": "lower",
         indentation: 2,

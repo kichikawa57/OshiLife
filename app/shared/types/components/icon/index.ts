@@ -5,4 +5,6 @@ export type IconName =
   | "chevron-left"
   | "star"
   | "user-circle"
-  | "cog";
+  | "cog"
+  | "pencil"
+  | "plus";
