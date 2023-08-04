@@ -21,7 +21,7 @@ export const App: FC<Props> = ({ rootRoute }) => {
 
   return (
     <Tab.Navigator
-      initialRouteName="schedule"
+      initialRouteName="profile"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: (props) => tabBarIcon(route, props),

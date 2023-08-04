@@ -9,6 +9,7 @@ export const StyledWrap = styled.View`
 export const StyledTitle = styled.Text`
   margin-bottom: 20px;
   font-size: 12px;
+  color: ${colors.textDark};
 `;
 
 const width = 100 + 5;

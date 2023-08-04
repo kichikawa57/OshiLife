@@ -18,7 +18,7 @@ const { Navigator, Screen } = createStackNavigator<RoutingOfProfile>();
 export const Profile: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
     <Navigator initialRouteName="top">
-      <Screen name="top">
+      <Screen name="top" options={{ headerTitle: "プロフィール" }}>
         {(props) => <ProfilePage rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
       </Screen>
     </Navigator>

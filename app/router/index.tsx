@@ -15,7 +15,7 @@ const Stack = createStackNavigator<RoutingOfRoot>();
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator initialRouteName="setupOshi">
+      <Stack.Navigator initialRouteName="app">
         <Stack.Screen
           name="app"
           options={{
@@ -38,7 +38,9 @@ export const Router: FC = () => {
         >
           {(props) => <Login rootRoute={props} />}
         </Stack.Screen>
-        <Stack.Screen name="setupOshi">{(props) => <SetupOshi rootRoute={props} />}</Stack.Screen>
+        <Stack.Screen name="setupOshi" options={{ headerTitle: "推しを選択" }}>
+          {(props) => <SetupOshi rootRoute={props} />}
+        </Stack.Screen>
         <Stack.Screen name="setupUser" options={{ headerTitle: "ユーザー情報" }}>
           {(props) => <SetupUser rootRoute={props} />}
         </Stack.Screen>
