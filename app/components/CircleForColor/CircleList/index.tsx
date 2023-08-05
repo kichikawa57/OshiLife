@@ -1,5 +1,4 @@
-import React from "react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 import { objectKeys } from "../../../shared/utils";
 import { circleColors } from "../shared";

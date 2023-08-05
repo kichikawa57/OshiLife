@@ -7,4 +7,5 @@ export type IconName =
   | "user-circle"
   | "cog"
   | "pencil"
-  | "plus";
+  | "plus"
+  | "check";

@@ -21,7 +21,7 @@ type Props = {
 export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
     <Navigator initialRouteName="top">
-      <Screen name="top">
+      <Screen name="top" options={{ headerShown: false }}>
         {(props) => (
           <SchedulePage rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />
         )}

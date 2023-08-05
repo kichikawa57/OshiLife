@@ -1,12 +1,16 @@
 import React, { FC } from "react";
+import dayjs from "dayjs";
 
-import { CalendarPresenter } from "./presenter";
-import { useCalendar } from "./hooks/use-calendar";
+import { StyledText, StyledView } from "./style";
 
-export const Calendar: FC = () => {
-  const { getMonth } = useCalendar();
+type Props = {
+  //
+};
 
-  getMonth(7);
-
-  return <CalendarPresenter />;
+export const Calendar: FC<Props> = () => {
+  return (
+    <StyledView>
+      <StyledText>{dayjs().format("YYYY年MM月DD日 HH:mm:ss")}</StyledText>
+    </StyledView>
+  );
 };
