@@ -20,7 +20,7 @@ type Props = {
 
 export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
-    <Navigator initialRouteName="top">
+    <Navigator initialRouteName="date">
       <Screen name="top" options={{ headerShown: false }}>
         {(props) => (
           <SchedulePage rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />
@@ -30,7 +30,7 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
         name="date"
         options={({ navigation }) => ({
           headerLeft: () => <Icon name="chevron-left" onPress={() => navigation.goBack()} />,
-          headerTitle: "",
+          headerTitle: "2023/01/10",
         })}
       >
         {(props) => <Date rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
