@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { Button, Icon } from "@rneui/themed";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
