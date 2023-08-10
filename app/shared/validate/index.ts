@@ -5,6 +5,13 @@ export const validateEmailAndPassword = {
   password: z.string().min(8, "最低8文字です").max(16, "最大16文字です"),
 };
 
+export const validateEditOshi = {
+  image: z.string().optional(),
+  name: z.string().nonempty("推しの名前を記入してください"),
+  color: z.string().nonempty("推しの色を選択してください"),
+  memo: z.string().nonempty("推しの色を選択してください"),
+};
+
 type ErrorKeys<T> = keyof T;
 
 export const checkFormData = <T>(formData: z.ZodObject<z.ZodRawShape>, data: T) => {

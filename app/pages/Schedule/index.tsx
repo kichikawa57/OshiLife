@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -10,8 +11,10 @@ import { TabView } from "../../components/Tab/View";
 import { TabItem } from "../../components/Tab/View/Item";
 import { Calendar } from "../../components/Calendar";
 import { StyledTabPanel } from "../../components/Tab/List/style";
+import { EditScheduleContent } from "../../components/BottomSheetContents/EditScheduleContent";
 
 import { StyledCheckBox, StyledContent, StyledTabView, StyledWrap } from "./style";
+import { useSchedule } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -22,44 +25,57 @@ type Props = {
 export const Schedule: FC<Props> = () => {
   const [dateType, setDateType] = useState(0);
   const [calendarType, setCalendarType] = useState(0);
+  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } = useSchedule();
 
   return (
-    <StyledWrap>
-      <TabList list={["日", "週", "月"]} value={dateType} onClick={setDateType} />
-      <StyledCheckBox>
-        <CheckBoxGroup>
-          <CheckBoxItem
-            imageUrl="testr"
-            isSelected
-            name="川村和馬"
-            onPress={() => null}
-            isMarginRight
-          />
-          <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
-        </CheckBoxGroup>
-      </StyledCheckBox>
-      <StyledTabPanel>
-        <TabList
-          list={["all", "自分の"]}
-          value={calendarType}
-          onClick={setCalendarType}
-          type="panel"
+    <>
+      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+        <EditScheduleContent
+          control={control}
+          clearErrors={clearErrors}
+          onPressComplete={onPressComplete}
+          onPressCancel={onPressCancel}
         />
-      </StyledTabPanel>
-      <StyledTabView>
-        <TabView value={calendarType} onChange={setCalendarType}>
-          <TabItem>
-            <StyledContent>
-              <Calendar />
-            </StyledContent>
-          </TabItem>
-          <TabItem>
-            <StyledContent>
-              <Calendar />
-            </StyledContent>
-          </TabItem>
-        </TabView>
-      </StyledTabView>
-    </StyledWrap>
+      </BottomSheetModal>
+      <StyledWrap>
+        <TabList list={["日", "週", "月"]} value={dateType} onClick={setDateType} />
+        <StyledCheckBox>
+          <CheckBoxGroup>
+            <CheckBoxItem
+              imageUrl="testr"
+              isSelected
+              name="川村和馬"
+              onPress={() => {
+                ref.current?.present();
+              }}
+              isMarginRight
+            />
+            <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
+          </CheckBoxGroup>
+        </StyledCheckBox>
+        <StyledTabPanel>
+          <TabList
+            list={["all", "自分の"]}
+            value={calendarType}
+            onClick={setCalendarType}
+            type="panel"
+          />
+        </StyledTabPanel>
+        <StyledTabView>
+          <TabView value={calendarType} onChange={setCalendarType}>
+            <TabItem>
+              <StyledContent>
+                <Calendar />
+              </StyledContent>
+            </TabItem>
+            <TabItem>
+              <StyledContent>
+                <Calendar />
+              </StyledContent>
+            </TabItem>
+          </TabView>
+        </StyledTabView>
+      </StyledWrap>
+    </>
   );
 };

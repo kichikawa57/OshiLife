@@ -15,7 +15,7 @@ export const Circle: FC<Props> = ({ color, isSelected, onPress }) => {
     <StyledWrap
       color={circleColors[color]}
       isSelected={!!isSelected}
-      onPress={() => onPress && onPress}
+      onPress={() => onPress && onPress()}
       isPress={!!onPress}
     />
   );
