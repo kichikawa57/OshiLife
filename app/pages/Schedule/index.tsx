@@ -12,6 +12,7 @@ import { TabItem } from "../../components/Tab/View/Item";
 import { Calendar } from "../../components/Calendar";
 import { StyledTabPanel } from "../../components/Tab/List/style";
 import { EditScheduleContent } from "../../components/BottomSheetContents/EditScheduleContent";
+import { TrackButton } from "../../components/TrackButton";
 
 import { StyledCheckBox, StyledContent, StyledTabView, StyledWrap } from "./style";
 import { useSchedule } from "./hooks";
@@ -37,6 +38,14 @@ export const Schedule: FC<Props> = () => {
           onPressCancel={onPressCancel}
         />
       </BottomSheetModal>
+      <TrackButton
+        buttonText="予定追加"
+        iconName="plus"
+        isHiddenHeader
+        onPress={() => {
+          ref.current?.present();
+        }}
+      />
       <StyledWrap>
         <TabList list={["日", "週", "月"]} value={dateType} onClick={setDateType} />
         <StyledCheckBox>
@@ -45,9 +54,7 @@ export const Schedule: FC<Props> = () => {
               imageUrl="testr"
               isSelected
               name="川村和馬"
-              onPress={() => {
-                ref.current?.present();
-              }}
+              onPress={() => null}
               isMarginRight
             />
             <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />

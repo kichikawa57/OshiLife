@@ -15,7 +15,6 @@ module.exports = {
         "value-keyword-case": null,
         "declaration-block-no-duplicate-properties": true,
         "color-hex-case": "lower",
-        indentation: 2,
         "string-quotes": "double",
         "declaration-block-trailing-semicolon": "always",
       },
