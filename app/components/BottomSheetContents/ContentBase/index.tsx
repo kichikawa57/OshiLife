@@ -10,20 +10,30 @@ import {
 
 type Props = {
   children: ReactNode;
-  onPressCancel: () => void;
-  onPressComplete: () => void;
+  headerPosition?: "center" | "right";
+  onPressCancel?: () => void;
+  onPressComplete?: () => void;
 };
 
-export const ContentBase: FC<Props> = ({ children, onPressCancel, onPressComplete }) => {
+export const ContentBase: FC<Props> = ({
+  children,
+  headerPosition = "center",
+  onPressCancel,
+  onPressComplete,
+}) => {
   return (
     <StyledView>
-      <StyledHeader>
-        <StyledTextButtonWrap>
-          <StyledTextButton onPress={onPressCancel}>キャンセル</StyledTextButton>
-        </StyledTextButtonWrap>
-        <StyledTextButtonWrap>
-          <StyledTextButton onPress={onPressComplete}>完了</StyledTextButton>
-        </StyledTextButtonWrap>
+      <StyledHeader headerPosition={headerPosition}>
+        {onPressCancel && (
+          <StyledTextButtonWrap>
+            <StyledTextButton onPress={onPressCancel}>キャンセル</StyledTextButton>
+          </StyledTextButtonWrap>
+        )}
+        {onPressComplete && (
+          <StyledTextButtonWrap>
+            <StyledTextButton onPress={onPressComplete}>完了</StyledTextButton>
+          </StyledTextButtonWrap>
+        )}
       </StyledHeader>
       <StyledScrollView>{children}</StyledScrollView>
     </StyledView>

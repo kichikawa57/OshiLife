@@ -16,13 +16,15 @@
     "format:fix": "prettier --write \"**/*.+(js|ts|tsx)\"",
     "lints": "yarn eslint && yarn format && yarn stylelint && yarn tsc",
     "lints:fix": "yarn eslint:fix && yarn format:fix && yarn stylelint:fix && yarn tsc",
-    "login": "eas login",
-    "build:dev": "eas build --profile development --platform ios",
+    "eas:login": "eas login",
+    "eas:build:dev": "eas build --profile development --platform ios",
     "tsc": "tsc",
+    "pod:install": "cd ios && pod install && cd ..",
     "prepare": "husky install"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
+    "@react-native-picker/picker": "^2.5.0",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native": "^6.1.7",
@@ -30,6 +32,7 @@
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
     "dayjs": "^1.11.9",
+    "dayjs-plugin-utc": "^0.1.2",
     "react": "18.2.0",
     "react-hook-form": "^7.45.2",
     "react-native": "0.72.1",
@@ -40,7 +43,8 @@
     "react-native-screens": "^3.22.1",
     "react-native-vector-icons": "^10.0.0",
     "styled-components": "^6.0.2",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

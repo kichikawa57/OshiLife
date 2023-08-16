@@ -1,20 +1,19 @@
 import React, { FC, useState } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
-import { CheckBoxItem } from "../../components/CheckBox/Item";
-import { CheckBoxGroup } from "../../components/CheckBox/Group";
-import { TabList } from "../../components/Tab/List";
 import { TabView } from "../../components/Tab/View";
 import { TabItem } from "../../components/Tab/View/Item";
 import { Calendar } from "../../components/Calendar";
-import { StyledTabPanel } from "../../components/Tab/List/style";
 import { EditScheduleContent } from "../../components/BottomSheetContents/EditScheduleContent";
 import { TrackButton } from "../../components/TrackButton";
+import { FilterScheduleContent } from "../../components/BottomSheetContents/FilterScheduleContent";
+import { EditDateContent } from "../../components/BottomSheetContents/EditDateContent";
+import { BottomSheet } from "../../components/BottomSheet";
 
-import { StyledCheckBox, StyledContent, StyledTabView, StyledWrap } from "./style";
+import { ScheduleHeader } from "./components/ScheduleHeader";
+import { StyledContent, StyledTabView, StyledWrap } from "./style";
 import { useSchedule } from "./hooks";
 
 type Props = {
@@ -26,18 +25,46 @@ type Props = {
 export const Schedule: FC<Props> = () => {
   const [dateType, setDateType] = useState(0);
   const [calendarType, setCalendarType] = useState(0);
-  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } = useSchedule();
+  const {
+    control,
+    clearErrors,
+    ref,
+    onPressCancel,
+    onPressComplete,
+    onChange,
+    onPressCancelForFilter,
+    filterRef,
+    dateRef,
+    editDateContent,
+  } = useSchedule();
 
   return (
     <>
-      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      {/* <StyledBg /> */}
+      <BottomSheet bottomSheetModalRef={dateRef} index={0}>
+        <EditDateContent
+          currentDate={editDateContent.currentDate}
+          onPressCancel={editDateContent.onPressCancelForDate}
+          onPressComplete={editDateContent.onPressCompleteForDate}
+        />
+      </BottomSheet>
+      <BottomSheet bottomSheetModalRef={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
         <EditScheduleContent
           control={control}
           clearErrors={clearErrors}
           onPressComplete={onPressComplete}
           onPressCancel={onPressCancel}
         />
-      </BottomSheetModal>
+      </BottomSheet>
+      <BottomSheet bottomSheetModalRef={filterRef} index={0}>
+        <FilterScheduleContent
+          dateType={dateType}
+          setDateType={setDateType}
+          calendarType={calendarType}
+          setCalendarType={setCalendarType}
+          onPressCancel={onPressCancelForFilter}
+        />
+      </BottomSheet>
       <TrackButton
         buttonText="予定追加"
         iconName="plus"
@@ -46,40 +73,25 @@ export const Schedule: FC<Props> = () => {
           ref.current?.present();
         }}
       />
+      <ScheduleHeader
+        currentDate={editDateContent.currentDate}
+        onPress={() => {
+          dateRef.current?.present();
+        }}
+      />
       <StyledWrap>
-        <TabList list={["日", "週", "月"]} value={dateType} onClick={setDateType} />
-        <StyledCheckBox>
-          <CheckBoxGroup>
-            <CheckBoxItem
-              imageUrl="testr"
-              isSelected
-              name="川村和馬"
-              onPress={() => null}
-              isMarginRight
-            />
-            <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
-          </CheckBoxGroup>
-        </StyledCheckBox>
-        <StyledTabPanel>
-          <TabList
-            list={["all", "自分の"]}
-            value={calendarType}
-            onClick={setCalendarType}
-            type="panel"
-          />
-        </StyledTabPanel>
         <StyledTabView>
           <TabView value={calendarType} onChange={setCalendarType}>
             <TabItem>
               <StyledContent>
-                <Calendar />
+                <Calendar currentDate={editDateContent.currentDate} />
               </StyledContent>
             </TabItem>
-            <TabItem>
+            {/* <TabItem>
               <StyledContent>
                 <Calendar />
               </StyledContent>
-            </TabItem>
+            </TabItem> */}
           </TabView>
         </StyledTabView>
       </StyledWrap>

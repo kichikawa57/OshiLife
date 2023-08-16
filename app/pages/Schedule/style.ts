@@ -7,6 +7,13 @@ export const StyledWrap = styled.View`
   width: 100%;
 `;
 
+export const StyledHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 25px 0 0;
+`;
+
 export const StyledTabView = styled.View`
   flex: 1;
   width: 100%;
@@ -20,12 +27,28 @@ export const StyledCheckBox = styled.View`
 
 export const StyledContent = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  padding: 20px;
+`;
+
+export const StyledBg = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: ${colors.bgDark};
+`;
+
+export const StyledHeaderTextWrap = styled.TouchableOpacity`
+  display: block;
+`;
+
+export const BottomSheetInner = styled.View`
+  width: 100%;
+  background-color: ${colors.bgLight};
 `;
 
 export const StyledText = styled.Text`
-  font-size: 20px;
+  font-size: 24px;
 `;

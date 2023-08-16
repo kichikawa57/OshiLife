@@ -14,7 +14,7 @@ export const validateEditOshi = {
 
 export const validateEditSchedule = {
   title: z.string().nonempty("予定のタイトルを入れてください"),
-  date: z.string().datetime("日付を選択してください"),
+  date: z.string(),
   oshiName: z.string().nonempty("推しを選択してください"),
   memo: z.string().optional(),
 };

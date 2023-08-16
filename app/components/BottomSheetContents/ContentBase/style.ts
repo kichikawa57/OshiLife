@@ -8,10 +8,11 @@ export const StyledView = styled.View`
   padding: 10px 20px 0;
 `;
 
-export const StyledHeader = styled.View`
+export const StyledHeader = styled.View<{ headerPosition: "center" | "right" }>`
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ headerPosition }) =>
+    headerPosition === "center" ? "space-between" : "flex-end"};
   width: 100%;
   margin-bottom: 40px;
 `;

@@ -1,12 +1,16 @@
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 import { FormData, formValidation } from "./validate";
 
 export const useSchedule = () => {
   const ref = useRef<BottomSheetModal>(null);
+  const filterRef = useRef<BottomSheetModal>(null);
+  const dateRef = useRef<BottomSheetModal>(null);
+
+  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
 
   const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
     defaultValues: {
@@ -17,7 +21,7 @@ export const useSchedule = () => {
     },
   });
 
-  const onPressComplete = () => {
+  const onPressComplete = async () => {
     if (!ref.current) return;
 
     const values = getValues();
@@ -31,14 +35,29 @@ export const useSchedule = () => {
       return;
     }
 
-    reset();
     ref.current.close();
+    reset();
   };
+
+  const onPressCompleteForDate = useCallback(async (date: Dayjs) => {
+    if (!dateRef.current) return;
+    dateRef.current.dismiss();
+    setCurrentDate(date);
+  }, []);
 
   const onPressCancel = () => {
     if (!ref.current) return;
     ref.current.close();
-    reset();
+  };
+
+  const onPressCancelForFilter = () => {
+    if (!filterRef.current) return;
+    filterRef.current.close();
+  };
+
+  const onPressCancelForDate = () => {
+    if (!dateRef.current) return;
+    dateRef.current.close();
   };
 
   const onChange = (index: number) => {
@@ -48,10 +67,18 @@ export const useSchedule = () => {
 
   return {
     ref,
+    filterRef,
+    dateRef,
     control,
     onChange,
     clearErrors,
     onPressComplete,
     onPressCancel,
+    onPressCancelForFilter,
+    editDateContent: {
+      currentDate,
+      onPressCompleteForDate,
+      onPressCancelForDate,
+    },
   };
 };
