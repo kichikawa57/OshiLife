@@ -1,6 +1,6 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 
-import { colors } from "../../shared/styles/color";
+import { colors, dateColors } from "../../shared/styles/color";
 
 export const StyledView = styled.View`
   flex: 1;
@@ -9,24 +9,45 @@ export const StyledView = styled.View`
 `;
 
 export const StyledCalendarContentWrap = styled.View`
-  flex: 0.2;
-  flex-flow: row wrap;
+  flex-flow: wrap;
   width: 100%;
+`;
+
+const styleTopBorder = css`
+  border-top-color: ${colors.borderDarkSecondary};
+  border-top-width: 1px;
+`;
+
+export const StyledCalendarWeek = styled.View<{ isFirstWeek: boolean }>`
+  position: relative;
+  flex-flow: row;
+  width: 100%;
+  border-bottom-color: ${colors.borderDarkSecondary};
+  border-bottom-width: 1px;
+
+  ${({ isFirstWeek }) => isFirstWeek && styleTopBorder}
 `;
 
 export const StyledCalendarContent = styled.TouchableOpacity`
+  position: relative;
+  z-index: 1;
   width: 14.2857%;
+`;
 
-  /* flex: 0.14285714; */
-
-  /* align-items: center;
-  justify-content: center; */
+export const StyledCalendarBorder = styled.View<{ index: number }>`
+  position: absolute;
+  top: 0;
+  left: ${({ index }) => 14.2857 * (index + 1)}%;
+  z-index: 1;
+  width: 1px;
+  height: 100%;
+  background-color: ${colors.borderDarkSecondary};
 `;
 
 export const StyledCalendarContentInner = styled.View`
+  position: relative;
+  z-index: 1;
   width: 100%;
-
-  /* flex: 1; */
   padding: 5px 0 20px;
 `;
 
@@ -35,10 +56,36 @@ export const StyledTextWrap = styled.View`
   width: 100%;
 `;
 
-export const StyledText = styled.Text<{ isCurrent: boolean; isOtherMonth: boolean }>`
+type StyledTextProps = {
+  isCurrent: boolean;
+  isOtherMonth: boolean;
+  isSunday: boolean;
+  isSaturday: boolean;
+  isHoliday: boolean;
+};
+
+const selectColor = ({
+  isOtherMonth,
+  isSunday,
+  isSaturday,
+  isHoliday,
+}: Omit<StyledTextProps, "isCurrent">) => {
+  if (isOtherMonth) return colors.textDarkSecondary;
+  if (isSunday) return dateColors.sunday;
+  if (isSaturday) return dateColors.saturday;
+  if (isHoliday) return dateColors.holiday;
+
+  return colors.textDark;
+};
+export const StyledText = styled.Text<StyledTextProps>`
   font-size: 14px;
-  color: ${({ isCurrent, isOtherMonth }) =>
-    isCurrent ? colors.strong : isOtherMonth ? colors.textDarkSecondary : colors.textDark};
+  color: ${({ isOtherMonth, isSunday, isSaturday, isHoliday }) =>
+    selectColor({ isOtherMonth, isSunday, isSaturday, isHoliday })};
+`;
+export const StyledHolidayText = styled.Text`
+  margin-top: 2px;
+  font-size: 10px;
+  color: ${colors.error};
 `;
 
 export const StyledScheduleDetail = styled.Text<{

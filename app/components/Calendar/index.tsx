@@ -1,12 +1,15 @@
 import React, { FC, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { isHoliday } from "japanese-holidays";
 
 import { nonNullable, sortDates } from "../../shared/utils";
 
 import {
+  StyledCalendarBorder,
   StyledCalendarContent,
   StyledCalendarContentInner,
   StyledCalendarContentWrap,
+  StyledCalendarWeek,
   StyledScheduleDetail,
   StyledText,
   StyledTextWrap,
@@ -62,7 +65,7 @@ const dummyData: ScheduleData[] = [
   {
     id: "schedule-004",
     startDate: "2023-08-02 10:30:00",
-    endDate: "2023-08-10 10:30:00",
+    endDate: "2023-08-12 10:30:00",
     title: "スケジュール 03",
     createDate: "2022-01-02 10:30:00",
   },
@@ -163,9 +166,10 @@ export const Calendar: FC<Props> = ({ currentDate }) => {
 
         return result;
       });
-      return orderResults.map((orderResult, dateIndex) => {
+      const week = orderResults.map((orderResult, dateIndex) => {
         const isCurrent = dayjs(currentDate).isSame(orderResult.date.format("YYYY-MM-DD"));
         const isOtherMonth = !(orderResult.date.month() === currentMonth);
+        const holiday = isHoliday(orderResult.date.toDate());
 
         return (
           <StyledCalendarContent
@@ -175,7 +179,13 @@ export const Calendar: FC<Props> = ({ currentDate }) => {
           >
             <StyledCalendarContentInner>
               <StyledTextWrap>
-                <StyledText isCurrent={isCurrent} isOtherMonth={isOtherMonth}>
+                <StyledText
+                  isCurrent={isCurrent}
+                  isOtherMonth={isOtherMonth}
+                  isSaturday={orderResult.date.day() === 6}
+                  isSunday={orderResult.date.day() === 0}
+                  isHoliday={!!holiday}
+                >
                   {orderResult.date.format("D")}
                 </StyledText>
               </StyledTextWrap>
@@ -194,6 +204,15 @@ export const Calendar: FC<Props> = ({ currentDate }) => {
           </StyledCalendarContent>
         );
       });
+
+      return (
+        <StyledCalendarWeek key={`weeks-${datesIndex}`} isFirstWeek={datesIndex === 0}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <StyledCalendarBorder key={`border-${index}`} index={index} />
+          ))}
+          {week}
+        </StyledCalendarWeek>
+      );
     });
   }, [currentDate, currentMonth, getMonth]);
 
