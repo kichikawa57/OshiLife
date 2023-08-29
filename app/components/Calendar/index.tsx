@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, Fragment, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { isHoliday } from "japanese-holidays";
 
@@ -7,8 +7,10 @@ import { nonNullable, sortDates } from "../../shared/utils";
 import {
   StyledCalendarBorder,
   StyledCalendarContent,
+  StyledCalendarContentBg,
   StyledCalendarContentInner,
   StyledCalendarContentWrap,
+  StyledCalendarEventPanel,
   StyledCalendarWeek,
   StyledScheduleDetail,
   StyledText,
@@ -19,6 +21,7 @@ import { useCalendar } from "./hooks";
 
 type Props = {
   currentDate: Dayjs;
+  onPressDate: () => void;
 };
 
 type ScheduleData = {
@@ -78,8 +81,9 @@ const dummyData: ScheduleData[] = [
   },
 ];
 
-export const Calendar: FC<Props> = ({ currentDate }) => {
+export const Calendar: FC<Props> = ({ currentDate, onPressDate }) => {
   const currentMonth = currentDate.month();
+  const today = dayjs();
   const { getMonth } = useCalendar(currentDate);
 
   const calendar = useMemo(() => {
@@ -167,41 +171,47 @@ export const Calendar: FC<Props> = ({ currentDate }) => {
         return result;
       });
       const week = orderResults.map((orderResult, dateIndex) => {
-        const isCurrent = dayjs(currentDate).isSame(orderResult.date.format("YYYY-MM-DD"));
+        const isCurrent = dayjs(today.format("YYYY-MM-DD")).isSame(
+          orderResult.date.format("YYYY-MM-DD"),
+        );
         const isOtherMonth = !(orderResult.date.month() === currentMonth);
         const holiday = isHoliday(orderResult.date.toDate());
 
         return (
-          <StyledCalendarContent
-            key={`${datesIndex}-${dateIndex}`}
-            activeOpacity={1}
-            onPress={() => console.log("クリック")}
-          >
-            <StyledCalendarContentInner>
-              <StyledTextWrap>
-                <StyledText
-                  isCurrent={isCurrent}
-                  isOtherMonth={isOtherMonth}
-                  isSaturday={orderResult.date.day() === 6}
-                  isSunday={orderResult.date.day() === 0}
-                  isHoliday={!!holiday}
-                >
-                  {orderResult.date.format("D")}
-                </StyledText>
-              </StyledTextWrap>
-              {orderResult.schedules.map((schedule, scheduleIndex) => (
-                <StyledScheduleDetail
-                  key={`${datesIndex}-${dateIndex}-${scheduleIndex}`}
-                  numberOfLines={1}
-                  isTransparent={schedule.isTransparent}
-                  startWeekIndex={schedule.startWeekIndex}
-                  endWeekIndex={schedule.endWeekIndex}
-                >
-                  予定ありsssssss
-                </StyledScheduleDetail>
-              ))}
-            </StyledCalendarContentInner>
-          </StyledCalendarContent>
+          <Fragment key={`${datesIndex}-${dateIndex}`}>
+            {isCurrent && <StyledCalendarContentBg index={dateIndex} />}
+            <StyledCalendarEventPanel index={dateIndex} activeOpacity={1} onPress={onPressDate} />
+            <StyledCalendarContent>
+              <StyledCalendarContentInner>
+                <StyledTextWrap>
+                  <StyledText
+                    isCurrent={isCurrent}
+                    isOtherMonth={isOtherMonth}
+                    isSaturday={orderResult.date.day() === 6}
+                    isSunday={orderResult.date.day() === 0}
+                    isHoliday={!!holiday}
+                  >
+                    {orderResult.date.format("D")}
+                  </StyledText>
+                </StyledTextWrap>
+                {orderResult.schedules.map((schedule, scheduleIndex) => {
+                  return (
+                    scheduleIndex <= 2 && (
+                      <StyledScheduleDetail
+                        key={`${datesIndex}-${dateIndex}-${scheduleIndex}`}
+                        numberOfLines={1}
+                        isTransparent={schedule.isTransparent}
+                        startWeekIndex={schedule.startWeekIndex}
+                        endWeekIndex={schedule.endWeekIndex}
+                      >
+                        予定ありsssssss
+                      </StyledScheduleDetail>
+                    )
+                  );
+                })}
+              </StyledCalendarContentInner>
+            </StyledCalendarContent>
+          </Fragment>
         );
       });
 
@@ -214,7 +224,7 @@ export const Calendar: FC<Props> = ({ currentDate }) => {
         </StyledCalendarWeek>
       );
     });
-  }, [currentDate, currentMonth, getMonth]);
+  }, [currentMonth, getMonth, onPressDate, today]);
 
   return (
     <StyledView>

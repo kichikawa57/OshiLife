@@ -22,7 +22,7 @@ type Props = {
   scheduleRoute: RoutingPropsOfSchedule<"top">;
 };
 
-export const Schedule: FC<Props> = () => {
+export const Schedule: FC<Props> = ({ scheduleRoute }) => {
   const [dateType, setDateType] = useState(0);
   const [calendarType, setCalendarType] = useState(0);
   const {
@@ -33,14 +33,14 @@ export const Schedule: FC<Props> = () => {
     onPressComplete,
     onChange,
     onPressCancelForFilter,
+    onPressDate,
     filterRef,
     dateRef,
     editDateContent,
-  } = useSchedule();
+  } = useSchedule(scheduleRoute);
 
   return (
     <>
-      {/* <StyledBg /> */}
       <BottomSheet bottomSheetModalRef={dateRef} index={0}>
         <EditDateContent
           currentDate={editDateContent.currentDate}
@@ -75,8 +75,11 @@ export const Schedule: FC<Props> = () => {
       />
       <ScheduleHeader
         currentDate={editDateContent.currentDate}
-        onPress={() => {
+        onPressDate={() => {
           dateRef.current?.present();
+        }}
+        onPressFilter={() => {
+          filterRef.current?.present();
         }}
       />
       <StyledWrap>
@@ -84,14 +87,13 @@ export const Schedule: FC<Props> = () => {
           <TabView value={calendarType} onChange={setCalendarType}>
             <TabItem>
               <StyledContent>
-                <Calendar currentDate={editDateContent.currentDate} />
+                <Calendar
+                  key={Math.random().toString(36).substr(2, 9)}
+                  currentDate={editDateContent.currentDate}
+                  onPressDate={onPressDate}
+                />
               </StyledContent>
             </TabItem>
-            {/* <TabItem>
-              <StyledContent>
-                <Calendar />
-              </StyledContent>
-            </TabItem> */}
           </TabView>
         </StyledTabView>
       </StyledWrap>

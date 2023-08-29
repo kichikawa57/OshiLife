@@ -25,9 +25,6 @@ export const FilterScheduleContent: FC<Props> = ({
   return (
     <ContentBase onPressCancel={onPressCancel} headerPosition="right">
       <StyledContent>
-        <TabList list={["日", "週", "月"]} value={dateType} onClick={setDateType} />
-      </StyledContent>
-      <StyledContent>
         <CheckBoxGroup>
           <CheckBoxItem
             imageUrl="testr"
@@ -38,6 +35,9 @@ export const FilterScheduleContent: FC<Props> = ({
           />
           <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
         </CheckBoxGroup>
+      </StyledContent>
+      <StyledContent>
+        <TabList list={["日", "週", "月"]} value={dateType} type="panel" onClick={setDateType} />
       </StyledContent>
       <StyledContent>
         <TabList

@@ -39,7 +39,7 @@ export const TabList: FC<Omit<Props, "ref">> = ({ list, type = "border", onClick
               dense
               containerStyle={{
                 backgroundColor: props.value === index ? colors.secondary : colors.bgLight,
-                borderRadius: 10,
+                borderRadius: 6,
               }}
               titleStyle={{
                 fontSize: 12,

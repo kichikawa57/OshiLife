@@ -8,4 +8,5 @@ export type IconName =
   | "cog"
   | "pencil"
   | "plus"
-  | "check";
+  | "check"
+  | "filter";

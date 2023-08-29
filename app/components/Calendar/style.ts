@@ -28,20 +28,44 @@ export const StyledCalendarWeek = styled.View<{ isFirstWeek: boolean }>`
   ${({ isFirstWeek }) => isFirstWeek && styleTopBorder}
 `;
 
-export const StyledCalendarContent = styled.TouchableOpacity`
+export const StyledCalendarContent = styled.View`
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 14.2857%;
+`;
+
+export const StyledCalendar = styled.View`
+  display: block;
+`;
+
+export const StyledCalendarEventPanel = styled.TouchableOpacity<{ index: number }>`
+  position: absolute;
+  top: 0;
+  left: ${({ index }) => 14.2857 * index}%;
+  z-index: 3;
+  width: 14.2857%;
+  height: 100%;
+  opacity: 0;
 `;
 
 export const StyledCalendarBorder = styled.View<{ index: number }>`
   position: absolute;
   top: 0;
   left: ${({ index }) => 14.2857 * (index + 1)}%;
-  z-index: 1;
+  z-index: 0;
   width: 1px;
   height: 100%;
   background-color: ${colors.borderDarkSecondary};
+`;
+
+export const StyledCalendarContentBg = styled.View<{ index: number }>`
+  position: absolute;
+  top: 0;
+  left: ${({ index }) => 14.2857 * index}%;
+  z-index: 1;
+  width: 14.2857%;
+  height: 100%;
+  border: solid 2px ${colors.primary};
 `;
 
 export const StyledCalendarContentInner = styled.View`

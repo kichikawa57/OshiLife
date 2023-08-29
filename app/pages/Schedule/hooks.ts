@@ -3,9 +3,11 @@ import { useCallback, useRef, useState } from "react";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import dayjs, { Dayjs } from "dayjs";
 
+import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
+
 import { FormData, formValidation } from "./validate";
 
-export const useSchedule = () => {
+export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   const ref = useRef<BottomSheetModal>(null);
   const filterRef = useRef<BottomSheetModal>(null);
   const dateRef = useRef<BottomSheetModal>(null);
@@ -60,6 +62,10 @@ export const useSchedule = () => {
     dateRef.current.close();
   };
 
+  const onPressDate = () => {
+    scheduleRoute.navigation.navigate("date");
+  };
+
   const onChange = (index: number) => {
     if (!ref.current || index !== -1) return;
     reset();
@@ -75,6 +81,7 @@ export const useSchedule = () => {
     onPressComplete,
     onPressCancel,
     onPressCancelForFilter,
+    onPressDate,
     editDateContent: {
       currentDate,
       onPressCompleteForDate,
