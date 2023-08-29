@@ -5,6 +5,7 @@ import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfOshi } from "../../router/app/Oshi/types";
 import { ListItem } from "../../components/List";
+import { Button } from "../../components/Button";
 import { TrackButton } from "../../components/TrackButton";
 import { EditOshiContent } from "../../components/BottomSheetContents/EditOshiContent";
 
@@ -36,21 +37,45 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
             <StyledList>
               <ListItem
                 title="川村 和馬"
+                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+                bottomDivider={true}
+                onPress={() => oshiRoute.navigation.navigate("detail")}
+                rightContent={
+                  <Button
+                    title="Delete"
+                    onPress={() => oshiRoute.navigation.navigate("detail")}
+                    iconName="trash-o"
+                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                  />
+                }
+              />
+              {/* <ListItem
+                title="川村 和馬"
                 onPress={() => oshiRoute.navigation.navigate("detail")}
                 avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
                 bottomDivider={true}
+                rightContent={
+                  <Button
+                    title="Delete"
+                    onPress={() => oshiRoute.navigation.navigate("detail")}
+                    iconName="trash-o"
+                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                  />
+                }
               />
               <ListItem
                 title="川村 和馬"
                 onPress={() => oshiRoute.navigation.navigate("detail")}
                 avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-                bottomDivider={true}
-              />
-              <ListItem
-                title="川村 和馬"
-                onPress={() => oshiRoute.navigation.navigate("detail")}
-                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-              />
+                rightContent={
+                  <Button
+                    title="Delete"
+                    onPress={() => oshiRoute.navigation.navigate("detail")}
+                    iconName="trash-o"
+                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                  />
+                }
+              /> */}
             </StyledList>
           </StyledListWrap>
         </StyledContentWrap>

@@ -20,12 +20,16 @@ export const Button: FC<Omit<Props, "icon">> = ({
     <ButtonOfRneui
       {...props}
       titleStyle={{ color: colors[textColor ? textColor : "textLight"] }}
-      buttonStyle={{
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 20,
-        backgroundColor: colors[backgroundColor ? backgroundColor : "primary"],
-      }}
+      buttonStyle={
+        props.buttonStyle
+          ? props.buttonStyle
+          : {
+              paddingTop: 10,
+              paddingBottom: 10,
+              borderRadius: 20,
+              backgroundColor: colors[backgroundColor ? backgroundColor : "primary"],
+            }
+      }
       containerStyle={{
         width: "100%",
       }}

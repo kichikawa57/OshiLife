@@ -9,4 +9,5 @@ export type IconName =
   | "pencil"
   | "plus"
   | "check"
-  | "filter";
+  | "filter"
+  | "trash-o";
