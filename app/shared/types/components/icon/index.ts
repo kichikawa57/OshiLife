@@ -10,4 +10,6 @@ export type IconName =
   | "plus"
   | "check"
   | "filter"
-  | "trash-o";
+  | "trash-o"
+  | "chevron-down"
+  | "eyedropper";

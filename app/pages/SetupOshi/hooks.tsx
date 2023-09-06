@@ -1,10 +1,14 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 
 import { FormData, formValidation } from "./validate";
 
 export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
+  const [isModal, setIsModal] = useState(false);
+  const [isEditColor, setIsEditColor] = useState(false);
+
   const { control, clearErrors, getValues, setError } = useForm<FormData>({
     defaultValues: {
       name: "",
@@ -29,5 +33,11 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     control,
     clearErrors,
     onPress,
+    editColor: {
+      isModal,
+      isEditColor,
+      setIsModal,
+      setIsEditColor,
+    },
   };
 };

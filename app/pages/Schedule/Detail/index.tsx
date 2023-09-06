@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -28,19 +28,19 @@ type Props = {
 
 export const Detail: FC<Props> = () => {
   const [isChack, setIsCheck] = useState(false);
-  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } =
+  const { isModal, control, clearErrors, onPressCancel, onPressComplete, setIsModal } =
     useScheduleDetail();
 
   return (
     <>
-      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      <Modal animationType="slide" presentationStyle="pageSheet" visible={isModal}>
         <EditScheduleContent
           control={control}
           clearErrors={clearErrors}
           onPressComplete={onPressComplete}
           onPressCancel={onPressCancel}
         />
-      </BottomSheetModal>
+      </Modal>
       <StyledWrap>
         <StyledInner>
           <StyledTitle>記事のタイトル</StyledTitle>
@@ -69,7 +69,7 @@ export const Detail: FC<Props> = () => {
         buttonText="編集"
         iconName="pencil"
         onPress={() => {
-          ref.current?.present();
+          setIsModal(true);
         }}
       />
     </>

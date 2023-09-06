@@ -20,7 +20,7 @@ export const StyledCircleWrap = styled.View`
 `;
 
 export const StyledCircle = styled.View`
-  width: 16.6666%;
+  width: 14.28571429%;
   padding: 0 2.5%;
 `;
 

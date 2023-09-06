@@ -1,11 +1,36 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { colors } from "../../../shared/styles/color";
 
-export const StyledView = styled.View`
-  flex: 1;
+export const StyledView = styled.View<{ isFullHeight: boolean; isStatusBar: boolean }>`
   width: 100%;
-  padding: 10px 20px 0;
+  flex: 1;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: ${({ isStatusBar }) => (isStatusBar ? getStatusBarHeight() : 0)}px 20px 20px;
+
+  ${({ isFullHeight }) =>
+    isFullHeight &&
+    css`
+      justify-content: flex-start;
+      flex: 1;
+      background-color: #fff;
+    `}
+`;
+
+export const StyledViewInner = styled.View<{ isFullHeight: boolean }>`
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+
+  ${({ isFullHeight }) =>
+    isFullHeight &&
+    css`
+      padding: 20px 20px 0;
+      background-color: #fff;
+    `}
 `;
 
 export const StyledHeader = styled.View<{ headerPosition: "center" | "right" }>`
@@ -19,6 +44,14 @@ export const StyledHeader = styled.View<{ headerPosition: "center" | "right" }>`
 
 export const StyledScrollView = styled.ScrollView`
   width: 100%;
+`;
+
+export const StyledContent = styled.View`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
 `;
 
 export const StyledTextButtonWrap = styled.TouchableOpacity`

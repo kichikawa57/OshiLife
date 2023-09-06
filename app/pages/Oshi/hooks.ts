@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useState } from "react";
 
 import { FormData, formValidation } from "./validate";
 
 export const useOshi = () => {
-  const ref = useRef<BottomSheetModal>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenColor, setIsOpenColor] = useState(false);
+  const [isSelectedEdit, setIsSelectedEdit] = useState(false);
 
   const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
     defaultValues: {
@@ -17,8 +18,6 @@ export const useOshi = () => {
   });
 
   const onPressComplete = () => {
-    if (!ref.current) return;
-
     const values = getValues();
     const error = formValidation(values);
 
@@ -31,26 +30,24 @@ export const useOshi = () => {
     }
 
     reset();
-    ref.current.close();
+    setIsOpen(false);
   };
 
   const onPressCancel = () => {
-    if (!ref.current) return;
-    ref.current.close();
-    reset();
-  };
-
-  const onChange = (index: number) => {
-    if (!ref.current || index !== -1) return;
+    setIsOpen(false);
     reset();
   };
 
   return {
-    ref,
+    isOpen,
+    isOpenColor,
+    isSelectedEdit,
     control,
-    onChange,
+    setIsOpen,
     clearErrors,
     onPressComplete,
     onPressCancel,
+    setIsOpenColor,
+    setIsSelectedEdit,
   };
 };

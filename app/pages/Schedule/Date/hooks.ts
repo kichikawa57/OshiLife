@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useState } from "react";
 import dayjs from "dayjs";
 
 import { FormData, formValidation } from "./validate";
 
 export const useScheduleDate = () => {
-  const ref = useRef<BottomSheetModal>(null);
+  const [isModal, setIsModal] = useState(false);
 
   const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
     defaultValues: {
@@ -18,8 +17,6 @@ export const useScheduleDate = () => {
   });
 
   const onPressComplete = () => {
-    if (!ref.current) return;
-
     const values = getValues();
     const error = formValidation(values);
 
@@ -32,24 +29,18 @@ export const useScheduleDate = () => {
     }
 
     reset();
-    ref.current.close();
+    setIsModal(false);
   };
 
   const onPressCancel = () => {
-    if (!ref.current) return;
-    ref.current.close();
-    reset();
-  };
-
-  const onChange = (index: number) => {
-    if (!ref.current || index !== -1) return;
+    setIsModal(false);
     reset();
   };
 
   return {
-    ref,
+    isModal,
     control,
-    onChange,
+    setIsModal,
     clearErrors,
     onPressComplete,
     onPressCancel,

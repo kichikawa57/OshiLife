@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -10,7 +11,6 @@ import { EditScheduleContent } from "../../components/BottomSheetContents/EditSc
 import { TrackButton } from "../../components/TrackButton";
 import { FilterScheduleContent } from "../../components/BottomSheetContents/FilterScheduleContent";
 import { EditDateContent } from "../../components/BottomSheetContents/EditDateContent";
-import { BottomSheet } from "../../components/BottomSheet";
 
 import { ScheduleHeader } from "./components/ScheduleHeader";
 import { StyledContent, StyledTabView, StyledWrap } from "./style";
@@ -28,58 +28,49 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
   const {
     control,
     clearErrors,
-    ref,
-    onPressCancel,
-    onPressComplete,
-    onChange,
-    onPressCancelForFilter,
     onPressDate,
-    filterRef,
-    dateRef,
+    createScheduleContent,
     editDateContent,
+    filetrContent,
   } = useSchedule(scheduleRoute);
 
   return (
     <>
-      <BottomSheet bottomSheetModalRef={dateRef} index={0}>
+      <Modal animationType="fade" visible={editDateContent.isOpenDate} transparent={true}>
         <EditDateContent
           currentDate={editDateContent.currentDate}
           onPressCancel={editDateContent.onPressCancelForDate}
           onPressComplete={editDateContent.onPressCompleteForDate}
         />
-      </BottomSheet>
-      <BottomSheet bottomSheetModalRef={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      </Modal>
+      <Modal
+        animationType="slide"
+        presentationStyle="pageSheet"
+        visible={createScheduleContent.isOpenCreateSchedule}
+      >
         <EditScheduleContent
           control={control}
           clearErrors={clearErrors}
-          onPressComplete={onPressComplete}
-          onPressCancel={onPressCancel}
+          onPressComplete={createScheduleContent.onPressComplete}
+          onPressCancel={createScheduleContent.onPressCancel}
         />
-      </BottomSheet>
-      <BottomSheet bottomSheetModalRef={filterRef} index={0}>
+      </Modal>
+      <Modal animationType="fade" visible={filetrContent.isOpenFilter} transparent={true}>
         <FilterScheduleContent
           dateType={dateType}
           setDateType={setDateType}
           calendarType={calendarType}
           setCalendarType={setCalendarType}
-          onPressCancel={onPressCancelForFilter}
+          onPressCancel={() => filetrContent.setIsOpenFilter(false)}
         />
-      </BottomSheet>
-      <TrackButton
-        buttonText="予定追加"
-        iconName="plus"
-        isHiddenHeader
-        onPress={() => {
-          ref.current?.present();
-        }}
-      />
+      </Modal>
       <ScheduleHeader
         currentDate={editDateContent.currentDate}
         onPressDate={() => {
-          dateRef.current?.present();
+          editDateContent.setIsOpenDate(true);
         }}
         onPressFilter={() => {
-          filterRef.current?.present();
+          filetrContent.setIsOpenFilter(true);
         }}
       />
       <StyledWrap>
@@ -96,6 +87,13 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
             </TabItem>
           </TabView>
         </StyledTabView>
+        <TrackButton
+          buttonText="予定追加"
+          iconName="plus"
+          onPress={() => {
+            createScheduleContent.openCreateScheduleModal();
+          }}
+        />
       </StyledWrap>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -19,18 +19,34 @@ type Props = {
 };
 
 export const Oshi: FC<Props> = ({ oshiRoute }) => {
-  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } = useOshi();
+  const {
+    control,
+    clearErrors,
+    isOpen,
+    isSelectedEdit,
+    setIsSelectedEdit,
+    setIsOpenColor,
+    onPressCancel,
+    onPressComplete,
+    setIsOpen,
+  } = useOshi();
 
   return (
     <>
-      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      <Modal animationType="slide" presentationStyle="pageSheet" visible={isOpen}>
         <EditOshiContent
           control={control}
+          isSelectedEdit={isSelectedEdit}
           clearErrors={clearErrors}
           onPressComplete={onPressComplete}
           onPressCancel={onPressCancel}
+          onPressEditColor={() => {
+            setIsOpenColor(true);
+            console.log("はっか");
+            setIsSelectedEdit(false);
+          }}
         />
-      </BottomSheetModal>
+      </Modal>
       <StyledWrap>
         <StyledContentWrap>
           <StyledListWrap>
@@ -49,33 +65,6 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
                   />
                 }
               />
-              {/* <ListItem
-                title="川村 和馬"
-                onPress={() => oshiRoute.navigation.navigate("detail")}
-                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-                bottomDivider={true}
-                rightContent={
-                  <Button
-                    title="Delete"
-                    onPress={() => oshiRoute.navigation.navigate("detail")}
-                    iconName="trash-o"
-                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
-                  />
-                }
-              />
-              <ListItem
-                title="川村 和馬"
-                onPress={() => oshiRoute.navigation.navigate("detail")}
-                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-                rightContent={
-                  <Button
-                    title="Delete"
-                    onPress={() => oshiRoute.navigation.navigate("detail")}
-                    iconName="trash-o"
-                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
-                  />
-                }
-              /> */}
             </StyledList>
           </StyledListWrap>
         </StyledContentWrap>
@@ -83,7 +72,7 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
           buttonText="追加"
           iconName="plus"
           onPress={() => {
-            ref.current?.present();
+            setIsOpen(true);
           }}
         />
       </StyledWrap>

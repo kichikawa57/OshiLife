@@ -3,19 +3,20 @@ import React, { FC } from "react";
 import { Button } from "../Button";
 import { IconName } from "../../shared/types/components/icon";
 
-import { StyledWrap } from "./style";
+import { StyledInner, StyledWrap } from "./style";
 
 interface Props {
   buttonText: string;
   iconName: IconName;
-  isHiddenHeader?: boolean;
   onPress: () => void;
 }
 
-export const TrackButton: FC<Props> = ({ buttonText, iconName, isHiddenHeader, onPress }) => {
+export const TrackButton: FC<Props> = ({ buttonText, iconName, onPress }) => {
   return (
-    <StyledWrap isHiddenHeader={!!isHiddenHeader}>
-      <Button title={buttonText} iconName={iconName} onPress={onPress} />
+    <StyledWrap>
+      <StyledInner>
+        <Button title={buttonText} iconName={iconName} onPress={onPress} />
+      </StyledInner>
     </StyledWrap>
   );
 };

@@ -21,6 +21,8 @@ export const EditDateContent: FC<Props> = ({ currentDate, onPressCancel, onPress
 
   return (
     <ContentBase
+      isAbleToScroll={false}
+      isFullHeight={false}
       onPressCancel={onPressCancel}
       onPressComplete={() => {
         onPressComplete(date);

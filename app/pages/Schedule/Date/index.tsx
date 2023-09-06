@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -9,6 +9,7 @@ import { CheckBoxItem } from "../../../components/CheckBox/Item";
 import { ListItem } from "../../../components/List";
 import { TrackButton } from "../../../components/TrackButton";
 import { EditScheduleContent } from "../../../components/BottomSheetContents/EditScheduleContent";
+import { Button } from "../../../components/Button";
 
 import {
   StyledCheckBox,
@@ -26,18 +27,19 @@ type Props = {
 };
 
 export const Date: FC<Props> = ({ scheduleRoute }) => {
-  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } = useScheduleDate();
+  const { control, isModal, clearErrors, setIsModal, onPressCancel, onPressComplete } =
+    useScheduleDate();
 
   return (
     <>
-      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      <Modal animationType="slide" presentationStyle="pageSheet" visible={isModal}>
         <EditScheduleContent
           control={control}
           clearErrors={clearErrors}
           onPressComplete={onPressComplete}
           onPressCancel={onPressCancel}
         />
-      </BottomSheetModal>
+      </Modal>
       <StyledWrap>
         <StyledCheckBox>
           <CheckBoxGroup>
@@ -59,11 +61,28 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                 onPress={() => scheduleRoute.navigation.navigate("detail")}
                 avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
                 bottomDivider={true}
+                rightContent={
+                  <Button
+                    title="Delete"
+                    onPress={() => scheduleRoute.navigation.navigate("detail")}
+                    iconName="trash-o"
+                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                  />
+                }
               />
               <ListItem
-                title="吉野 和馬のイベントに参加します"
+                title="川村 和馬のイベントに参加します"
                 onPress={() => scheduleRoute.navigation.navigate("detail")}
                 avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+                bottomDivider={false}
+                rightContent={
+                  <Button
+                    title="Delete"
+                    onPress={() => scheduleRoute.navigation.navigate("detail")}
+                    iconName="trash-o"
+                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                  />
+                }
               />
             </StyledScrollViewInner>
           </StyledScrollView>
@@ -72,7 +91,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
           buttonText="予定追加"
           iconName="plus"
           onPress={() => {
-            ref.current?.present();
+            setIsModal(true);
           }}
         />
       </StyledWrap>

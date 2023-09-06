@@ -7,6 +7,7 @@ export const StyledWrap = styled.View`
 
 export const StyledContentWrap = styled.ScrollView`
   width: 100%;
+  flex: 1;
   padding: 0 0 40px;
 `;
 

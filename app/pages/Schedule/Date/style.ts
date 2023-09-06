@@ -4,10 +4,12 @@ import { colors } from "../../../shared/styles/color";
 
 export const StyledWrap = styled.View`
   width: 100%;
+  flex: 1;
 `;
 
 export const StyledScrollViewWrap = styled.View`
   width: 100%;
+  flex: 1;
 `;
 
 export const StyledScrollView = styled.ScrollView`
@@ -16,7 +18,7 @@ export const StyledScrollView = styled.ScrollView`
 
 export const StyledScrollViewInner = styled.View`
   width: 100%;
-  padding: 20px 20px 140px;
+  padding: 20px 20px 0;
 `;
 
 export const StyledCheckBox = styled.View`

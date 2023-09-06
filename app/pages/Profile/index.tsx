@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -24,25 +24,18 @@ type Props = {
 };
 
 export const Profile: FC<Props> = () => {
-  const { control, clearErrors, ref, onPressCancel, onPressComplete, onChange } = useOshi();
+  const { control, clearErrors, isOpen, onPressCancel, onPressComplete, setIsOpen } = useOshi();
 
   return (
     <>
-      <BottomSheetModal ref={ref} index={0} snapPoints={["90%"]} onChange={onChange}>
+      <Modal animationType="slide" presentationStyle="pageSheet" visible={isOpen}>
         <EditProfileContent
           control={control}
           clearErrors={clearErrors}
           onPressComplete={onPressComplete}
           onPressCancel={onPressCancel}
         />
-      </BottomSheetModal>
-      <TrackButton
-        buttonText="編集"
-        iconName="pencil"
-        onPress={() => {
-          ref.current?.present();
-        }}
-      />
+      </Modal>
       <StyledWrap>
         <StyledListWrap>
           <StyledList>
@@ -53,6 +46,13 @@ export const Profile: FC<Props> = () => {
           </StyledList>
         </StyledListWrap>
       </StyledWrap>
+      <TrackButton
+        buttonText="編集"
+        iconName="pencil"
+        onPress={() => {
+          setIsOpen(true);
+        }}
+      />
     </>
   );
 };

@@ -1,11 +1,11 @@
 import styled from "styled-components/native";
 
+import { colors } from "../../shared/styles/color";
+
 export const StyledWrap = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  padding: 0 20px;
+  padding: 40px 20px 0;
 `;
 
 export const StyledForm = styled.View`
@@ -21,6 +21,8 @@ export const StyledInput = styled.View<{ isMarginBottom: boolean }>`
 export const StyledButtonWrap = styled.View`
   align-items: center;
   width: 100%;
+  padding: 40px 0;
+  background-color: ${colors.bgLight};
 `;
 
 export const StyledButton = styled.View`

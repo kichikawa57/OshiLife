@@ -3,11 +3,11 @@ import type { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { RoutingPropsOfApp } from "../types";
-import { Icon } from "../../../components/Icon";
 import { RoutingPropsOfRoot } from "../../types";
 import { Schedule as SchedulePage } from "../../../pages/Schedule";
 import { Date } from "../../../pages/Schedule/Date";
 import { Detail } from "../../../pages/Schedule/Detail";
+import { Header } from "../../../components/Header/Normal";
 
 import { RoutingOfSchedule } from "./types";
 
@@ -28,19 +28,30 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
       </Screen>
       <Screen
         name="date"
-        options={({ navigation }) => ({
-          headerLeft: () => <Icon name="chevron-left" onPress={() => navigation.goBack()} />,
-          headerTitle: "2023/01/10",
-        })}
+        options={{
+          header: ({ navigation }) => (
+            <Header
+              title={"2023/01/10"}
+              onPressLeft={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
+        }}
       >
         {(props) => <Date rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
       </Screen>
       <Screen
         name="detail"
-        options={({ navigation }) => ({
-          headerLeft: () => <Icon name="chevron-left" onPress={() => navigation.goBack()} />,
-          headerTitle: "",
-        })}
+        options={{
+          header: ({ navigation }) => (
+            <Header
+              onPressLeft={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
+        }}
       >
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
       </Screen>

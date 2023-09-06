@@ -16,49 +16,51 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
   const { control, clearErrors, onPress } = useSetupUser(rootRoute);
 
   return (
-    <StyledWrap>
-      <StyledForm>
-        <StyledInput isMarginBottom={true}>
-          <Controller
-            control={control}
-            name={"email"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <Input
-                title="メールアドレス"
-                value={value}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("email");
-                }}
-                errorMessage={error && error.message}
-              />
-            )}
-          />
-        </StyledInput>
-        <StyledInput isMarginBottom={false}>
-          <Controller
-            control={control}
-            name={"password"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <Input
-                title="パスワード"
-                value={value}
-                secureTextEntry={true}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("password");
-                }}
-                errorMessage={error && error.message}
-              />
-            )}
-          />
-        </StyledInput>
-      </StyledForm>
+    <>
+      <StyledWrap>
+        <StyledForm>
+          <StyledInput isMarginBottom={true}>
+            <Controller
+              control={control}
+              name={"email"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Input
+                  title="メールアドレス"
+                  value={value}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("email");
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledInput>
+          <StyledInput isMarginBottom={false}>
+            <Controller
+              control={control}
+              name={"password"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Input
+                  title="パスワード"
+                  value={value}
+                  secureTextEntry={true}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("password");
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledInput>
+        </StyledForm>
+      </StyledWrap>
       <StyledButtonWrap>
         <StyledButton>
           <Button title="次へ" onPress={onPress} />
         </StyledButton>
       </StyledButtonWrap>
-    </StyledWrap>
+    </>
   );
 };

@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useCallback, useRef, useState } from "react";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useCallback, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
@@ -8,9 +7,9 @@ import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
 import { FormData, formValidation } from "./validate";
 
 export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
-  const ref = useRef<BottomSheetModal>(null);
-  const filterRef = useRef<BottomSheetModal>(null);
-  const dateRef = useRef<BottomSheetModal>(null);
+  const [isOpenCreateSchedule, setIsOpenCreateSchedule] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [isOpenDate, setIsOpenDate] = useState(false);
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
 
@@ -24,8 +23,6 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   });
 
   const onPressComplete = async () => {
-    if (!ref.current) return;
-
     const values = getValues();
     const error = formValidation(values);
 
@@ -37,53 +34,50 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
       return;
     }
 
-    ref.current.close();
+    setIsOpenCreateSchedule(false);
     reset();
   };
 
   const onPressCompleteForDate = useCallback(async (date: Dayjs) => {
-    if (!dateRef.current) return;
-    dateRef.current.dismiss();
+    setIsOpenDate(false);
     setCurrentDate(date);
   }, []);
 
   const onPressCancel = () => {
-    if (!ref.current) return;
-    ref.current.close();
-  };
-
-  const onPressCancelForFilter = () => {
-    if (!filterRef.current) return;
-    filterRef.current.close();
+    setIsOpenCreateSchedule(false);
   };
 
   const onPressCancelForDate = () => {
-    if (!dateRef.current) return;
-    dateRef.current.close();
+    setIsOpenDate(false);
   };
 
   const onPressDate = () => {
     scheduleRoute.navigation.navigate("date");
   };
 
-  const onChange = (index: number) => {
-    if (!ref.current || index !== -1) return;
+  const openCreateScheduleModal = () => {
     reset();
+    setIsOpenCreateSchedule(true);
   };
 
   return {
-    ref,
-    filterRef,
-    dateRef,
     control,
-    onChange,
     clearErrors,
-    onPressComplete,
-    onPressCancel,
-    onPressCancelForFilter,
     onPressDate,
+    createScheduleContent: {
+      isOpenCreateSchedule,
+      openCreateScheduleModal,
+      onPressComplete,
+      onPressCancel,
+    },
+    filetrContent: {
+      isOpenFilter,
+      setIsOpenFilter,
+    },
     editDateContent: {
+      isOpenDate,
       currentDate,
+      setIsOpenDate,
       onPressCompleteForDate,
       onPressCancelForDate,
     },

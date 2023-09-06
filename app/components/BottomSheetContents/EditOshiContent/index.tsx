@@ -11,16 +11,20 @@ import { StyledContent, StyledSelectedImage, StyledSelectedImageInner } from "./
 
 type Props = {
   control: Control<FormData>;
+  isSelectedEdit: boolean;
   clearErrors: UseFormClearErrors<FormData>;
   onPressCancel: () => void;
   onPressComplete: () => void;
+  onPressEditColor: () => void;
 };
 
 export const EditOshiContent: FC<Props> = ({
   control,
+  isSelectedEdit,
   clearErrors,
   onPressCancel,
   onPressComplete,
+  onPressEditColor,
 }) => {
   return (
     <ContentBase onPressCancel={onPressCancel} onPressComplete={onPressComplete}>
@@ -52,10 +56,14 @@ export const EditOshiContent: FC<Props> = ({
             <CircleList
               title="推しの色を選択してください"
               selectColor={value}
+              isSelectedEdit={isSelectedEdit}
               onClick={(color) => {
                 console.log(color);
                 onChange(color !== value ? color : "");
                 clearErrors("color");
+              }}
+              onClickEdit={() => {
+                onPressEditColor();
               }}
               errorMessage={error && error.message}
             />

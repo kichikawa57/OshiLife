@@ -6,6 +6,7 @@ import { RoutingPropsOfRoot } from "../../types";
 import { RoutingPropsOfApp } from "../types";
 import { Oshi as OshiPage } from "../../../pages/Oshi";
 import { Detail } from "../../../pages/Oshi/Detail";
+import { Header } from "../../../components/Header/Normal";
 
 import { RoutingOfOshi } from "./types";
 
@@ -19,10 +20,22 @@ const { Navigator, Screen } = createStackNavigator<RoutingOfOshi>();
 export const Oshi: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
     <Navigator initialRouteName="top">
-      <Screen name="top" options={{ headerTitle: "推し一覧" }}>
+      <Screen name="top" options={{ header: () => <Header title={"推し一覧"} /> }}>
         {(props) => <OshiPage rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
-      <Screen name="detail" options={{ headerTitle: "川村和馬" }}>
+      <Screen
+        name="detail"
+        options={{
+          header: ({ navigation }) => (
+            <Header
+              title={"川村和馬"}
+              onPressLeft={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
+        }}
+      >
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
     </Navigator>
