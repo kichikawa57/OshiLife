@@ -12,6 +12,6 @@ export const StyledHead = styled.TouchableOpacity`
 `;
 
 export const StyledHeadTitle = styled.Text`
-  font-size: 14px;
+  font-size: 12px;
   padding: 20px 0;
 `;

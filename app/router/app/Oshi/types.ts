@@ -1,10 +1,17 @@
-import { NavigationProps, TabBarIconProps } from "../../../shared/types/router";
+import { z } from "zod";
 
-export type ExampleRoute = { itemId: number; otherParam: string } | undefined;
+import { NavigationProps, TabBarIconProps } from "../../../shared/types/router";
+import { validateEditOshi } from "../../../shared/validate";
+
+export const formData = z.object(validateEditOshi);
+export type EditParams =
+  | ({ id: string; isEditColor: boolean } & z.infer<typeof formData>)
+  | undefined;
 
 export type RoutingOfOshi = {
   top: undefined;
   detail: undefined;
+  edit: EditParams;
 };
 
 export type RoutingPropsOfOshi<K extends keyof RoutingOfOshi> = NavigationProps<RoutingOfOshi, K>;

@@ -36,7 +36,7 @@ export const Accordion: FC<Props> = ({ title, children }) => {
       <StyledHead onPress={onPress}>
         <StyledHeadTitle>{title}</StyledHeadTitle>
         <Animated.View style={{ transform: [{ rotate: spin }] }}>
-          <Icon name="chevron-down" />
+          <Icon name="chevron-down" size={12} />
         </Animated.View>
       </StyledHead>
       {isOpen && children}

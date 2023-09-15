@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -7,10 +6,8 @@ import { RoutingPropsOfOshi } from "../../router/app/Oshi/types";
 import { ListItem } from "../../components/List";
 import { Button } from "../../components/Button";
 import { TrackButton } from "../../components/TrackButton";
-import { EditOshiContent } from "../../components/BottomSheetContents/EditOshiContent";
 
 import { StyledList, StyledListWrap, StyledContentWrap, StyledWrap } from "./style";
-import { useOshi } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -19,34 +16,8 @@ type Props = {
 };
 
 export const Oshi: FC<Props> = ({ oshiRoute }) => {
-  const {
-    control,
-    clearErrors,
-    isOpen,
-    isSelectedEdit,
-    setIsSelectedEdit,
-    setIsOpenColor,
-    onPressCancel,
-    onPressComplete,
-    setIsOpen,
-  } = useOshi();
-
   return (
     <>
-      <Modal animationType="slide" presentationStyle="pageSheet" visible={isOpen}>
-        <EditOshiContent
-          control={control}
-          isSelectedEdit={isSelectedEdit}
-          clearErrors={clearErrors}
-          onPressComplete={onPressComplete}
-          onPressCancel={onPressCancel}
-          onPressEditColor={() => {
-            setIsOpenColor(true);
-            console.log("はっか");
-            setIsSelectedEdit(false);
-          }}
-        />
-      </Modal>
       <StyledWrap>
         <StyledContentWrap>
           <StyledListWrap>
@@ -72,7 +43,7 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
           buttonText="追加"
           iconName="plus"
           onPress={() => {
-            setIsOpen(true);
+            oshiRoute.navigation.navigate("edit");
           }}
         />
       </StyledWrap>

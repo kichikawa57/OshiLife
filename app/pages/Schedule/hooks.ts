@@ -1,51 +1,30 @@
-import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
 
-import { FormData, formValidation } from "./validate";
-
 export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
-  const [isOpenCreateSchedule, setIsOpenCreateSchedule] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isOpenDate, setIsOpenDate] = useState(false);
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
 
-  const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
-    defaultValues: {
-      title: "",
-      date: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-      oshiName: "",
-      memo: "",
-    },
-  });
+  const onPressNextButton = useCallback(() => {
+    setCurrentDate((props) => props.add(1, "month"));
+  }, []);
 
-  const onPressComplete = async () => {
-    const values = getValues();
-    const error = formValidation(values);
+  const onPressPrevButton = useCallback(() => {
+    setCurrentDate((props) => props.add(-1, "month"));
+  }, []);
 
-    if (error !== null) {
-      error.title && setError("title", { message: error.title });
-      error.date && setError("date", { message: error.date });
-      error.oshiName && setError("oshiName", { message: error.oshiName });
-      error.memo && setError("memo", { message: error.memo });
-      return;
-    }
-
-    setIsOpenCreateSchedule(false);
-    reset();
-  };
+  const onPressCurrentDate = useCallback(() => {
+    setCurrentDate(dayjs());
+  }, []);
 
   const onPressCompleteForDate = useCallback(async (date: Dayjs) => {
     setIsOpenDate(false);
     setCurrentDate(date);
   }, []);
-
-  const onPressCancel = () => {
-    setIsOpenCreateSchedule(false);
-  };
 
   const onPressCancelForDate = () => {
     setIsOpenDate(false);
@@ -55,21 +34,11 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     scheduleRoute.navigation.navigate("date");
   };
 
-  const openCreateScheduleModal = () => {
-    reset();
-    setIsOpenCreateSchedule(true);
-  };
-
   return {
-    control,
-    clearErrors,
     onPressDate,
-    createScheduleContent: {
-      isOpenCreateSchedule,
-      openCreateScheduleModal,
-      onPressComplete,
-      onPressCancel,
-    },
+    onPressNextButton,
+    onPressPrevButton,
+    onPressCurrentDate,
     filetrContent: {
       isOpenFilter,
       setIsOpenFilter,

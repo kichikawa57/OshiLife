@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useMemo } from "react";
+import React, { FC, Fragment, memo, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { isHoliday } from "japanese-holidays";
 
@@ -81,7 +81,7 @@ const dummyData: ScheduleData[] = [
   },
 ];
 
-export const Calendar: FC<Props> = ({ currentDate, onPressDate }) => {
+const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
   const currentMonth = currentDate.month();
   const today = dayjs();
   const { getMonth } = useCalendar(currentDate);
@@ -232,3 +232,5 @@ export const Calendar: FC<Props> = ({ currentDate, onPressDate }) => {
     </StyledView>
   );
 };
+
+export const Calendar = memo(CalendarComponent);

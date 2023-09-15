@@ -16,7 +16,6 @@ import {
   StyledButtonWrap,
   StyledForm,
   StyledImageTouch,
-  StyledImageWrap,
   StyledInput,
   StyledTitle,
   StyledWrap,

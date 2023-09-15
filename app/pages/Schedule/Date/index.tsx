@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -8,7 +7,6 @@ import { CheckBoxGroup } from "../../../components/CheckBox/Group";
 import { CheckBoxItem } from "../../../components/CheckBox/Item";
 import { ListItem } from "../../../components/List";
 import { TrackButton } from "../../../components/TrackButton";
-import { EditScheduleContent } from "../../../components/BottomSheetContents/EditScheduleContent";
 import { Button } from "../../../components/Button";
 
 import {
@@ -18,7 +16,6 @@ import {
   StyledScrollViewWrap,
   StyledWrap,
 } from "./style";
-import { useScheduleDate } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -27,19 +24,8 @@ type Props = {
 };
 
 export const Date: FC<Props> = ({ scheduleRoute }) => {
-  const { control, isModal, clearErrors, setIsModal, onPressCancel, onPressComplete } =
-    useScheduleDate();
-
   return (
     <>
-      <Modal animationType="slide" presentationStyle="pageSheet" visible={isModal}>
-        <EditScheduleContent
-          control={control}
-          clearErrors={clearErrors}
-          onPressComplete={onPressComplete}
-          onPressCancel={onPressCancel}
-        />
-      </Modal>
       <StyledWrap>
         <StyledCheckBox>
           <CheckBoxGroup>
@@ -91,7 +77,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
           buttonText="予定追加"
           iconName="plus"
           onPress={() => {
-            setIsModal(true);
+            scheduleRoute.navigation.navigate("edit");
           }}
         />
       </StyledWrap>

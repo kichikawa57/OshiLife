@@ -9,6 +9,7 @@ type Route = {
 export type Navigation<T extends Route> = {
   navigate: <K extends keyof T>(page: K, params?: T[K]) => void;
   reset: (props: { index: number; routes: Array<{ name: keyof T }> }) => void;
+  goBack: () => void;
 };
 
 export type NavigationProps<T extends Route, K extends keyof T> = {

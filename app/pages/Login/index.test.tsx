@@ -15,6 +15,7 @@ describe("Login", () => {
     navigation: {
       navigate: jest.fn(),
       reset: jest.fn(),
+      goBack: jest.fn(),
     },
   };
 

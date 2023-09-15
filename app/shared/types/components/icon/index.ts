@@ -2,6 +2,7 @@ export type IconName =
   | "home"
   | "users"
   | "calendar"
+  | "calendar-o"
   | "chevron-left"
   | "star"
   | "user-circle"
@@ -12,4 +13,7 @@ export type IconName =
   | "filter"
   | "trash-o"
   | "chevron-down"
-  | "eyedropper";
+  | "eyedropper"
+  | "caret-left"
+  | "caret-right"
+  | "check";

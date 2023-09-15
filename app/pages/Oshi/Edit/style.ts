@@ -2,16 +2,14 @@ import styled from "styled-components/native";
 
 import { colors } from "../../../shared/styles/color";
 
-export const StyledContent = styled.View<{ isHiddenBottom?: boolean }>`
-  padding-bottom: ${({ isHiddenBottom }) => (!isHiddenBottom ? 20 : 0)}px;
+export const StyledWrap = styled.ScrollView`
+  width: 100%;
+  padding: 40px 20px 0;
 `;
 
-export const StyledDatePickerWrap = styled.View`
+export const StyledContent = styled.View<{ isHideMarginBottom?: boolean }>`
   width: 100%;
-`;
-
-export const StyledDatePicker = styled.View`
-  width: 100%;
+  margin-bottom: ${({ isHideMarginBottom }) => (!isHideMarginBottom ? 40 : 0)}px;
 `;
 
 export const StyledDatePickerTitle = styled.Text`

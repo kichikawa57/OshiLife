@@ -19,6 +19,10 @@ export const validateEditSchedule = {
   memo: z.string().optional(),
 };
 
+export const validateEditProfile = {
+  email: z.string().email("メールアドレスを正しく記載してください"),
+};
+
 type ErrorKeys<T> = keyof T;
 
 export const checkFormData = <T>(formData: z.ZodObject<z.ZodRawShape>, data: T) => {

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { checkFormData, validateEditOshi } from "../../shared/validate";
+import { checkFormData, validateEditSchedule } from "../../../shared/validate";
 
-export const formData = z.object(validateEditOshi);
+export const formData = z.object(validateEditSchedule);
 
 export type FormData = z.infer<typeof formData>;
 

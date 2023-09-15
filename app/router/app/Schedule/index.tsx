@@ -8,6 +8,7 @@ import { Schedule as SchedulePage } from "../../../pages/Schedule";
 import { Date } from "../../../pages/Schedule/Date";
 import { Detail } from "../../../pages/Schedule/Detail";
 import { Header } from "../../../components/Header/Normal";
+import { Edit } from "../../../pages/Schedule/Edit";
 
 import { RoutingOfSchedule } from "./types";
 
@@ -54,6 +55,14 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
         }}
       >
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
+      </Screen>
+      <Screen
+        name="edit"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {(props) => <Edit rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
       </Screen>
     </Navigator>
   );

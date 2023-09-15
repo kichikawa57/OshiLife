@@ -6,6 +6,7 @@ import { RoutingPropsOfRoot } from "../../types";
 import { RoutingPropsOfApp } from "../types";
 import { Profile as ProfilePage } from "../../../pages/Profile";
 import { Header } from "../../../components/Header/Normal";
+import { Edit } from "../../../pages/Profile/Edit";
 
 import { RoutingOfProfile } from "./types";
 
@@ -26,6 +27,9 @@ export const Profile: FC<Props> = ({ rootRoute, appRoute }) => {
     >
       <Screen name="top" options={{ headerTitle: "プロフィール" }}>
         {(props) => <ProfilePage rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
+      </Screen>
+      <Screen name="edit" options={{ headerShown: false }}>
+        {(props) => <Edit rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
       </Screen>
     </Navigator>
   );

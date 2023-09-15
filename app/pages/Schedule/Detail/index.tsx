@@ -1,12 +1,11 @@
 import React, { FC, useState } from "react";
-import { Modal } from "react-native";
+import dayjs from "dayjs";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
 import { RoutingPropsOfSchedule } from "../../../router/app/Schedule/types";
 import { SwitchList } from "../../../components/Switch/List";
 import { TrackButton } from "../../../components/TrackButton";
-import { EditScheduleContent } from "../../../components/BottomSheetContents/EditScheduleContent";
 
 import {
   Memo,
@@ -18,29 +17,17 @@ import {
   StyledTitle,
   StyledWrap,
 } from "./style";
-import { useScheduleDetail } from "./hooks";
-
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
   appRoute: RoutingPropsOfApp<"schedule">;
   scheduleRoute: RoutingPropsOfSchedule<"detail">;
 };
 
-export const Detail: FC<Props> = () => {
+export const Detail: FC<Props> = ({ scheduleRoute }) => {
   const [isChack, setIsCheck] = useState(false);
-  const { isModal, control, clearErrors, onPressCancel, onPressComplete, setIsModal } =
-    useScheduleDetail();
 
   return (
     <>
-      <Modal animationType="slide" presentationStyle="pageSheet" visible={isModal}>
-        <EditScheduleContent
-          control={control}
-          clearErrors={clearErrors}
-          onPressComplete={onPressComplete}
-          onPressCancel={onPressCancel}
-        />
-      </Modal>
       <StyledWrap>
         <StyledInner>
           <StyledTitle>記事のタイトル</StyledTitle>
@@ -69,7 +56,13 @@ export const Detail: FC<Props> = () => {
         buttonText="編集"
         iconName="pencil"
         onPress={() => {
-          setIsModal(true);
+          scheduleRoute.navigation.navigate("edit", {
+            id: "id-01",
+            title: "記事のタイトル",
+            date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+            oshiName: "川村かずま",
+            memo: "メモメモメモメモメモメモメモメモメモ メモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモ",
+          });
         }}
       />
     </>

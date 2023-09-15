@@ -16,7 +16,9 @@ export const EditDateContent: FC<Props> = ({ currentDate, onPressCancel, onPress
   const [date, setDate] = useState<Dayjs>(currentDate);
 
   const currentYear = dayjs().year();
-  const years = Array.from({ length: 50 }, (_, index) => currentYear - index);
+  const pastYears = Array.from({ length: 100 }, (_, index) => currentYear - index);
+  const futureYears = Array.from({ length: 100 }, (_, index) => currentYear + index + 1);
+  const years = [...pastYears.reverse(), currentYear, ...futureYears];
   const months = Array.from({ length: 12 }, (_, index) => index + 1);
 
   return (

@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -7,7 +6,6 @@ import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { Image } from "../../../components/Image";
 import { Circle } from "../../../components/CircleForColor/Circle";
 import { TrackButton } from "../../../components/TrackButton";
-import { EditOshiContent } from "../../../components/BottomSheetContents/EditOshiContent";
 
 import {
   ImageWrap,
@@ -19,7 +17,6 @@ import {
   StyledCircle,
   StyledMemo,
 } from "./style";
-import { useOshiDetail } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -27,22 +24,9 @@ type Props = {
   oshiRoute: RoutingPropsOfOshi<"detail">;
 };
 
-export const Detail: FC<Props> = () => {
-  const { control, clearErrors, isOpen, onPressCancel, onPressComplete, setIsOpen } =
-    useOshiDetail();
-
+export const Detail: FC<Props> = ({ oshiRoute }) => {
   return (
     <>
-      <Modal animationType="slide" presentationStyle="pageSheet" visible={isOpen}>
-        <EditOshiContent
-          control={control}
-          isSelectedEdit={false}
-          clearErrors={clearErrors}
-          onPressEditColor={() => null}
-          onPressComplete={onPressComplete}
-          onPressCancel={onPressCancel}
-        />
-      </Modal>
       <StyledWrap>
         <StyledContentsWrap>
           <ImageWrap>
@@ -70,7 +54,13 @@ export const Detail: FC<Props> = () => {
           buttonText="編集"
           iconName="pencil"
           onPress={() => {
-            setIsOpen(true);
+            oshiRoute.navigation.navigate("edit", {
+              id: "id-01",
+              name: "川村かずま",
+              color: "#ff0000",
+              memo: "メモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメ",
+              isEditColor: true,
+            });
           }}
         />
       </StyledWrap>

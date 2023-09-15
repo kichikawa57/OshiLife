@@ -1,10 +1,8 @@
 import { z } from "zod";
 
-import { checkFormData } from "../../shared/validate";
+import { checkFormData, validateEditProfile } from "../../shared/validate";
 
-export const formData = z.object({
-  email: z.string().email("メールアドレスを正しく記載してください"),
-});
+export const formData = z.object(validateEditProfile);
 
 export type FormData = z.infer<typeof formData>;
 
