@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { Modal } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
@@ -55,6 +56,18 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           onPressCancel={createScheduleContent.onPressCancel}
         />
       </Modal>
+      <Modal
+        animationType="slide"
+        presentationStyle="pageSheet"
+        visible={createScheduleContent.isOpenCreateSchedule}
+      >
+        <EditScheduleContent
+          control={control}
+          clearErrors={clearErrors}
+          onPressComplete={createScheduleContent.onPressComplete}
+          onPressCancel={createScheduleContent.onPressCancel}
+        />
+      </Modal>
       <Modal animationType="fade" visible={filetrContent.isOpenFilter} transparent={true}>
         <FilterScheduleContent
           dateType={dateType}
@@ -69,7 +82,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
         onPressDate={() => {
           editDateContent.setIsOpenDate(true);
         }}
-        onPressFilter={() => {
+        onPressFilter={async () => {
           filetrContent.setIsOpenFilter(true);
         }}
       />

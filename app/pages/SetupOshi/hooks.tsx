@@ -11,8 +11,10 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
 
   const { control, clearErrors, getValues, setError } = useForm<FormData>({
     defaultValues: {
+      image: "",
       name: "",
       color: "",
+      memo: "",
     },
   });
 

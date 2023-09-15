@@ -1,14 +1,26 @@
 import React, { FC } from "react";
 import { Controller } from "react-hook-form";
 import { Modal } from "react-native";
+import { Image } from "@rneui/base";
+import ImagePicker from "react-native-image-crop-picker";
 
 import { Input } from "../../components/Input";
 import { RoutingPropsOfRoot } from "../../router/types";
 import { CircleList } from "../../components/CircleForColor/CircleList";
 import { Button } from "../../components/Button";
 import { EditColorContent } from "../../components/BottomSheetContents/EditColorContent";
+import { Textarea } from "../../components/Textarea";
 
-import { StyledButton, StyledButtonWrap, StyledForm, StyledInput, StyledWrap } from "./style";
+import {
+  StyledButton,
+  StyledButtonWrap,
+  StyledForm,
+  StyledImageTouch,
+  StyledImageWrap,
+  StyledInput,
+  StyledTitle,
+  StyledWrap,
+} from "./style";
 import { useSetupOshi } from "./hooks";
 
 type Props = {
@@ -42,6 +54,31 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
       <StyledWrap>
         <StyledForm>
           <StyledInput isMarginBottom={true}>
+            <StyledTitle>画像選択</StyledTitle>
+            <Controller
+              control={control}
+              name={"image"}
+              render={({ field: { onChange, value } }) => (
+                <StyledImageTouch
+                  onPress={async () => {
+                    const image = await ImagePicker.openPicker({
+                      width: 300,
+                      height: 300,
+                      cropping: true,
+                    });
+
+                    onChange(image.path);
+                  }}
+                >
+                  <Image
+                    source={value !== "" ? { uri: value } : require("./person.png")}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </StyledImageTouch>
+              )}
+            />
+          </StyledInput>
+          <StyledInput isMarginBottom={true}>
             <Controller
               control={control}
               name={"name"}
@@ -58,7 +95,7 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
               )}
             />
           </StyledInput>
-          <StyledInput isMarginBottom={false}>
+          <StyledInput isMarginBottom={true}>
             <Controller
               control={control}
               name={"color"}
@@ -75,6 +112,23 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
                   onClickEdit={() => {
                     !editColor.isEditColor && onChange("");
                     editColor.setIsModal(true);
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledInput>
+          <StyledInput isMarginBottom={true}>
+            <Controller
+              control={control}
+              name={"memo"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Textarea
+                  title="メモ"
+                  value={value}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("memo");
                   }}
                   errorMessage={error && error.message}
                 />

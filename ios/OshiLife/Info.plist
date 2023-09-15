@@ -73,5 +73,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>アプリがあなたの写真を選択するためのアクセス許可が必要です。</string>
+	<key>NSCameraUsageDescription</key>
+	<string>アプリが写真やビデオを撮影するためのアクセス許可が必要です。</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>アプリがビデオを撮影する際に音声を録音するためのアクセス許可が必要です。</string>
 </dict>
 </plist>
