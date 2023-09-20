@@ -238,12 +238,6 @@ export const ColorPicker: FC<IHoloPickerProps> = (props) => {
       const relativeX = x - _pageX.current - marginLeft;
       const relativeY = y - _pageY.current - marginTop;
 
-      // console.log("marginLeft", marginLeft);
-      // console.log("marginTop", marginTop);
-      // console.log("relativeX", relativeX);
-      // console.log("y", y);
-      console.log("relativeY", pickerSize);
-
       const h = computeHValue(relativeX, relativeY);
       onColorChange({ h, s, v });
       return true;
