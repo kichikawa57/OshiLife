@@ -16,7 +16,7 @@ import { SelectOshiListContent } from "../../../components/BottomSheetContents/S
 import { OSHI_LIST } from "../../../shared/constants/oshi";
 
 import { useScheduleDetail } from "./hooks";
-import { StyledWrap, StyledContent, StyledDatePickerError } from "./style";
+import { StyledWrap, StyledContent, StyledDatePickerError, StyledInner } from "./style";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -27,7 +27,10 @@ type Props = {
 export const Edit: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
 
-  const { isModal, control, clearErrors, setIsModal } = useScheduleDetail(params);
+  const { isModal, control, clearErrors, setIsModal, onPressComplete } = useScheduleDetail(
+    scheduleRoute,
+    params,
+  );
 
   return (
     <>
@@ -44,6 +47,7 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
               onPressComplete={(_, name) => {
                 onChange(name);
                 setIsModal(false);
+                clearErrors("oshiName");
               }}
             />
           )}
@@ -54,78 +58,119 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
         onPressLeft={() => {
           scheduleRoute.navigation.goBack();
         }}
-        right={<Icon name="check" onPress={() => scheduleRoute.navigation.goBack()} />}
+        right={
+          <Icon
+            name="check"
+            onPress={() => {
+              onPressComplete();
+            }}
+          />
+        }
       />
       <StyledWrap>
-        <StyledContent>
-          <Controller
-            control={control}
-            name={"title"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <Input
-                title="タイトル"
-                value={value}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("title");
-                }}
-                errorMessage={error && error.message}
-              />
-            )}
-          />
-        </StyledContent>
-        <StyledContent>
-          <Controller
-            control={control}
-            name={"oshiName"}
-            render={({ field: { value }, fieldState: { error } }) => (
-              <Input
-                title="推し選択"
-                value={value}
-                onPress={() => setIsModal(true)}
-                editable={false}
-                errorMessage={error && error.message}
-              />
-            )}
-          />
-        </StyledContent>
-        <StyledContent>
-          <Accordion title="日付">
+        <StyledInner>
+          <StyledContent>
             <Controller
               control={control}
-              name={"date"}
+              name={"title"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Input
+                  title="タイトル"
+                  value={value}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("title");
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledContent>
+          <StyledContent>
+            <Controller
+              control={control}
+              name={"oshiName"}
+              render={({ field: { value }, fieldState: { error } }) => (
+                <Input
+                  title="推し選択"
+                  value={value}
+                  onPress={() => setIsModal(true)}
+                  editable={false}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledContent>
+          <StyledContent>
+            <Controller
+              control={control}
+              name={"startDate"}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <>
-                  <DatePicker
-                    date={dayjs(value).toDate()}
-                    onDateChange={(date) => {
-                      onChange(dayjs(date).format("YYYY-MM-DD HH:mm:ss"));
-                    }}
-                    locale="ja"
-                  />
+                  <Accordion
+                    title={`開始日付: ${
+                      value !== "" ? dayjs(value).format("YYYY年MM月DD日 HH時 mm分") : "未選択"
+                    }`}
+                  >
+                    <DatePicker
+                      date={dayjs(value !== "" ? value : undefined).toDate()}
+                      onDateChange={(date) => {
+                        onChange(dayjs(date).format("YYYY-MM-DD HH:mm:ss"));
+                        clearErrors(["startDate", "endDate"]);
+                      }}
+                      mode="datetime"
+                      locale="ja"
+                    />
+                  </Accordion>
                   {error && <StyledDatePickerError>{error.message}</StyledDatePickerError>}
                 </>
               )}
             />
-          </Accordion>
-        </StyledContent>
-        <StyledContent isHideMarginBottom>
-          <Controller
-            control={control}
-            name={"memo"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <Textarea
-                title="メモ"
-                value={value}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("memo");
-                }}
-                errorMessage={error && error.message}
-              />
-            )}
-          />
-        </StyledContent>
+          </StyledContent>
+          <StyledContent>
+            <Controller
+              control={control}
+              name={"endDate"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <>
+                  <Accordion
+                    title={`終了日付: ${
+                      value !== "" ? dayjs(value).format("YYYY年MM月DD日 HH時 mm分") : "未選択"
+                    }`}
+                  >
+                    <DatePicker
+                      date={dayjs(value !== "" ? value : undefined).toDate()}
+                      onDateChange={(date) => {
+                        onChange(dayjs(date).format("YYYY-MM-DD HH:mm:ss"));
+                        clearErrors(["startDate", "endDate"]);
+                      }}
+                      mode="datetime"
+                      locale="ja"
+                    />
+                  </Accordion>
+                  {error && <StyledDatePickerError>{error.message}</StyledDatePickerError>}
+                </>
+              )}
+            />
+          </StyledContent>
+          <StyledContent isHideMarginBottom>
+            <Controller
+              control={control}
+              name={"memo"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Textarea
+                  title="メモ"
+                  value={value}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("memo");
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledContent>
+        </StyledInner>
       </StyledWrap>
     </>
   );

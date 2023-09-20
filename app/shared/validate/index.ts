@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { z } from "zod";
 
 export const validateEmailAndPassword = {
@@ -9,14 +10,25 @@ export const validateEditOshi = {
   image: z.string().optional(),
   name: z.string().nonempty("推しの名前を記入してください"),
   color: z.string().nonempty("推しの色を選択してください"),
-  memo: z.string().nonempty("推しの色を選択してください"),
+  memo: z.string().optional(),
 };
 
 export const validateEditSchedule = {
   title: z.string().nonempty("予定のタイトルを入れてください"),
-  date: z.string(),
+  startDate: z.string().nonempty("開始日を設定してください"),
+  endDate: z.string().nonempty("終了日を設定してください"),
   oshiName: z.string().nonempty("推しを選択してください"),
   memo: z.string().optional(),
+};
+
+export const validateDateRange = (data: { startDate: string; endDate: string }) => {
+  if (data.startDate && data.endDate) {
+    const isValid =
+      dayjs(data.startDate).isBefore(data.endDate) || dayjs(data.startDate).isSame(data.endDate);
+
+    return !isValid ? "開始日は終了日より後の日付にできません" : "";
+  }
+  return "";
 };
 
 export const validateEditProfile = {

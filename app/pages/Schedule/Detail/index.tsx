@@ -31,7 +31,7 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
       <StyledWrap>
         <StyledInner>
           <StyledTitle>記事のタイトル</StyledTitle>
-          <StyledDate>日時: 01月01日 ~ 01月03日 09:00</StyledDate>
+          <StyledDate>日時: 01月01日 09:00 ~ 01月03日 09:00</StyledDate>
           <StyledSwitch>
             <SwitchList
               text="自分のカレンダーに登録する"
@@ -59,7 +59,8 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
           scheduleRoute.navigation.navigate("edit", {
             id: "id-01",
             title: "記事のタイトル",
-            date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+            startDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+            endDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
             oshiName: "川村壱馬",
             memo: "メモメモメモメモメモメモメモメモメモ メモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモ",
           });

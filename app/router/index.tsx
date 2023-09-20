@@ -21,7 +21,7 @@ const Stack = createStackNavigator<RoutingOfRoot>();
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator initialRouteName="setupOshi">
+      <Stack.Navigator initialRouteName="app">
         <Stack.Screen
           name="app"
           options={{
