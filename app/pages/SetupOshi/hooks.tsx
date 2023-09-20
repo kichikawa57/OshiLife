@@ -6,8 +6,10 @@ import { RoutingPropsOfRoot } from "../../router/types";
 import { FormData, formValidation } from "./validate";
 
 export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
-  const [isModal, setIsModal] = useState(false);
+  const [isOpenSelectedColorModal, setIsOpenSelectedColorModal] = useState(false);
   const [isEditColor, setIsEditColor] = useState(false);
+
+  const [isOpenSelectedOshiModal, setIsOpenSelectedOshiModal] = useState(false);
 
   const { control, clearErrors, getValues, setError } = useForm<FormData>({
     defaultValues: {
@@ -36,10 +38,14 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     clearErrors,
     onPress,
     editColor: {
-      isModal,
+      isModal: isOpenSelectedColorModal,
       isEditColor,
-      setIsModal,
+      setIsModal: setIsOpenSelectedColorModal,
       setIsEditColor,
+    },
+    selectedOshi: {
+      isOpenSelectedOshiModal,
+      setIsOpenSelectedOshiModal,
     },
   };
 };

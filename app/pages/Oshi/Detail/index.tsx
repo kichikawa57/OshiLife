@@ -56,7 +56,7 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
           onPress={() => {
             oshiRoute.navigation.navigate("edit", {
               id: "id-01",
-              name: "川村かずま",
+              name: "川村壱馬",
               color: "#ff0000",
               memo: "メモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメ",
               isEditColor: true,

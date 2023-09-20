@@ -17,3 +17,17 @@ export const StyledErrorText = styled.Text`
   font-size: 12px;
   color: ${colors.error};
 `;
+
+export const StyledInputWrap = styled.View`
+  width: 100%;
+  position: relative;
+`;
+
+export const StyledTouchableOpacity = styled.TouchableOpacity`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+`;

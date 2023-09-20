@@ -6,7 +6,8 @@ import { EditParams } from "../../../router/app/Oshi/types";
 import { FormData, formValidation } from "./validate";
 
 export const useOshiEdit = (params: EditParams) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSelectedColorModal, setIsOpenSelectedColorModal] = useState(false);
+  const [isOpenSelectedOshiModal, setIsOpenSelectedOshiModal] = useState(false);
   const [isEditColor, setIsEditColor] = useState(params?.isEditColor || false);
 
   const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
@@ -34,12 +35,14 @@ export const useOshiEdit = (params: EditParams) => {
   };
 
   return {
-    isOpen,
+    isOpenSelectedColorModal,
+    isOpenSelectedOshiModal,
     control,
     isEditColor,
     setIsEditColor,
     clearErrors,
-    setIsOpen,
+    setIsOpenSelectedColorModal,
+    setIsOpenSelectedOshiModal,
     onPressComplete,
   };
 };

@@ -13,6 +13,10 @@ export const StyledSelectedImageInner = styled.View`
   background-color: ${colors.bgDark};
 `;
 
+export const StyledContentWrap = styled.View`
+  padding: 20px;
+`;
+
 export const StyledContent = styled.View<{ isHiddenBottom?: boolean }>`
-  padding-bottom: ${({ isHiddenBottom }) => (!isHiddenBottom ? 20 : 0)}px;
+  margin-bottom: ${({ isHiddenBottom }) => (!isHiddenBottom ? 20 : 0)}px;
 `;

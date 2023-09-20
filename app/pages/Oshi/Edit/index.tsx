@@ -11,6 +11,8 @@ import { Icon } from "../../../components/Icon";
 import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { CircleList } from "../../../components/CircleForColor/CircleList";
 import { EditColorContent } from "../../../components/BottomSheetContents/EditColorContent";
+import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
+import { OSHI_LIST } from "../../../shared/constants/oshi";
 
 import { useOshiEdit } from "./hooks";
 import { StyledWrap, StyledContent } from "./style";
@@ -24,12 +26,24 @@ type Props = {
 export const Edit: FC<Props> = ({ oshiRoute }) => {
   const params = oshiRoute.route.params;
 
-  const { control, clearErrors, setIsEditColor, setIsOpen, isOpen, isEditColor } =
-    useOshiEdit(params);
+  const {
+    control,
+    clearErrors,
+    setIsEditColor,
+    setIsOpenSelectedColorModal,
+    setIsOpenSelectedOshiModal,
+    isOpenSelectedColorModal,
+    isOpenSelectedOshiModal,
+    isEditColor,
+  } = useOshiEdit(params);
 
   return (
     <>
-      <Modal animationType="slide" visible={isOpen} presentationStyle="fullScreen">
+      <Modal
+        animationType="slide"
+        visible={isOpenSelectedColorModal}
+        presentationStyle="fullScreen"
+      >
         <Controller
           control={control}
           name={"color"}
@@ -37,12 +51,30 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
             <EditColorContent
               color={value}
               onPressCancel={() => {
-                setIsOpen(false);
+                setIsOpenSelectedColorModal(false);
               }}
               onPressComplete={(color) => {
                 onChange(color);
                 setIsEditColor(true);
-                setIsOpen(false);
+                setIsOpenSelectedColorModal(false);
+              }}
+            />
+          )}
+        />
+      </Modal>
+      <Modal animationType="slide" visible={isOpenSelectedOshiModal} presentationStyle="fullScreen">
+        <Controller
+          control={control}
+          name={"name"}
+          render={({ field: { onChange } }) => (
+            <SelectOshiListContent
+              oshiList={OSHI_LIST}
+              onPressCancel={() => {
+                setIsOpenSelectedOshiModal(false);
+              }}
+              onPressComplete={(_, name) => {
+                onChange(name);
+                setIsOpenSelectedOshiModal(false);
               }}
             />
           )}
@@ -60,13 +92,12 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           <Controller
             control={control}
             name={"name"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
+            render={({ field: { value }, fieldState: { error } }) => (
               <Input
                 title="推しの名前"
                 value={value}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("name");
+                onPress={() => {
+                  setIsOpenSelectedOshiModal(true);
                 }}
                 errorMessage={error && error.message}
               />
@@ -88,7 +119,7 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
                   clearErrors("color");
                 }}
                 onClickEdit={() => {
-                  setIsOpen(true);
+                  setIsOpenSelectedColorModal(true);
                 }}
                 errorMessage={error && error.message}
               />

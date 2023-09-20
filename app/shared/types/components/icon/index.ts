@@ -16,4 +16,6 @@ export type IconName =
   | "eyedropper"
   | "caret-left"
   | "caret-right"
-  | "check";
+  | "check"
+  | "search"
+  | "close";

@@ -10,6 +10,8 @@ import { CircleList } from "../../components/CircleForColor/CircleList";
 import { Button } from "../../components/Button";
 import { EditColorContent } from "../../components/BottomSheetContents/EditColorContent";
 import { Textarea } from "../../components/Textarea";
+import { SelectOshiListContent } from "../../components/BottomSheetContents/SelectOshiListContent";
+import { OSHI_LIST } from "../../shared/constants/oshi";
 
 import {
   StyledButton,
@@ -27,7 +29,7 @@ type Props = {
 };
 
 export const SetupOshi: FC<Props> = ({ rootRoute }) => {
-  const { control, clearErrors, onPress, editColor } = useSetupOshi(rootRoute);
+  const { control, clearErrors, onPress, editColor, selectedOshi } = useSetupOshi(rootRoute);
 
   return (
     <>
@@ -45,6 +47,28 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
                 onChange(color);
                 editColor.setIsEditColor(true);
                 editColor.setIsModal(false);
+              }}
+            />
+          )}
+        />
+      </Modal>
+      <Modal
+        animationType="slide"
+        visible={selectedOshi.isOpenSelectedOshiModal}
+        presentationStyle="fullScreen"
+      >
+        <Controller
+          control={control}
+          name={"name"}
+          render={({ field: { onChange } }) => (
+            <SelectOshiListContent
+              oshiList={OSHI_LIST}
+              onPressCancel={() => {
+                selectedOshi.setIsOpenSelectedOshiModal(false);
+              }}
+              onPressComplete={(_, name) => {
+                onChange(name);
+                selectedOshi.setIsOpenSelectedOshiModal(false);
               }}
             />
           )}
@@ -81,13 +105,12 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
             <Controller
               control={control}
               name={"name"}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
+              render={({ field: { value }, fieldState: { error } }) => (
                 <Input
-                  title="メールアドレス"
+                  title="推しの名前"
                   value={value}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    clearErrors("name");
+                  onPress={() => {
+                    selectedOshi.setIsOpenSelectedOshiModal(true);
                   }}
                   errorMessage={error && error.message}
                 />

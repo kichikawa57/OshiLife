@@ -60,7 +60,7 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
             id: "id-01",
             title: "記事のタイトル",
             date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-            oshiName: "川村かずま",
+            oshiName: "川村壱馬",
             memo: "メモメモメモメモメモメモメモメモメモ メモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメメモメモメモメモメモメモメモメモメモメモメモ",
           });
         }}

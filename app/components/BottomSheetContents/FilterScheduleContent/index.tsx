@@ -5,7 +5,7 @@ import { CheckBoxGroup } from "../../CheckBox/Group";
 import { CheckBoxItem } from "../../CheckBox/Item";
 import { TabList } from "../../Tab/List";
 
-import { StyledContent } from "./style";
+import { StyledContent, StyledContentWrap } from "./style";
 
 type Props = {
   dateType: number;
@@ -29,29 +29,31 @@ export const FilterScheduleContent: FC<Props> = ({
       isAbleToScroll={false}
       isFullHeight={false}
     >
-      <StyledContent>
-        <CheckBoxGroup>
-          <CheckBoxItem
-            imageUrl="testr"
-            isSelected
-            name="川村和馬"
-            onPress={() => null}
-            isMarginRight
+      <StyledContentWrap>
+        <StyledContent>
+          <CheckBoxGroup>
+            <CheckBoxItem
+              imageUrl="testr"
+              isSelected
+              name="川村和馬"
+              onPress={() => null}
+              isMarginRight
+            />
+            <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
+          </CheckBoxGroup>
+        </StyledContent>
+        <StyledContent>
+          <TabList list={["日", "週", "月"]} value={dateType} type="panel" onClick={setDateType} />
+        </StyledContent>
+        <StyledContent isHiddenBottom>
+          <TabList
+            list={["all", "自分の"]}
+            value={calendarType}
+            onClick={setCalendarType}
+            type="panel"
           />
-          <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
-        </CheckBoxGroup>
-      </StyledContent>
-      <StyledContent>
-        <TabList list={["日", "週", "月"]} value={dateType} type="panel" onClick={setDateType} />
-      </StyledContent>
-      <StyledContent isHiddenBottom>
-        <TabList
-          list={["all", "自分の"]}
-          value={calendarType}
-          onClick={setCalendarType}
-          type="panel"
-        />
-      </StyledContent>
+        </StyledContent>
+      </StyledContentWrap>
     </ContentBase>
   );
 };

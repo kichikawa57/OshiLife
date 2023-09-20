@@ -8,11 +8,16 @@ export const StyledView = styled.View<{ isFullHeight: boolean; isStatusBar: bool
   flex: 1;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: ${({ isStatusBar }) => (isStatusBar ? getStatusBarHeight() : 0)}px 20px 20px;
+  padding-top: ${({ isStatusBar }) => (isStatusBar ? getStatusBarHeight() : 0)}px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 
   ${({ isFullHeight }) =>
     isFullHeight &&
     css`
+      padding-left: 0;
+      padding-right: 0;
       justify-content: flex-start;
       flex: 1;
       background-color: #fff;
@@ -22,24 +27,35 @@ export const StyledView = styled.View<{ isFullHeight: boolean; isStatusBar: bool
 export const StyledViewInner = styled.View<{ isFullHeight: boolean }>`
   width: 100%;
   background-color: #fff;
-  padding: 20px;
   border-radius: 10px;
+  padding-top: 20px;
 
   ${({ isFullHeight }) =>
     isFullHeight &&
     css`
-      padding: 20px 20px 0;
+      padding-top: 0;
+      padding-bottom: 20px;
       background-color: #fff;
     `}
 `;
 
-export const StyledHeader = styled.View<{ headerPosition: "center" | "right" }>`
+export const StyledHeaderWrap = styled.View`
+  width: 100%;
+  padding: 0 20px 20px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${colors.borderDarkSecondary};
+`;
+
+export const StyledHeader = styled.View<{
+  headerPosition: "center" | "right";
+  isDisplaySearch: boolean;
+}>`
   flex-direction: row;
   align-items: center;
   justify-content: ${({ headerPosition }) =>
     headerPosition === "center" ? "space-between" : "flex-end"};
   width: 100%;
-  margin-bottom: 40px;
+  padding-bottom: ${({ isDisplaySearch }) => (isDisplaySearch ? 16 : 0)}px;
 `;
 
 export const StyledScrollView = styled.ScrollView`
