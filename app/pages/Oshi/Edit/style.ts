@@ -12,6 +12,11 @@ export const StyledContent = styled.View<{ isHideMarginBottom?: boolean }>`
   margin-bottom: ${({ isHideMarginBottom }) => (!isHideMarginBottom ? 40 : 0)}px;
 `;
 
+export const StyledTitle = styled.Text`
+  font-size: 12px;
+  margin-bottom: 12px;
+`;
+
 export const StyledDatePickerTitle = styled.Text`
   padding: 0 10px;
   margin-bottom: 20px;
@@ -25,4 +30,8 @@ export const StyledDatePickerError = styled.Text`
   margin-bottom: 20px;
   font-size: 12px;
   color: ${colors.error};
+`;
+
+export const StyledImageTouch = styled.TouchableOpacity`
+  display: block;
 `;

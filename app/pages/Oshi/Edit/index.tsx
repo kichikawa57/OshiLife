@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { Controller } from "react-hook-form";
 import { Modal } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
+import { Image } from "@rneui/base";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -15,7 +17,7 @@ import { SelectOshiListContent } from "../../../components/BottomSheetContents/S
 import { OSHI_LIST } from "../../../shared/constants/oshi";
 
 import { useOshiEdit } from "./hooks";
-import { StyledWrap, StyledContent } from "./style";
+import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch } from "./style";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -88,6 +90,31 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
         right={<Icon name="check" onPress={() => oshiRoute.navigation.goBack()} />}
       />
       <StyledWrap>
+        <StyledContent>
+          <StyledTitle>画像選択</StyledTitle>
+          <Controller
+            control={control}
+            name={"image"}
+            render={({ field: { onChange, value } }) => (
+              <StyledImageTouch
+                onPress={async () => {
+                  const image = await ImagePicker.openPicker({
+                    width: 300,
+                    height: 300,
+                    cropping: true,
+                  });
+
+                  onChange(image.path);
+                }}
+              >
+                <Image
+                  source={value !== "" ? { uri: value } : require("./person.png")}
+                  style={{ width: 100, height: 100 }}
+                />
+              </StyledImageTouch>
+            )}
+          />
+        </StyledContent>
         <StyledContent>
           <Controller
             control={control}
