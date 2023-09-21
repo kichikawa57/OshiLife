@@ -10,7 +10,9 @@ export const useProfileEdit = (params: EditParams) => {
 
   const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
     defaultValues: {
+      name: params.name,
       email: params.email,
+      sex: params.sex,
     },
   });
 
@@ -19,7 +21,9 @@ export const useProfileEdit = (params: EditParams) => {
     const error = formValidation(values);
 
     if (error !== null) {
+      error.name && setError("name", { message: error.name });
       error.email && setError("email", { message: error.email });
+      error.sex && setError("sex", { message: error.sex });
       return;
     }
 

@@ -19,10 +19,15 @@ export const StyledDatePickerTitle = styled.Text`
   color: ${colors.textDark};
 `;
 
-export const StyledDatePickerError = styled.Text`
-  padding: 0 10px;
+export const StyledError = styled.Text`
   margin-top: 20px;
-  margin-bottom: 20px;
   font-size: 12px;
   color: ${colors.error};
+`;
+
+export const StyledSexWrap = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
 `;

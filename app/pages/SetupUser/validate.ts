@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { checkFormData, validateEmailAndPassword } from "../../shared/validate";
+import { checkFormData, validateSetupUserData } from "../../shared/validate";
 
 export const formData = z.object({
-  ...validateEmailAndPassword,
+  ...validateSetupUserData,
 });
 
 export type FormData = z.infer<typeof formData>;

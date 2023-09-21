@@ -4,8 +4,17 @@ import { Controller } from "react-hook-form";
 import { RoutingPropsOfRoot } from "../../router/types";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
+import { CircleCheckBox } from "../../components/CheckBox/Circle";
 
-import { StyledButton, StyledButtonWrap, StyledForm, StyledInput, StyledWrap } from "./style";
+import {
+  StyledButton,
+  StyledButtonWrap,
+  StyledForm,
+  StyledInput,
+  StyledSexWrap,
+  StyledWrap,
+  StyledError,
+} from "./style";
 import { useSetupUser } from "./hooks";
 
 type Props = {
@@ -22,6 +31,23 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
           <StyledInput isMarginBottom={true}>
             <Controller
               control={control}
+              name={"name"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <Input
+                  title="ユーザー名"
+                  value={value}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    clearErrors("name");
+                  }}
+                  errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledInput>
+          <StyledInput isMarginBottom={true}>
+            <Controller
+              control={control}
               name={"email"}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Input
@@ -33,6 +59,35 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
                   }}
                   errorMessage={error && error.message}
                 />
+              )}
+            />
+          </StyledInput>
+          <StyledInput isMarginBottom={true}>
+            <Controller
+              control={control}
+              name={"sex"}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <>
+                  <StyledSexWrap>
+                    <CircleCheckBox
+                      title="男性"
+                      checked={value === "men"}
+                      onPress={() => {
+                        onChange("men");
+                        clearErrors("sex");
+                      }}
+                    />
+                    <CircleCheckBox
+                      title="女性"
+                      checked={value === "women"}
+                      onPress={() => {
+                        onChange("women");
+                        clearErrors("sex");
+                      }}
+                    />
+                  </StyledSexWrap>
+                  {error && <StyledError>{error.message}</StyledError>}
+                </>
               )}
             />
           </StyledInput>

@@ -7,7 +7,9 @@ import { FormData, formValidation } from "./validate";
 export const useSetupUser = (rootRoute: RoutingPropsOfRoot<"setupUser">) => {
   const { control, clearErrors, getValues, setError } = useForm<FormData>({
     defaultValues: {
+      name: "",
       email: "",
+      sex: "",
       password: "",
     },
   });
@@ -17,7 +19,9 @@ export const useSetupUser = (rootRoute: RoutingPropsOfRoot<"setupUser">) => {
     const error = formValidation(values);
 
     if (error !== null) {
+      error.name && setError("name", { message: error.name });
       error.email && setError("email", { message: error.email });
+      error.sex && setError("sex", { message: error.sex });
       error.password && setError("password", { message: error.password });
       return;
     }

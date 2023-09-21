@@ -26,6 +26,18 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
       <StyledWrap>
         <StyledListWrap>
           <StyledList>
+            <StyledListTitle>ユーザー名</StyledListTitle>
+            <StyledListTextWrap>
+              <StyledListText>kota</StyledListText>
+            </StyledListTextWrap>
+          </StyledList>
+          <StyledList>
+            <StyledListTitle>性別</StyledListTitle>
+            <StyledListTextWrap>
+              <StyledListText>男性</StyledListText>
+            </StyledListTextWrap>
+          </StyledList>
+          <StyledList isHiddenMarginButtom>
             <StyledListTitle>メールアドレス</StyledListTitle>
             <StyledListTextWrap>
               <StyledListText>k.ichikawa057@gmail.com</StyledListText>
@@ -39,7 +51,9 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
         onPress={() => {
           profileRoute.navigation.navigate("edit", {
             id: "id-01",
+            name: "kota",
             email: "k.ichikawa057@gmail.com",
+            sex: "men",
           });
         }}
       />

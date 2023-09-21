@@ -25,9 +25,7 @@ export const StyledDatePickerTitle = styled.Text`
 `;
 
 export const StyledDatePickerError = styled.Text`
-  padding: 0 10px;
   margin-top: 20px;
-  margin-bottom: 20px;
   font-size: 12px;
   color: ${colors.error};
 `;

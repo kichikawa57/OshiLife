@@ -1,9 +1,22 @@
 import dayjs from "dayjs";
 import { z } from "zod";
 
-export const validateEmailAndPassword = {
+export const validateEditProfile = {
+  name: z.string().nonempty("ユーザー名を記入してください").max(30, "ユーザー名は最大30文字です"),
   email: z.string().email("メールアドレスを正しく記載してください"),
-  password: z.string().min(8, "最低8文字です").max(16, "最大16文字です"),
+  sex: z
+    .union([z.literal("men"), z.literal("women"), z.literal("")])
+    .refine((value) => value !== "", "性別を選んでください"),
+};
+
+export const validateSetupUserData = {
+  ...validateEditProfile,
+  password: z.string().min(8, "パスワードは最低8文字です").max(16, "パスワードは最大16文字です"),
+};
+
+export const validateEmailAndPassword = {
+  email: validateSetupUserData.email,
+  password: validateSetupUserData.password,
 };
 
 export const validateEditOshi = {
@@ -29,10 +42,6 @@ export const validateDateRange = (data: { startDate: string; endDate: string }) 
     return !isValid ? "開始日は終了日より後の日付にできません" : "";
   }
   return "";
-};
-
-export const validateEditProfile = {
-  email: z.string().email("メールアドレスを正しく記載してください"),
 };
 
 type ErrorKeys<T> = keyof T;

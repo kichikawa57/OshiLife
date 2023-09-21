@@ -18,6 +18,13 @@ export const StyledInput = styled.View<{ isMarginBottom: boolean }>`
   margin-bottom: ${({ isMarginBottom }) => (isMarginBottom ? 42 : 0)}px;
 `;
 
+export const StyledSexWrap = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+`;
+
 export const StyledButtonWrap = styled.View`
   align-items: center;
   width: 100%;
@@ -27,4 +34,10 @@ export const StyledButtonWrap = styled.View`
 
 export const StyledButton = styled.View`
   width: 80%;
+`;
+
+export const StyledError = styled.Text`
+  margin-top: 20px;
+  font-size: 12px;
+  color: ${colors.error};
 `;
