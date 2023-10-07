@@ -14,7 +14,6 @@ import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { CircleList } from "../../../components/CircleForColor/CircleList";
 import { EditColorContent } from "../../../components/BottomSheetContents/EditColorContent";
 import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
-import { OSHI_LIST } from "../../../shared/constants/oshi";
 
 import { useOshiEdit } from "./hooks";
 import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch } from "./style";
@@ -70,7 +69,6 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           name={"name"}
           render={({ field: { onChange } }) => (
             <SelectOshiListContent
-              oshiList={OSHI_LIST}
               onPressCancel={() => {
                 setIsOpenSelectedOshiModal(false);
               }}

@@ -1,9 +1,12 @@
+import "react-native-url-polyfill/auto";
+
 import React from "react";
 import type { FC } from "react";
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import dayjs from "dayjs";
+import { NativeModules } from "react-native";
 
 import { Login } from "../pages/Login";
 import { SetupOshi } from "../pages/SetupOshi";
@@ -18,10 +21,14 @@ dayjs.extend(isSameOrAfter);
 
 const Stack = createStackNavigator<RoutingOfRoot>();
 
+if (__DEV__) {
+  NativeModules.DevSettings.setIsDebuggingRemotely(true);
+}
+
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator initialRouteName="app">
+      <Stack.Navigator initialRouteName="setupUser">
         <Stack.Screen
           name="app"
           options={{

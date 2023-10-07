@@ -9,8 +9,8 @@ export type Oshis = Model<
   {
     user_id: ProfileId;
     artist_id: ArtistId;
-    image_url: string;
-    memo: string;
+    image_url: string | null;
+    memo: string | null;
     color: string;
     is_edit_color: boolean;
   }

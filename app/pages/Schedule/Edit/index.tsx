@@ -13,7 +13,6 @@ import { Textarea } from "../../../components/Textarea";
 import { Header } from "../../../components/Header/Normal";
 import { Icon } from "../../../components/Icon";
 import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
-import { OSHI_LIST } from "../../../shared/constants/oshi";
 
 import { useScheduleDetail } from "./hooks";
 import { StyledWrap, StyledContent, StyledDatePickerError, StyledInner } from "./style";
@@ -40,7 +39,6 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
           name={"oshiName"}
           render={({ field: { onChange } }) => (
             <SelectOshiListContent
-              oshiList={OSHI_LIST}
               onPressCancel={() => {
                 setIsModal(false);
               }}

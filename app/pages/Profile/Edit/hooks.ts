@@ -8,7 +8,7 @@ import { FormData, formValidation } from "./validate";
 export const useProfileEdit = (params: EditParams) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
+  const { control, clearErrors, getValues, setValue, setError, reset } = useForm<FormData>({
     defaultValues: {
       name: params.name,
       email: params.email,
@@ -39,6 +39,7 @@ export const useProfileEdit = (params: EditParams) => {
   return {
     isOpen,
     control,
+    setValue,
     setIsOpen,
     clearErrors,
     onPressComplete,

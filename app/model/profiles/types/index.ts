@@ -7,6 +7,6 @@ export type Profiles = Model<
   {
     email: string;
     name: string;
-    age: "men" | "women";
+    sex: "men" | "women";
   }
 >;

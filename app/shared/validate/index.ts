@@ -20,8 +20,9 @@ export const validateEmailAndPassword = {
 };
 
 export const validateEditOshi = {
+  artistId: z.string().nonempty("推しを選択してください"),
+  name: z.string().nonempty("推しを選択してください"),
   image: z.string().optional(),
-  name: z.string().nonempty("推しの名前を記入してください"),
   color: z.string().nonempty("推しの色を選択してください"),
   memo: z.string().optional(),
 };

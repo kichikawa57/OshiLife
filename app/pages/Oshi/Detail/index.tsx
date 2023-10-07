@@ -6,6 +6,7 @@ import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { Image } from "../../../components/Image";
 import { Circle } from "../../../components/CircleForColor/Circle";
 import { TrackButton } from "../../../components/TrackButton";
+import { artistId } from "../../../model/artists";
 
 import {
   ImageWrap,
@@ -57,6 +58,7 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
             oshiRoute.navigation.navigate("edit", {
               id: "id-01",
               name: "川村壱馬",
+              artistId: artistId("test"),
               color: "#ff0000",
               memo: "メモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメ",
               isEditColor: true,

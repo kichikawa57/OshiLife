@@ -1,11 +1,12 @@
 import { Model, Phantom } from "../../helper";
+import { ProfileId } from "../../profiles";
 
 export type ScheduleId = Phantom<string, "ScheduleId">;
 
 export type Schedules = Model<
   ScheduleId,
   {
-    user_id: string;
+    user_id: ProfileId;
     oshi_id: string;
     title: string;
     memo: string;

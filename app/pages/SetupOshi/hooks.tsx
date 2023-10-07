@@ -1,42 +1,99 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
+import { Alert } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../router/types";
+import { DEFAULT_MESSAGE, createOshi, getUser } from "../../api";
+import { artistId } from "../../model/artists";
+import { useUserStore } from "../../store/user";
 
 import { FormData, formValidation } from "./validate";
 
 export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
+  const userId = useUserStore((store) => store.userId);
+
   const [isOpenSelectedColorModal, setIsOpenSelectedColorModal] = useState(false);
   const [isEditColor, setIsEditColor] = useState(false);
 
   const [isOpenSelectedOshiModal, setIsOpenSelectedOshiModal] = useState(false);
 
-  const { control, clearErrors, getValues, setError } = useForm<FormData>({
+  const { control, clearErrors, getValues, setValue, setError } = useForm<FormData>({
     defaultValues: {
-      image: "",
+      artistId: "",
       name: "",
+      image: "",
       color: "",
       memo: "",
     },
   });
 
-  const onPress = () => {
-    const values = getValues();
-    const error = formValidation(values);
+  const onPress = useMutation(
+    async () => {
+      const values = getValues();
+      const validateError = formValidation(values);
 
-    if (error !== null) {
-      error.name && setError("name", { message: error.name });
-      error.color && setError("color", { message: error.color });
-      return;
-    }
+      if (validateError !== null) {
+        validateError.artistId && setError("artistId", { message: validateError.artistId });
+        validateError.name && setError("name", { message: validateError.name });
+        validateError.color && setError("color", { message: validateError.color });
+        return;
+      }
 
-    rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
-  };
+      const { error } = await createOshi({
+        user_id: userId,
+        artist_id: artistId(values.artistId),
+        image_url: values.image || null,
+        color: values.color,
+        memo: values.memo || null,
+        is_edit_color: isEditColor,
+      });
+
+      if (error !== null) throw error;
+
+      return null;
+    },
+    {
+      onSuccess: () => {
+        rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
+      },
+      onError: () => {
+        Alert.alert(DEFAULT_MESSAGE);
+      },
+    },
+  );
+
+  const validateSession = useMutation(
+    async () => {
+      const { error } = await getUser();
+
+      if (error !== null) throw error;
+
+      return null;
+    },
+    {
+      onError: () => {
+        Alert.alert("アクセス権限がありません", "", [
+          {
+            text: "OK",
+            onPress: () => {
+              rootRoute.navigation.reset({ index: 0, routes: [{ name: "login" }] });
+            },
+          },
+        ]);
+      },
+    },
+  );
+
+  useEffect(() => {
+    validateSession.mutate();
+  }, []);
 
   return {
     control,
     clearErrors,
-    onPress,
+    onPress: onPress.mutate,
+    setValue,
     editColor: {
       isModal: isOpenSelectedColorModal,
       isEditColor,

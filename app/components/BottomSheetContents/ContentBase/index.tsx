@@ -23,6 +23,7 @@ type SearchProps = {
   onFocus: () => void;
   onEndEditing: () => void;
   onClickClearIcon: () => void;
+  onSubmitEditing: () => void;
 };
 
 type Props = {

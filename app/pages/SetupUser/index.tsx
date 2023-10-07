@@ -37,6 +37,7 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
                   title="ユーザー名"
                   value={value}
                   onChangeText={(value) => {
+                    console.log("tetst");
                     onChange(value);
                     clearErrors("name");
                   }}
@@ -113,7 +114,7 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
       </StyledWrap>
       <StyledButtonWrap>
         <StyledButton>
-          <Button title="次へ" onPress={onPress} />
+          <Button title="次へ" onPress={() => onPress()} />
         </StyledButton>
       </StyledButtonWrap>
     </>

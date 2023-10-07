@@ -11,7 +11,6 @@ import { Button } from "../../components/Button";
 import { EditColorContent } from "../../components/BottomSheetContents/EditColorContent";
 import { Textarea } from "../../components/Textarea";
 import { SelectOshiListContent } from "../../components/BottomSheetContents/SelectOshiListContent";
-import { OSHI_LIST } from "../../shared/constants/oshi";
 
 import {
   StyledButton,
@@ -29,8 +28,8 @@ type Props = {
 };
 
 export const SetupOshi: FC<Props> = ({ rootRoute }) => {
-  const { control, clearErrors, onPress, editColor, selectedOshi } = useSetupOshi(rootRoute);
-
+  const { control, clearErrors, onPress, editColor, selectedOshi, setValue } =
+    useSetupOshi(rootRoute);
   return (
     <>
       <Modal animationType="slide" visible={editColor.isModal} presentationStyle="fullScreen">
@@ -59,15 +58,15 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
       >
         <Controller
           control={control}
-          name={"name"}
+          name={"artistId"}
           render={({ field: { onChange } }) => (
             <SelectOshiListContent
-              oshiList={OSHI_LIST}
               onPressCancel={() => {
                 selectedOshi.setIsOpenSelectedOshiModal(false);
               }}
-              onPressComplete={(_, name) => {
-                onChange(name);
+              onPressComplete={(id, name) => {
+                onChange(id);
+                setValue("name", name);
                 selectedOshi.setIsOpenSelectedOshiModal(false);
               }}
             />
@@ -107,7 +106,7 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
               name={"name"}
               render={({ field: { value }, fieldState: { error } }) => (
                 <Input
-                  title="推しの名前"
+                  title="推し選択"
                   value={value}
                   onPress={() => {
                     selectedOshi.setIsOpenSelectedOshiModal(true);
@@ -161,7 +160,7 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
       </StyledWrap>
       <StyledButtonWrap>
         <StyledButton>
-          <Button title="次へ" onPress={onPress} />
+          <Button title="次へ" onPress={() => onPress()} />
         </StyledButton>
       </StyledButtonWrap>
     </>
