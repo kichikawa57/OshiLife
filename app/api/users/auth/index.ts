@@ -19,3 +19,9 @@ export const getUser = async (token?: string) => {
 
   return data;
 };
+
+export const getSettion = async () => {
+  const data = await supabase.auth.getSession();
+
+  return data;
+};

@@ -12,6 +12,11 @@ export type Navigation<T extends Route> = {
   goBack: () => void;
 };
 
+export type UseRoute<T extends Route> = {
+  name: keyof T;
+  key: string;
+};
+
 export type NavigationProps<T extends Route, K extends keyof T> = {
   route: RouteProp<T, K>;
   navigation: Navigation<T>;

@@ -59,6 +59,7 @@ export const useSelectOshiListContent = () => {
 
   useEffect(() => {
     getArtistsMutation.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

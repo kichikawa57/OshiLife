@@ -15,6 +15,7 @@ import { SetupUser } from "../pages/SetupUser";
 import { Wrapper } from "./helper/Wrapper";
 import { RoutingOfRoot } from "./types";
 import { App } from "./app";
+import { CheckLoginUser } from "./helper/Auth/CheckLoginUser";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -28,7 +29,7 @@ if (__DEV__) {
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator initialRouteName="login">
+      <Stack.Navigator initialRouteName="app">
         <Stack.Screen
           name="app"
           options={{
@@ -38,7 +39,11 @@ export const Router: FC = () => {
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         >
-          {(props) => <App rootRoute={props} />}
+          {(props) => (
+            <CheckLoginUser>
+              <App rootRoute={props} />
+            </CheckLoginUser>
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="login"

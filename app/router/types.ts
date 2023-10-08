@@ -1,4 +1,4 @@
-import { NavigationProps, TabBarIconProps } from "../shared/types/router";
+import { Navigation, NavigationProps, TabBarIconProps, UseRoute } from "../shared/types/router";
 
 export type RoutingOfRoot = {
   app: undefined;
@@ -9,3 +9,7 @@ export type RoutingOfRoot = {
 
 export type RoutingPropsOfRoot<K extends keyof RoutingOfRoot> = NavigationProps<RoutingOfRoot, K>;
 export type TabBarIconPropsOfRoot = TabBarIconProps<RoutingOfRoot, keyof RoutingOfRoot>;
+
+export type UseNavigationOfRoot = Navigation<RoutingOfRoot>;
+
+export type UseRouteOfRoot = UseRoute<RoutingOfRoot>;

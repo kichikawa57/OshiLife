@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { Alert } from "react-native";
 
-import { DEFAULT_MESSAGE, setSettion, signin } from "../../api";
+import { DEFAULT_MESSAGE, signin } from "../../api";
 import { RoutingPropsOfRoot } from "../../router/types";
 
 import { FormData, formValidation } from "./validate";
@@ -14,24 +14,6 @@ export const useLogin = (rootRoute: RoutingPropsOfRoot<"login">) => {
       password: "",
     },
   });
-
-  const setSettionMutation = useMutation(
-    async ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) => {
-      const { data, error } = await setSettion({ accessToken, refreshToken });
-
-      if (error !== null) throw error;
-
-      return data;
-    },
-    {
-      onSuccess: () => {
-        rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-    },
-  );
 
   const singinMutation = useMutation(
     async () => {
@@ -54,12 +36,8 @@ export const useLogin = (rootRoute: RoutingPropsOfRoot<"login">) => {
     },
     {
       onSuccess: (data) => {
-        if (!data || data.session === null || data.user === null) return;
-
-        setSettionMutation.mutate({
-          accessToken: data.session.access_token,
-          refreshToken: data.session.refresh_token,
-        });
+        if (!data) return;
+        rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
       },
       onError: () => {
         Alert.alert("メールアドレス、パスワードのどちらかが間違っています");
@@ -68,7 +46,7 @@ export const useLogin = (rootRoute: RoutingPropsOfRoot<"login">) => {
   );
 
   return {
-    isLoading: singinMutation.isLoading || setSettionMutation.isLoading,
+    isLoading: singinMutation.isLoading,
     control,
     clearErrors,
     onPress: singinMutation.mutate,
