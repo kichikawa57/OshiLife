@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const Login: FC<Props> = ({ rootRoute }) => {
-  const { control, clearErrors, onPress } = useLogin();
+  const { control, clearErrors, onPress, isLoading } = useLogin(rootRoute);
 
   return (
     <StyledWrap>
@@ -64,10 +64,14 @@ export const Login: FC<Props> = ({ rootRoute }) => {
       </StyledForm>
       <StyledButtonWrap>
         <StyledButton isMarginBottom={true}>
-          <Button title="ログイン" onPress={onPress} />
+          <Button title="ログイン" disabled={isLoading} onPress={() => onPress()} />
         </StyledButton>
         <StyledButton isMarginBottom={false}>
-          <Button title="新規登録" onPress={() => rootRoute.navigation.navigate("setupUser")} />
+          <Button
+            title="新規登録"
+            disabled={isLoading}
+            onPress={() => rootRoute.navigation.navigate("setupUser")}
+          />
         </StyledButton>
       </StyledButtonWrap>
     </StyledWrap>

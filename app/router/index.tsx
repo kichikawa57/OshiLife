@@ -28,7 +28,7 @@ if (__DEV__) {
 export const Router: FC = () => {
   return (
     <Wrapper>
-      <Stack.Navigator initialRouteName="setupUser">
+      <Stack.Navigator initialRouteName="login">
         <Stack.Screen
           name="app"
           options={{
@@ -51,7 +51,10 @@ export const Router: FC = () => {
         >
           {(props) => <Login rootRoute={props} />}
         </Stack.Screen>
-        <Stack.Screen name="setupOshi" options={{ headerTitle: "推しを選択" }}>
+        <Stack.Screen
+          name="setupOshi"
+          options={{ headerTitle: "推しを選択", headerLeft: () => null }}
+        >
           {(props) => <SetupOshi rootRoute={props} />}
         </Stack.Screen>
         <Stack.Screen name="setupUser" options={{ headerTitle: "ユーザー情報" }}>

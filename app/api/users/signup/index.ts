@@ -1,4 +1,5 @@
 import { Profiles } from "../../../model/profiles";
+import { err, ok } from "../../helper";
 import { supabase } from "../../init";
 
 type SignupParams = {
@@ -9,7 +10,7 @@ type SignupParams = {
 };
 
 export const signup = async (params: SignupParams) => {
-  const res = await supabase.auth.signUp({
+  const data = await supabase.auth.signUp({
     email: params.email,
     password: params.password,
     options: {
@@ -20,5 +21,5 @@ export const signup = async (params: SignupParams) => {
     },
   });
 
-  return res;
+  return data;
 };
