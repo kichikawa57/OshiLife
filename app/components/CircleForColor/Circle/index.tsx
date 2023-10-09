@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 
-import { CircleColor, circleColors } from "../shared";
 import { Icon } from "../../Icon";
 
 import { StyledWrap, StyledEdit } from "./style";
 
 type Props = {
-  color: CircleColor;
+  color: string;
   isEdit?: boolean;
   isSelected?: boolean;
   onPress?: () => void;
@@ -19,7 +18,7 @@ export const Circle: FC<Props> = ({ color, isSelected, onPress, isEdit }) => {
     </StyledEdit>
   ) : (
     <StyledWrap
-      color={circleColors[color]}
+      color={color}
       isSelected={!!isSelected}
       onPress={() => onPress && onPress()}
       isPress={!!onPress}

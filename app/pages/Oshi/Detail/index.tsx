@@ -6,7 +6,7 @@ import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { Image } from "../../../components/Image";
 import { Circle } from "../../../components/CircleForColor/Circle";
 import { TrackButton } from "../../../components/TrackButton";
-import { artistId } from "../../../model/artists";
+import { Header } from "../../../components/Header/Normal";
 
 import {
   ImageWrap,
@@ -26,29 +26,34 @@ type Props = {
 };
 
 export const Detail: FC<Props> = ({ oshiRoute }) => {
+  const params = oshiRoute.route.params;
+
   return (
     <>
+      <Header
+        title={params.name}
+        onPressLeft={() => {
+          oshiRoute.navigation.goBack();
+        }}
+      />
       <StyledWrap>
         <StyledContentsWrap>
           <ImageWrap>
-            <Image
-              url="https://placehold.jp/30/dd6699/ffffff/300x150.png?text=placeholder+image"
-              ratioType="16*9"
-            />
+            <Image url={params.image || ""} ratioType="16*9" />
           </ImageWrap>
           <StyledListWrap>
             <StyledList>
               <StyledListText>推しカラー</StyledListText>
               <StyledCircle>
-                <Circle color="red" />
+                <Circle color={params.color} />
               </StyledCircle>
             </StyledList>
-            <StyledList hiddenMerginBotton>
-              <StyledListText>メモ</StyledListText>
-              <StyledMemo>
-                メモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモ
-              </StyledMemo>
-            </StyledList>
+            {params.memo && (
+              <StyledList hiddenMerginBotton>
+                <StyledListText>メモ</StyledListText>
+                <StyledMemo>{params.memo}</StyledMemo>
+              </StyledList>
+            )}
           </StyledListWrap>
         </StyledContentsWrap>
         <TrackButton
@@ -56,12 +61,12 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
           iconName="pencil"
           onPress={() => {
             oshiRoute.navigation.navigate("edit", {
-              id: "id-01",
-              name: "川村壱馬",
-              artistId: artistId("test"),
-              color: "#ff0000",
-              memo: "メモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメモメ",
-              isEditColor: true,
+              id: params.id,
+              name: params.name,
+              artistId: params.artistId,
+              color: params.color,
+              memo: params.memo,
+              isEditColor: params.isEditColor,
             });
           }}
         />

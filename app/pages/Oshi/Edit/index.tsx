@@ -33,10 +33,13 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
     setIsEditColor,
     setIsOpenSelectedColorModal,
     setIsOpenSelectedOshiModal,
+    setValue,
+    onPressComplete,
+    isLoading,
     isOpenSelectedColorModal,
     isOpenSelectedOshiModal,
     isEditColor,
-  } = useOshiEdit(params);
+  } = useOshiEdit(oshiRoute, params);
 
   return (
     <>
@@ -72,8 +75,9 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
               onPressCancel={() => {
                 setIsOpenSelectedOshiModal(false);
               }}
-              onPressComplete={(_, name) => {
+              onPressComplete={(id, name) => {
                 onChange(name);
+                setValue("artistId", id);
                 setIsOpenSelectedOshiModal(false);
               }}
             />
@@ -85,7 +89,16 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
         onPressLeft={() => {
           oshiRoute.navigation.goBack();
         }}
-        right={<Icon name="check" onPress={() => oshiRoute.navigation.goBack()} />}
+        isDisabled={isLoading}
+        right={
+          <Icon
+            name="check"
+            disabled={isLoading}
+            onPress={() => {
+              onPressComplete();
+            }}
+          />
+        }
       />
       <StyledWrap>
         <StyledContent>

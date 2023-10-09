@@ -14,7 +14,10 @@ export type ResponseForGetArtistsGroups = {
 }[];
 
 export const getArtistsGroups = async () => {
-  const { data, error } = await supabase.from("artists_groups").select("*, artists(*)");
+  const { data, error } = await supabase
+    .from("artists_groups")
+    .select("id, name, furigana, deleted_at, artists(id, name, furigana)")
+    .is("deleted_at", null);
 
   if (error !== null) {
     return {

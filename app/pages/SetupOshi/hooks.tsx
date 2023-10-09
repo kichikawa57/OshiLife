@@ -87,6 +87,7 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
 
   useEffect(() => {
     validateSession.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

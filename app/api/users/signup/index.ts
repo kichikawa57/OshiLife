@@ -1,5 +1,4 @@
 import { Profiles } from "../../../model/profiles";
-import { err, ok } from "../../helper";
 import { supabase } from "../../init";
 
 type SignupParams = {

@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const SelectOshiListContent: FC<Props> = ({ onPressCancel, onPressComplete }) => {
-  const { isLoading, artistsGroups, searchText, setSearchText, searchArtists } =
+  const { isLoading, artistsGroups, searchText, setSearchText, searchArtists, resetSearchArtists } =
     useSelectOshiListContent();
   const [isHideHeader, setIsHideHeader] = useState(false);
   const searchBarRef = useRef<SearchBar | null>(null);
@@ -34,6 +34,7 @@ export const SelectOshiListContent: FC<Props> = ({ onPressCancel, onPressComplet
         onClickClearIcon: () => {
           if (!searchBarRef.current) return;
           searchBarRef.current.clear();
+          resetSearchArtists();
         },
         onChangeText: setSearchText,
         onFocus: () => {

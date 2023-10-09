@@ -1,8 +1,8 @@
 type DefaultSchema<T> = {
   id: T;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
+  // created_at: string;
+  // updated_at: string;
+  // deleted_at: string | null;
 };
 
 export type Model<I, T> = DefaultSchema<I> & T;

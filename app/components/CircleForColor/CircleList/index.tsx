@@ -30,7 +30,7 @@ export const CircleList: FC<Props> = ({
         {objectKeys(circleColors).map((color, index) => (
           <StyledCircle key={index}>
             <Circle
-              color={color}
+              color={circleColors[color]}
               isSelected={!isSelectedEdit && selectColor === circleColors[color]}
               onPress={() => onClick(circleColors[color])}
             />
@@ -38,7 +38,7 @@ export const CircleList: FC<Props> = ({
         ))}
         <StyledCircle>
           <Circle
-            color={"black"}
+            color={"#000"}
             isSelected={isSelectedEdit}
             isEdit={true}
             onPress={() => onClickEdit && onClickEdit()}

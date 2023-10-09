@@ -27,19 +27,7 @@ export const Oshi: FC<Props> = ({ rootRoute, appRoute }) => {
       <Screen name="edit" options={{ headerShown: false }}>
         {(props) => <Edit rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
-      <Screen
-        name="detail"
-        options={{
-          header: ({ navigation }) => (
-            <Header
-              title={"川村和馬"}
-              onPressLeft={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
-        }}
-      >
+      <Screen name="detail" options={{ headerShown: false }}>
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
     </Navigator>
