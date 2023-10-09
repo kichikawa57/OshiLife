@@ -1,41 +1,34 @@
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { Alert } from "react-native";
 
-import { FormData, formValidation } from "./validate";
+import { useQuery } from "../../query";
+import { getProfile } from "../../api/profile";
+import { useUserStore } from "../../store/user";
+import { DEFAULT_MESSAGE } from "../../api";
+import { getMinutes } from "../../shared/utils";
 
-export const useOshi = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export const useProfile = () => {
+  const userId = useUserStore((store) => store.userId);
 
-  const { control, clearErrors, getValues, setError, reset } = useForm<FormData>({
-    defaultValues: {
-      email: "",
+  const { isLoading, data } = useQuery(
+    "getProfile",
+    async () => {
+      const { data, error } = await getProfile(userId);
+
+      if (error !== null) throw error;
+
+      return data;
     },
-  });
-
-  const onPressComplete = () => {
-    const values = getValues();
-    const error = formValidation(values);
-
-    if (error !== null) {
-      error.email && setError("email", { message: error.email });
-      return;
-    }
-
-    reset();
-    setIsOpen(false);
-  };
-
-  const onPressCancel = () => {
-    setIsOpen(false);
-    reset();
-  };
+    {
+      onError: () => {
+        Alert.alert(DEFAULT_MESSAGE);
+      },
+      cacheTime: getMinutes(30),
+      staleTime: getMinutes(5),
+    },
+  );
 
   return {
-    isOpen,
-    control,
-    setIsOpen,
-    clearErrors,
-    onPressComplete,
-    onPressCancel,
+    data,
+    isLoading,
   };
 };

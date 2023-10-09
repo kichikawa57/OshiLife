@@ -21,16 +21,17 @@ type Props = {
 export const Edit: FC<Props> = ({ profileRoute }) => {
   const params = profileRoute.route.params;
 
-  const { control, clearErrors } = useProfileEdit(params);
+  const { isLoading, control, clearErrors, onPressComplete } = useProfileEdit(profileRoute, params);
 
   return (
     <>
       <Header
         title={"プロフィール編集"}
+        isDisabled={isLoading}
         onPressLeft={() => {
           profileRoute.navigation.goBack();
         }}
-        right={<Icon name="check" onPress={() => profileRoute.navigation.goBack()} />}
+        right={<Icon name="check" onPress={() => onPressComplete()} disabled={isLoading} />}
       />
       <StyledWrap>
         <StyledContent>

@@ -1,6 +1,6 @@
 import { useQuery as query, useQueryClient as queryClient, UseQueryOptions } from "react-query";
 
-export type QueryKeyName = "getOshis" | "getArtists";
+export type QueryKeyName = "getOshis" | "getArtists" | "getProfile";
 
 export const useQuery = <Data = unknown, Error = unknown>(
   key: QueryKeyName,
