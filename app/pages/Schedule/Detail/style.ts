@@ -46,3 +46,14 @@ export const Memo = styled.Text`
   font-size: 14px;
   color: ${colors.textDark};
 `;
+
+export const StyledButtonWrap = styled.View`
+  align-items: center;
+  width: 100%;
+  padding: 40px 0;
+  background-color: ${colors.bgLight};
+`;
+
+export const StyledButton = styled.View`
+  width: 80%;
+`;

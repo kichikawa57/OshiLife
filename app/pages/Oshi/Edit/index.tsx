@@ -13,7 +13,7 @@ import { Icon } from "../../../components/Icon";
 import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { CircleList } from "../../../components/CircleForColor/CircleList";
 import { EditColorContent } from "../../../components/BottomSheetContents/EditColorContent";
-import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
+import { SelectArtistListContent } from "../../../components/BottomSheetContents/SelectArtistListContent";
 
 import { useOshiEdit } from "./hooks";
 import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch } from "./style";
@@ -71,7 +71,7 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           control={control}
           name={"name"}
           render={({ field: { onChange } }) => (
-            <SelectOshiListContent
+            <SelectArtistListContent
               onPressCancel={() => {
                 setIsOpenSelectedOshiModal(false);
               }}

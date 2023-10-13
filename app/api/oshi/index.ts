@@ -2,7 +2,7 @@ import uuid from "react-native-uuid";
 import dayjs from "dayjs";
 
 import { OshiId, Oshis } from "../../model/oshis";
-import { DefaultRemoveTypeToCreateRow, DefaultRemoveTypeToUpdateRow, ok } from "../helper";
+import { DefaultRemoveTypeToCreateRow, DefaultRemoveTypeToUpdateRow } from "../helper";
 import { supabase } from "../init";
 import { ProfileId } from "../../model/profiles";
 
@@ -19,9 +19,7 @@ export const getOshis = async (userId: ProfileId) => {
   return data;
 };
 
-export const createOshi = async (
-  params: Omit<Oshis, DefaultRemoveTypeToCreateRow | "artist_name">,
-) => {
+export const createOshi = async (params: Omit<Oshis, DefaultRemoveTypeToCreateRow | "artists">) => {
   const id = String(uuid.v4());
 
   const data = await supabase.from("oshis").insert({

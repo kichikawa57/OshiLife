@@ -33,3 +33,29 @@ export const sortDates = (dates: Dayjs[], order: "asc" | "desc" = "asc") => {
     }
   });
 };
+
+export const getCalendarBounds = (date: Dayjs) => {
+  // 渡された月の1日目を取得
+  const startOfMonth = date.startOf("month");
+
+  // 渡された月の最後の日を取得
+  const endOfMonth = date.endOf("month");
+
+  // カレンダー表示の最初の日付を取得（前の月の最後の週の日曜日）
+  const startOfCalendar = startOfMonth.startOf("week");
+
+  // カレンダー表示の最後の日付を取得（次の月の最初の週の土曜日）
+  const endOfCalendar = endOfMonth.endOf("week");
+
+  return {
+    start: startOfCalendar.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
+    end: endOfCalendar.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
+  };
+};
+
+export const getDayRange = (date: Dayjs) => {
+  const startOfDay = date.startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+  const endOfDay = date.endOf("day").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+
+  return { startOfDay, endOfDay };
+};

@@ -3,6 +3,11 @@ import dayjs, { Dayjs } from "dayjs";
 import { isHoliday } from "japanese-holidays";
 
 import { nonNullable, sortDates } from "../../shared/utils";
+import {
+  ScheduleForCalendar,
+  Schedules,
+  convertScheduleForCalendarToModel,
+} from "../../model/schedules";
 
 import {
   StyledCalendarBorder,
@@ -21,67 +26,16 @@ import { useCalendar } from "./hooks";
 
 type Props = {
   currentDate: Dayjs;
-  onPressDate: () => void;
-};
-
-type ScheduleData = {
-  id: string;
-  startDate: string;
-  endDate: string;
-  title: string;
-  createDate: string;
-};
-
-type ResultScheduleData = ScheduleData & {
-  isTransparent: boolean;
-  startWeekIndex: number;
-  endWeekIndex: number;
+  scheduleData: Schedules[];
+  onPressDate: (calendarDate: string, schedules: Schedules[]) => void;
 };
 
 type ResultData = {
   date: Dayjs;
-  schedules: ResultScheduleData[];
+  schedules: ScheduleForCalendar[];
 };
 
-const dummyData: ScheduleData[] = [
-  {
-    id: "schedule-001",
-    startDate: "2023-07-31 10:30:00",
-    endDate: "2023-07-31 10:30:00",
-    title: "スケジュール 00",
-    createDate: "2023-01-02 10:30:00",
-  },
-  {
-    id: "schedule-002",
-    startDate: "2023-08-01 10:30:00",
-    endDate: "2023-08-02 10:30:00",
-    title: "スケジュール 01",
-    createDate: "2023-01-01 10:30:00",
-  },
-  {
-    id: "schedule-003",
-    startDate: "2023-08-01 10:30:00",
-    endDate: "2023-08-03 10:30:00",
-    title: "スケジュール 02",
-    createDate: "2022-01-02 10:30:00",
-  },
-  {
-    id: "schedule-004",
-    startDate: "2023-08-02 10:30:00",
-    endDate: "2023-08-12 10:30:00",
-    title: "スケジュール 03",
-    createDate: "2022-01-02 10:30:00",
-  },
-  {
-    id: "schedule-005",
-    startDate: "2023-08-01 10:30:00",
-    endDate: "2023-09-12 10:30:00",
-    title: "スケジュール 04",
-    createDate: "2022-01-02 10:30:00",
-  },
-];
-
-const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
+const CalendarComponent: FC<Props> = ({ scheduleData, currentDate, onPressDate }) => {
   const currentMonth = currentDate.month();
   const today = dayjs();
   const { getMonth } = useCalendar(currentDate);
@@ -98,19 +52,19 @@ const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
       // 取得した日付データを開始日、終了日を確認して
       // 該当する日付のデータを日付毎にまとめる
       orderedDates.forEach((currentDate, currentDateIndex) => {
-        const schedulesForTheDay = dummyData
+        const schedulesForTheDay = scheduleData
           // 開始日、終了日を確認する
           .filter((schedule) => {
-            const startDate = dayjs(schedule.startDate).format("YYYY-MM-DD");
-            const endDate = dayjs(schedule.endDate).format("YYYY-MM-DD");
+            const startDate = dayjs(schedule.start_at).format("YYYY-MM-DD");
+            const endDate = dayjs(schedule.end_at).format("YYYY-MM-DD");
             return currentDate.isSameOrAfter(startDate) && currentDate.isSameOrBefore(endDate);
           })
           // 該当する日付をまとめる
-          .map<ResultScheduleData>((schedule) => {
+          .map<ScheduleForCalendar>((schedule) => {
             const weekEndDate = orderedDates[orderedDates.length - 1];
 
-            const startDate = dayjs(schedule.startDate);
-            const endDate = dayjs(schedule.endDate);
+            const startDate = dayjs(schedule.start_at);
+            const endDate = dayjs(schedule.end_at);
             const startDateYmd = startDate.format("YYYY-MM-DD");
 
             // 開始日と週の初めのみ表示
@@ -171,16 +125,27 @@ const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
         return result;
       });
       const week = orderResults.map((orderResult, dateIndex) => {
-        const isCurrent = dayjs(today.format("YYYY-MM-DD")).isSame(
-          orderResult.date.format("YYYY-MM-DD"),
-        );
+        const calendarDate = orderResult.date.format("YYYY-MM-DD");
+
+        const isCurrent = dayjs(today.format("YYYY-MM-DD")).isSame(calendarDate);
         const isOtherMonth = !(orderResult.date.month() === currentMonth);
         const holiday = isHoliday(orderResult.date.toDate());
 
         return (
           <Fragment key={`${datesIndex}-${dateIndex}`}>
             {isCurrent && <StyledCalendarContentBg index={dateIndex} />}
-            <StyledCalendarEventPanel index={dateIndex} activeOpacity={1} onPress={onPressDate} />
+            <StyledCalendarEventPanel
+              index={dateIndex}
+              activeOpacity={1}
+              onPress={() => {
+                onPressDate(
+                  calendarDate,
+                  orderResult.schedules.map((schedule) =>
+                    convertScheduleForCalendarToModel(schedule),
+                  ),
+                );
+              }}
+            />
             <StyledCalendarContent>
               <StyledCalendarContentInner>
                 <StyledTextWrap>
@@ -204,7 +169,7 @@ const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
                         startWeekIndex={schedule.startWeekIndex}
                         endWeekIndex={schedule.endWeekIndex}
                       >
-                        予定ありsssssss
+                        {schedule.title}
                       </StyledScheduleDetail>
                     )
                   );
@@ -224,7 +189,7 @@ const CalendarComponent: FC<Props> = ({ currentDate, onPressDate }) => {
         </StyledCalendarWeek>
       );
     });
-  }, [currentMonth, getMonth, onPressDate, today]);
+  }, [currentMonth, getMonth, onPressDate, scheduleData, today]);
 
   return (
     <StyledView>

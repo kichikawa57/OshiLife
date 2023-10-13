@@ -31,6 +31,8 @@ export const validateEditSchedule = {
   title: z.string().nonempty("予定のタイトルを入れてください"),
   startDate: z.string().nonempty("開始日を設定してください"),
   endDate: z.string().nonempty("終了日を設定してください"),
+  oshiId: z.string().nonempty("推しを選択してください"),
+  artistId: z.string().nonempty("推しを選択してください"),
   oshiName: z.string().nonempty("推しを選択してください"),
   memo: z.string().optional(),
 };

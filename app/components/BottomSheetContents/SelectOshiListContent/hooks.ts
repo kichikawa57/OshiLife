@@ -1,73 +1,36 @@
-import { useMemo, useState } from "react";
 import { Alert } from "react-native";
 
-import { DEFAULT_MESSAGE, ResponseForGetArtistsGroups, getArtistsGroups } from "../../../api";
-import { getMinutes } from "../../../shared/utils";
+import { DEFAULT_MESSAGE, getOshis } from "../../../api";
 import { useQuery } from "../../../query";
+import { useUserStore } from "../../../store/user";
+import { convertOrigenalToModelForOshi } from "../../../model/oshis";
 
-export const useSelectOshiListContent = () => {
-  const [searchText, setSearchText] = useState("");
-  const [prevSearchText, setPrevSearchText] = useState("");
+export const useSelectArtistListContent = () => {
+  const userId = useUserStore((store) => store.userId);
 
   const { data, isLoading } = useQuery(
-    "getArtists",
+    "getOshis",
     async () => {
-      const { data, error } = await getArtistsGroups();
+      const { data, error } = await getOshis(userId);
 
       if (error !== null) throw error;
 
-      return data;
+      return data.map((oshi) =>
+        convertOrigenalToModelForOshi(
+          { ...oshi, created_at: "", updated_at: "", user_id: userId },
+          oshi.artists,
+        ),
+      );
     },
     {
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);
       },
-      cacheTime: getMinutes(30),
-      staleTime: getMinutes(30),
     },
   );
 
-  const searchArtists = () => {
-    setPrevSearchText(searchText);
-  };
-
-  const resetSearchArtists = () => {
-    setPrevSearchText("");
-  };
-
-  const filterArtistsGroups = useMemo<ResponseForGetArtistsGroups>(() => {
-    if (!data) return [];
-    if (prevSearchText === "") return data;
-
-    return data
-      .reduce<ResponseForGetArtistsGroups>((prev, current) => {
-        const filterArtists = current.artists.filter((artist) => {
-          if (artist.furigana === null) {
-            return artist.name.indexOf(prevSearchText) !== -1;
-          }
-
-          return (
-            artist.name.indexOf(prevSearchText) !== -1 ||
-            artist.furigana.indexOf(prevSearchText) !== -1
-          );
-        });
-
-        prev.push({
-          ...current,
-          artists: filterArtists,
-        });
-
-        return prev;
-      }, [])
-      .filter((groups) => groups.artists.length !== 0);
-  }, [data, prevSearchText]);
-
   return {
     isLoading,
-    searchText,
-    artistsGroups: filterArtistsGroups,
-    resetSearchArtists,
-    setSearchText,
-    searchArtists,
+    oshis: data || [],
   };
 };

@@ -10,7 +10,7 @@ import { CircleList } from "../../components/CircleForColor/CircleList";
 import { Button } from "../../components/Button";
 import { EditColorContent } from "../../components/BottomSheetContents/EditColorContent";
 import { Textarea } from "../../components/Textarea";
-import { SelectOshiListContent } from "../../components/BottomSheetContents/SelectOshiListContent";
+import { SelectArtistListContent } from "../../components/BottomSheetContents/SelectArtistListContent";
 
 import {
   StyledButton,
@@ -60,7 +60,7 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
           control={control}
           name={"artistId"}
           render={({ field: { onChange } }) => (
-            <SelectOshiListContent
+            <SelectArtistListContent
               onPressCancel={() => {
                 selectedOshi.setIsOpenSelectedOshiModal(false);
               }}

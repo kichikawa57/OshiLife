@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Alert } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -8,6 +9,9 @@ import { CheckBoxItem } from "../../../components/CheckBox/Item";
 import { ListItem } from "../../../components/List";
 import { TrackButton } from "../../../components/TrackButton";
 import { Button } from "../../../components/Button";
+import { Loading } from "../../../components/Loading";
+import { oshiId } from "../../../model/oshis";
+import { artistId } from "../../../model/artists";
 
 import {
   StyledCheckBox,
@@ -16,6 +20,7 @@ import {
   StyledScrollViewWrap,
   StyledWrap,
 } from "./style";
+import { useScheduleDate } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -24,6 +29,13 @@ type Props = {
 };
 
 export const Date: FC<Props> = ({ scheduleRoute }) => {
+  const params = scheduleRoute.route.params;
+
+  const { data, isLoading, getArtistOfOshiById } = useScheduleDate(
+    params.date,
+    params.calendarType,
+  );
+
   return (
     <>
       <StyledWrap>
@@ -40,46 +52,80 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
           </CheckBoxGroup>
         </StyledCheckBox>
         <StyledScrollViewWrap>
-          <StyledScrollView>
-            <StyledScrollViewInner>
-              <ListItem
-                title="川村 和馬のイベントに参加します"
-                onPress={() => scheduleRoute.navigation.navigate("detail")}
-                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-                bottomDivider={true}
-                rightContent={
-                  <Button
-                    title="Delete"
-                    onPress={() => scheduleRoute.navigation.navigate("detail")}
-                    iconName="trash-o"
-                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+          {isLoading || !data ? (
+            <Loading />
+          ) : (
+            <StyledScrollView>
+              <StyledScrollViewInner>
+                {data.map((schdule, index) => (
+                  <ListItem
+                    key={index}
+                    title={schdule.title}
+                    onPress={() => {
+                      scheduleRoute.navigation.navigate("detail", {
+                        id: schdule.id,
+                        oshiId: schdule.oshi_id,
+                        oshiName: getArtistOfOshiById(schdule.oshi_id)?.name || "",
+                        artistId: schdule.artist_id,
+                        connectedScheduleId: schdule.connected_schedule_id,
+                        title: schdule.title,
+                        startDate: schdule.start_at,
+                        endDate: schdule.end_at,
+                        date: params.date,
+                        calendarType: params.calendarType,
+                      });
+                    }}
+                    avatarUrl={getArtistOfOshiById(schdule.oshi_id)?.imageUrl || ""}
+                    bottomDivider={data.length + 1 !== index}
+                    rightContent={
+                      <Button
+                        title="Delete"
+                        onPress={() =>
+                          Alert.alert("本当に削除してよろしいでしょうか？", "", [
+                            {
+                              text: "キャンセル",
+                              onPress: () => console.log("User pressed No"),
+                              style: "cancel",
+                            },
+                            {
+                              text: "確定",
+                              onPress: () => {
+                                console.log("User pressed Yes");
+                              },
+                            },
+                          ])
+                        }
+                        iconName="trash-o"
+                        buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                      />
+                    }
                   />
-                }
-              />
-              <ListItem
-                title="川村 和馬のイベントに参加します"
-                onPress={() => scheduleRoute.navigation.navigate("detail")}
-                avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
-                bottomDivider={false}
-                rightContent={
-                  <Button
-                    title="Delete"
-                    onPress={() => scheduleRoute.navigation.navigate("detail")}
-                    iconName="trash-o"
-                    buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
-                  />
-                }
-              />
-            </StyledScrollViewInner>
-          </StyledScrollView>
+                ))}
+              </StyledScrollViewInner>
+            </StyledScrollView>
+          )}
         </StyledScrollViewWrap>
-        <TrackButton
-          buttonText="予定追加"
-          iconName="plus"
-          onPress={() => {
-            scheduleRoute.navigation.navigate("edit");
-          }}
-        />
+        {params.calendarType === "me" && (
+          <TrackButton
+            buttonText="予定追加"
+            iconName="plus"
+            onPress={() => {
+              scheduleRoute.navigation.navigate("edit", {
+                id: null,
+                oshiId: oshiId(""),
+                artistId: artistId(""),
+                date: params.date,
+                connectedScheduleId: null,
+                oshiName: "",
+                endDate: "",
+                startDate: "",
+                title: "",
+                memo: "",
+                calendarType: params.calendarType,
+              });
+            }}
+          />
+        )}
       </StyledWrap>
     </>
   );

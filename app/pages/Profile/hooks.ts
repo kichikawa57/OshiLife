@@ -5,6 +5,7 @@ import { getProfile } from "../../api/profile";
 import { useUserStore } from "../../store/user";
 import { DEFAULT_MESSAGE } from "../../api";
 import { getMinutes } from "../../shared/utils";
+import { convertOrigenalToModelForProfile } from "../../model/profiles";
 
 export const useProfile = () => {
   const userId = useUserStore((store) => store.userId);
@@ -16,7 +17,12 @@ export const useProfile = () => {
 
       if (error !== null) throw error;
 
-      return data;
+      return convertOrigenalToModelForProfile({
+        ...data,
+        updated_at: "",
+        deleted_at: "",
+        created_at: "",
+      });
     },
     {
       onError: () => {

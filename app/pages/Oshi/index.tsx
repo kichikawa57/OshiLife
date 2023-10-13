@@ -32,14 +32,14 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
               {oshis.map((oshi, idnex) => (
                 <StyledList key={idnex}>
                   <ListItem
-                    title={oshi.artist_name}
+                    title={oshi.artists?.name || ""}
                     avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
                     bottomDivider={true}
                     onPress={() =>
                       oshiRoute.navigation.navigate("detail", {
                         id: oshi.id,
                         artistId: oshi.artist_id,
-                        name: oshi.artist_name,
+                        name: oshi.artists?.name || "",
                         color: oshi.color,
                         image: oshi.image_url || undefined,
                         isEditColor: oshi.is_edit_color,

@@ -1,12 +1,10 @@
-import { Model, Phantom } from "../../helper";
+import { Database } from "../../../api/schema";
+import { Overwrite } from "../../../shared/types";
+import { Phantom } from "../../helper";
 
 export type ProfileId = Phantom<string, "ProfileId">;
 
-export type Profiles = Model<
-  ProfileId,
-  {
-    email: string;
-    name: string;
-    sex: "men" | "women";
-  }
+export type Profiles = Overwrite<
+  Database["public"]["Tables"]["profiles"]["Row"],
+  { id: ProfileId; sex: "men" | "women" }
 >;

@@ -5,7 +5,6 @@ import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfProfile } from "../../router/app/Profile/types";
 import { TrackButton } from "../../components/TrackButton";
 import { Loading } from "../../components/Loading";
-import { Profiles } from "../../model/profiles";
 
 import {
   StyledWrap,
@@ -62,7 +61,7 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
                 id: data.id,
                 name: data.name,
                 email: data.email,
-                sex: data.sex as Profiles["sex"],
+                sex: data.sex,
               });
             }}
           />

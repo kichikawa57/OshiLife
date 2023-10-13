@@ -8,11 +8,13 @@ interface Props extends ButtonProps {
   iconName?: IconName;
   textColor?: Colors;
   backgroundColor?: Colors;
+  borderColor?: Colors;
 }
 
 export const Button: FC<Omit<Props, "icon">> = ({
   iconName,
   backgroundColor,
+  borderColor,
   textColor,
   ...props
 }) => {
@@ -28,6 +30,8 @@ export const Button: FC<Omit<Props, "icon">> = ({
               paddingBottom: 10,
               borderRadius: 20,
               backgroundColor: colors[backgroundColor ? backgroundColor : "primary"],
+              borderWidth: 1,
+              borderColor: colors[borderColor ? borderColor : "primary"],
             }
       }
       containerStyle={{

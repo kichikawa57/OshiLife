@@ -14,7 +14,7 @@ import { Header } from "../../../components/Header/Normal";
 import { Icon } from "../../../components/Icon";
 import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
 
-import { useScheduleDetail } from "./hooks";
+import { useScheduleEdit } from "./hooks";
 import { StyledWrap, StyledContent, StyledDatePickerError, StyledInner } from "./style";
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
 export const Edit: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
 
-  const { isModal, control, clearErrors, setIsModal, onPressComplete } = useScheduleDetail(
+  const { isModal, control, clearErrors, setIsModal, setValue, onPressComplete } = useScheduleEdit(
     scheduleRoute,
     params,
   );
@@ -42,8 +42,10 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
               onPressCancel={() => {
                 setIsModal(false);
               }}
-              onPressComplete={(_, name) => {
+              onPressComplete={(artistId, oshiId, name) => {
                 onChange(name);
+                setValue("oshiId", oshiId);
+                setValue("artistId", artistId);
                 setIsModal(false);
                 clearErrors("oshiName");
               }}

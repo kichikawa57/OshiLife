@@ -1,77 +1,40 @@
-import React, { FC, Fragment, useRef, useState } from "react";
-import { SearchBar } from "@rneui/base";
-import { ActivityIndicator, LayoutAnimation } from "react-native";
+import React, { FC } from "react";
+import { ActivityIndicator } from "react-native";
 
 import { ContentBase } from "../ContentBase";
 import { ListItem } from "../../List";
+import { OshiId } from "../../../model/oshis";
 import { ArtistId } from "../../../model/artists";
 
-import { StyledContent, StyledListHeader, StyledScrollView } from "./style";
-import { useSelectOshiListContent } from "./hooks";
+import { StyledContent, StyledScrollView } from "./style";
+import { useSelectArtistListContent } from "./hooks";
 
 type Props = {
   onPressCancel: () => void;
-  onPressComplete: (id: ArtistId, name: string) => void;
+  onPressComplete: (artistId: ArtistId, oshiId: OshiId, name: string) => void;
 };
 
 export const SelectOshiListContent: FC<Props> = ({ onPressCancel, onPressComplete }) => {
-  const { isLoading, artistsGroups, searchText, setSearchText, searchArtists, resetSearchArtists } =
-    useSelectOshiListContent();
-  const [isHideHeader, setIsHideHeader] = useState(false);
-  const searchBarRef = useRef<SearchBar | null>(null);
+  const { isLoading, oshis } = useSelectArtistListContent();
 
   return (
-    <ContentBase
-      onPressCancel={onPressCancel}
-      isStatusBar={true}
-      isAbleToScroll={true}
-      isHideHeader={isHideHeader}
-      searchProps={{
-        ref: searchBarRef,
-        value: searchText,
-        placeholder: "検索",
-        showLoading: false,
-        onClickClearIcon: () => {
-          if (!searchBarRef.current) return;
-          searchBarRef.current.clear();
-          resetSearchArtists();
-        },
-        onChangeText: setSearchText,
-        onFocus: () => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          setIsHideHeader(true);
-        },
-        onSubmitEditing: () => {
-          searchArtists();
-        },
-        onEndEditing: () => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          setIsHideHeader(false);
-        },
-      }}
-    >
+    <ContentBase onPressCancel={onPressCancel} isStatusBar={true} isAbleToScroll={true}>
       {!isLoading ? (
         <StyledContent>
           <StyledScrollView>
-            {artistsGroups.map((group, index) => {
-              const { name, artists } = group;
+            {oshis.map((oshi, index) => {
+              const { artists, image_url, id, artist_id } = oshi;
 
               return (
-                <Fragment key={`SelectOshiListContent-${index}`}>
-                  <StyledListHeader>{name}</StyledListHeader>
-                  {artists.map((item, itemIndex) => {
-                    return (
-                      <ListItem
-                        key={`SelectOshiListContent-${index}-${itemIndex}`}
-                        title={item.name}
-                        bottomDivider={true}
-                        onPress={() => {
-                          onPressComplete(item.id, item.name);
-                        }}
-                      />
-                    );
-                  })}
-                </Fragment>
+                <ListItem
+                  key={`SelectOshiListContent-${index}`}
+                  avatarUrl={image_url || ""}
+                  title={artists?.name || ""}
+                  bottomDivider={true}
+                  onPress={() => {
+                    onPressComplete(artist_id, id, artists?.name || "");
+                  }}
+                />
               );
             })}
           </StyledScrollView>

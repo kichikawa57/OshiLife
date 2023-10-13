@@ -183,6 +183,8 @@ export interface Database {
       };
       schedules: {
         Row: {
+          artist_id: string;
+          connected_schedule_id: string | null;
           created_at: string;
           deleted_at: string | null;
           end_at: string;
@@ -196,6 +198,8 @@ export interface Database {
           user_id: string;
         };
         Insert: {
+          artist_id: string;
+          connected_schedule_id?: string | null;
           created_at?: string;
           deleted_at?: string | null;
           end_at?: string;
@@ -209,6 +213,8 @@ export interface Database {
           user_id: string;
         };
         Update: {
+          artist_id?: string;
+          connected_schedule_id?: string | null;
           created_at?: string;
           deleted_at?: string | null;
           end_at?: string;
@@ -222,6 +228,18 @@ export interface Database {
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "schedules_artist_id_fkey";
+            columns: ["artist_id"];
+            referencedRelation: "artists";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "schedules_connected_schedule_id_fkey";
+            columns: ["connected_schedule_id"];
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "schedules_oshi_id_fkey";
             columns: ["oshi_id"];
