@@ -56,9 +56,29 @@ export const useQueryClient = () => {
 
   return {
     removeQueries: (key: QueryKeyName) => client.removeQueries(key),
+    removeAllQueriesForSchedules: () => {
+      const queryCache = client.getQueryCache();
+      const cacheAll = queryCache.getAll();
+      const keys = cacheAll.map((cache) => cache.queryKey as QueryKeyName);
+
+      keys.forEach((key) => {
+        if (!Array.isArray(key)) return;
+
+        const name = key[0];
+        if (!(name === "getScheduleForMe" || name === "getScheduleForOthers")) return;
+
+        client.removeQueries(key);
+      });
+    },
     invalidateQueries: (key: QueryKeyName) => client.invalidateQueries(key),
     setQueryData: <K extends QueryKeyName>(key: K, data: ReturnType<K>) =>
       client.setQueryData(key, data),
     getQueryData: <K extends QueryKeyName>(key: K) => client.getQueryData<ReturnType<K>>(key),
+    getAllQueryKeys: () => {
+      const queryCache = client.getQueryCache();
+      const cacheAll = queryCache.getAll();
+
+      return cacheAll.map((cache) => cache.queryKey as QueryKeyName);
+    },
   };
 };

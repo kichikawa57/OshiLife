@@ -104,6 +104,7 @@ export const useOshiEdit = (
         const values = getValues();
 
         queryClient.removeQueries("getOshis");
+        queryClient.removeAllQueriesForSchedules();
 
         oshiRoute.navigation.navigate("detail", {
           id: params.id,

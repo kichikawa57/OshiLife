@@ -1,5 +1,7 @@
 import { Dayjs } from "dayjs";
 
+import { colors } from "../styles/color";
+
 export const nonNullable = <T>(value: T): value is NonNullable<T> => value != null;
 
 export const objectKeys = <T extends { [key: string]: unknown }>(obj: T): (keyof T)[] => {
@@ -58,4 +60,43 @@ export const getDayRange = (date: Dayjs) => {
   const endOfDay = date.endOf("day").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
   return { startOfDay, endOfDay };
+};
+
+/**
+ * HexをRGBに変換する
+ */
+const convertHexToRGB = (hex: string) => {
+  if (hex.slice(0, 1) !== "#") {
+    throw new Error("Hex must start with #");
+  }
+  if (hex.length !== 4 && hex.length !== 7) {
+    throw new Error("Hex must be 4 or 7 characters");
+  }
+
+  const hex6Digits =
+    hex.length == 4
+      ? "#" +
+        hex.slice(1, 2) +
+        hex.slice(1, 2) +
+        hex.slice(2, 3) +
+        hex.slice(2, 3) +
+        hex.slice(3, 4) +
+        hex.slice(3, 4)
+      : hex;
+
+  return [hex6Digits.slice(1, 3), hex6Digits.slice(3, 5), hex6Digits.slice(5, 7)].map((color) =>
+    parseInt(color, 16),
+  );
+};
+
+/**
+ * 背景色に合わせた文字色のスタイルを返す
+ */
+export const getTextStyle = (backgroundColor: string) => {
+  const [red, green, blue] = convertHexToRGB(backgroundColor);
+
+  if (red < 118 && green < 118 && blue < 118) {
+    return colors.textLight;
+  }
+  return colors.textDark;
 };

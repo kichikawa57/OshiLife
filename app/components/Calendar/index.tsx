@@ -8,6 +8,7 @@ import {
   Schedules,
   convertScheduleForCalendarToModel,
 } from "../../model/schedules";
+import { colors } from "../../shared/styles/color";
 
 import {
   StyledCalendarBorder,
@@ -165,6 +166,7 @@ const CalendarComponent: FC<Props> = ({ scheduleData, currentDate, onPressDate }
                       <StyledScheduleDetail
                         key={`${datesIndex}-${dateIndex}-${scheduleIndex}`}
                         numberOfLines={1}
+                        backgroundColor={schedule.oshi?.color || colors.primary}
                         isTransparent={schedule.isTransparent}
                         startWeekIndex={schedule.startWeekIndex}
                         endWeekIndex={schedule.endWeekIndex}

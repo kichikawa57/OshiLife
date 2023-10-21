@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components/native";
 
 import { colors, dateColors } from "../../shared/styles/color";
+import { getTextStyle } from "../../shared/utils";
 
 export const StyledView = styled.View`
   flex: 1;
@@ -115,12 +116,14 @@ export const StyledScheduleDetail = styled.Text<{
   isTransparent?: boolean;
   startWeekIndex: number;
   endWeekIndex: number;
+  backgroundColor: string;
 }>`
   width: ${({ startWeekIndex, endWeekIndex, isTransparent }) =>
     (isTransparent ? 98 : endWeekIndex + 1 - startWeekIndex) * 98}%;
   margin-top: 4px;
   overflow: hidden;
   font-size: 12px;
-  background-color: ${colors.primary};
+  background-color: ${(props) => props.backgroundColor};
   opacity: ${({ isTransparent }) => (isTransparent ? 0 : 1)};
+  color: ${(props) => getTextStyle(props.backgroundColor)};
 `;
