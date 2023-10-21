@@ -103,7 +103,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
       setDisplayedOshis((props) => {
         const oshis = getQueryData("getOshis");
         if (props === null) {
-          return oshis?.map((oshi) => oshi.id).filter((id) => id !== oshiId) || [oshiId];
+          return oshis?.map((oshi) => oshi.id).filter((id) => id !== oshiId) || [];
         }
 
         if (props.some((prop) => prop === oshiId)) {
