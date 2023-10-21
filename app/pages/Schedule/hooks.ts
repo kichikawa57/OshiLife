@@ -10,11 +10,13 @@ import { Schedules, convertOrigenalToModelForSchedule } from "../../model/schedu
 import { DEFAULT_MESSAGE } from "../../api";
 import { useQuery, useQueryClient } from "../../query";
 import { CalendarType } from "../../shared/types/components/schedules";
+import { OshiId } from "../../model/oshis";
 
 export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isOpenDate, setIsOpenDate] = useState(false);
   const [calendarTypeIndex, setCalendarTypeIndex] = useState(0);
+  const [displayedOshis, setDisplayedOshis] = useState<OshiId[] | null>(null);
 
   const { setQueryData, getQueryData } = useQueryClient();
 
@@ -136,24 +138,56 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     [calendarType, scheduleRoute.navigation, setQueryData],
   );
 
-  const isLoading = useMemo(() => {
-    if (calendarType === "me") {
-      return schedulesForMe.isLoading;
-    } else {
-      return schedulesForOthers.isLoading;
-    }
-  }, [calendarType, schedulesForMe.isLoading, schedulesForOthers.isLoading]);
+  const updateDisplayedOshis = (oshiId: OshiId) => {
+    setDisplayedOshis((props) => {
+      const oshis = getQueryData("getOshis");
+      if (props === null) {
+        return oshis?.map((oshi) => oshi.id).filter((id) => id !== oshiId) || [oshiId];
+      }
+
+      if (props.some((prop) => prop === oshiId)) {
+        return props.filter((prop) => prop !== oshiId);
+      } else {
+        return [...props, oshiId];
+      }
+    });
+  };
+
+  const schedulesForMeData = useMemo<Schedules[]>(() => {
+    const { data: schedules } = schedulesForMe;
+
+    if (!schedules) return [];
+    if (displayedOshis === null) return schedules;
+
+    return schedules.filter((schedule) =>
+      displayedOshis.some((displayedOshi) => displayedOshi === schedule.oshi_id),
+    );
+  }, [displayedOshis, schedulesForMe]);
+
+  const schedulesForOthersData = useMemo<Schedules[]>(() => {
+    const { data: schedules } = schedulesForOthers;
+
+    if (!schedules) return [];
+    if (displayedOshis === null) return schedules;
+
+    return schedules.filter((schedule) =>
+      displayedOshis.some((displayedOshi) => displayedOshi === schedule.oshi_id),
+    );
+  }, [displayedOshis, schedulesForOthers]);
 
   return {
-    isLoading,
-    schedulesForMe,
-    schedulesForOthers,
+    isLoadingSchedulesForMe: schedulesForMe.isLoading,
+    isLoadingSchedulesForOthers: schedulesForOthers.isLoading,
+    schedulesForMeData,
+    schedulesForOthersData,
     calendarTypeIndex,
+    displayedOshis,
     setCalendarTypeIndex,
     onPressDate,
     onPressNextButton,
     onPressPrevButton,
     onPressCurrentDate,
+    updateDisplayedOshis,
     filetrContent: {
       isOpenFilter,
       setIsOpenFilter,

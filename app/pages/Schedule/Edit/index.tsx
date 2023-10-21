@@ -92,9 +92,9 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
               name={"oshiName"}
               render={({ field: { value }, fieldState: { error } }) => (
                 <Input
-                  title="推し選択"
+                  title={`推し選択${params.id !== null ? "(変更不可)" : ""}`}
                   value={value}
-                  onPress={() => setIsModal(true)}
+                  onPress={() => params.id === null && setIsModal(true)}
                   editable={false}
                   errorMessage={error && error.message}
                 />

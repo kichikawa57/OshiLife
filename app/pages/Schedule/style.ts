@@ -14,13 +14,17 @@ export const StyledHeader = styled.View`
   padding: 25px 0 0;
 `;
 
+export const StyledTabList = styled.View`
+  width: 100%;
+  padding: 10px 0;
+`;
+
 export const StyledTabView = styled.View`
   flex: 1;
   width: 100%;
 `;
 
 export const StyledCheckBox = styled.View`
-  padding: 10px 0;
   border-bottom-color: ${colors.borderDark};
   border-bottom-width: 1px;
 `;

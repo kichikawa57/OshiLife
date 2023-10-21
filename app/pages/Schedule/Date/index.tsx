@@ -5,7 +5,6 @@ import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
 import { RoutingPropsOfSchedule } from "../../../router/app/Schedule/types";
 import { CheckBoxGroup } from "../../../components/CheckBox/Group";
-import { CheckBoxItem } from "../../../components/CheckBox/Item";
 import { ListItem } from "../../../components/List";
 import { TrackButton } from "../../../components/TrackButton";
 import { Button } from "../../../components/Button";
@@ -31,7 +30,7 @@ type Props = {
 export const Date: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
 
-  const { data, isLoading, getArtistOfOshiById } = useScheduleDate(
+  const { scheduleData, isLoading, checkBoxItems, getArtistOfOshiById } = useScheduleDate(
     params.date,
     params.calendarType,
   );
@@ -40,24 +39,15 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
     <>
       <StyledWrap>
         <StyledCheckBox>
-          <CheckBoxGroup>
-            <CheckBoxItem
-              imageUrl="testr"
-              isSelected
-              name="川村和馬"
-              onPress={() => null}
-              isMarginRight
-            />
-            <CheckBoxItem imageUrl="testr" isSelected name="吉野北斗" onPress={() => null} />
-          </CheckBoxGroup>
+          <CheckBoxGroup>{checkBoxItems}</CheckBoxGroup>
         </StyledCheckBox>
         <StyledScrollViewWrap>
-          {isLoading || !data ? (
+          {isLoading ? (
             <Loading />
           ) : (
             <StyledScrollView>
               <StyledScrollViewInner>
-                {data.map((schdule, index) => (
+                {scheduleData.map((schdule, index) => (
                   <ListItem
                     key={index}
                     title={schdule.title}
@@ -76,7 +66,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                       });
                     }}
                     avatarUrl={getArtistOfOshiById(schdule.oshi_id)?.imageUrl || ""}
-                    bottomDivider={data.length + 1 !== index}
+                    bottomDivider={scheduleData.length + 1 !== index}
                     rightContent={
                       <Button
                         title="Delete"
@@ -117,8 +107,8 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                 date: params.date,
                 connectedScheduleId: null,
                 oshiName: "",
-                endDate: "",
-                startDate: "",
+                endDate: params.date,
+                startDate: params.date,
                 title: "",
                 memo: "",
                 calendarType: params.calendarType,

@@ -6,7 +6,11 @@ import dayjs from "dayjs";
 
 import { Params, RoutingPropsOfSchedule } from "../../../router/app/Schedule/types";
 import { validateDateRange } from "../../../shared/validate";
-import { createSchedule, updateSchedule } from "../../../api/schedules";
+import {
+  createSchedule,
+  updateAllConnectedSchedules,
+  updateSchedule,
+} from "../../../api/schedules";
 import { useUserStore } from "../../../store/user";
 import { oshiId } from "../../../model/oshis";
 import { DEFAULT_MESSAGE } from "../../../api";
@@ -106,10 +110,8 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
 
       const { error } = await updateSchedule({
         scheduleId: params.id,
-        oshiId: oshiId(values.oshiId),
         title: values.title,
         connectedScheduleId: null,
-        artistId: artistId(values.artistId),
         isPublic: true,
         startAt: values.startDate,
         endAt: values.endDate,
@@ -122,8 +124,18 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
     },
     {
       onSuccess: (data) => {
-        if (!data) return;
+        if (!data || data.id === null) return;
         const values = getValues();
+
+        // コネクトしているスケジュールを全て変更
+        updateAllConnectedSchedules({
+          connectedScheduleId: data.id,
+          title: values.title,
+          isPublic: true,
+          startAt: values.startDate,
+          endAt: values.endDate,
+          memo: values.memo || "",
+        });
         removeQueries(["getScheduleForMe", dayjs(params.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(params.date).format("YYYY-MM-DD")]);
         scheduleRoute.navigation.navigate("detail", {

@@ -14,9 +14,10 @@ import { EditDateContent } from "../../components/BottomSheetContents/EditDateCo
 import { Loading } from "../../components/Loading";
 import { oshiId } from "../../model/oshis";
 import { artistId } from "../../model/artists";
+import { TabList } from "../../components/Tab/List";
 
 import { ScheduleHeader } from "./components/ScheduleHeader";
-import { StyledContent, StyledTabView, StyledWrap } from "./style";
+import { StyledContent, StyledTabList, StyledTabView, StyledWrap } from "./style";
 import { useSchedule } from "./hooks";
 
 type Props = {
@@ -29,12 +30,15 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
   const [dateType, setDateType] = useState(0);
   const {
     onPressDate,
-    isLoading,
+    isLoadingSchedulesForMe,
+    isLoadingSchedulesForOthers,
     editDateContent,
     filetrContent,
-    schedulesForMe,
-    schedulesForOthers,
+    schedulesForMeData,
+    schedulesForOthersData,
     calendarTypeIndex,
+    displayedOshis,
+    updateDisplayedOshis,
     setCalendarTypeIndex,
     onPressNextButton,
     onPressPrevButton,
@@ -53,6 +57,8 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
       <Modal animationType="fade" visible={filetrContent.isOpenFilter} transparent={true}>
         <FilterScheduleContent
           dateType={dateType}
+          displayedOshis={displayedOshis}
+          updateDisplayedOshis={updateDisplayedOshis}
           setDateType={setDateType}
           calendarType={calendarTypeIndex}
           setCalendarType={setCalendarTypeIndex}
@@ -71,55 +77,67 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           filetrContent.setIsOpenFilter(true);
         }}
       />
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <StyledWrap>
-          <StyledTabView>
-            <TabView value={calendarTypeIndex} onChange={setCalendarTypeIndex}>
-              <TabItem>
-                <StyledContent>
-                  <Calendar
-                    key={Math.random().toString(36).substr(2, 9)}
-                    scheduleData={schedulesForMe?.data || []}
-                    currentDate={editDateContent.currentDate}
-                    onPressDate={onPressDate}
-                  />
-                </StyledContent>
-              </TabItem>
-              <TabItem>
-                <StyledContent>
-                  <Calendar
-                    key={Math.random().toString(36).substr(2, 9)}
-                    scheduleData={schedulesForOthers?.data || []}
-                    currentDate={editDateContent.currentDate}
-                    onPressDate={onPressDate}
-                  />
-                </StyledContent>
-              </TabItem>
-            </TabView>
-          </StyledTabView>
-          <TrackButton
-            buttonText="予定追加"
-            iconName="plus"
-            onPress={() => {
-              scheduleRoute.navigation.navigate("edit", {
-                id: null,
-                oshiId: oshiId(""),
-                artistId: artistId(""),
-                date: dayjs(editDateContent.currentDate).format("YYYY-MM-DD"),
-                calendarType: "me",
-                connectedScheduleId: null,
-                oshiName: "",
-                endDate: "",
-                startDate: "",
-                title: "",
-                memo: "",
-              });
-            }}
+      <StyledWrap>
+        <StyledTabList>
+          <TabList
+            list={["自分の", "それ以外"]}
+            value={calendarTypeIndex}
+            onClick={setCalendarTypeIndex}
+            type="panel"
           />
-        </StyledWrap>
-      )}
+        </StyledTabList>
+        <StyledTabView>
+          <TabView value={calendarTypeIndex} onChange={setCalendarTypeIndex}>
+            <TabItem>
+              <StyledContent>
+                {isLoadingSchedulesForMe ? (
+                  <Loading />
+                ) : (
+                  <Calendar
+                    key={Math.random().toString(36).substr(2, 9)}
+                    scheduleData={schedulesForMeData}
+                    currentDate={editDateContent.currentDate}
+                    onPressDate={onPressDate}
+                  />
+                )}
+              </StyledContent>
+            </TabItem>
+            <TabItem>
+              <StyledContent>
+                {isLoadingSchedulesForOthers ? (
+                  <Loading />
+                ) : (
+                  <Calendar
+                    key={Math.random().toString(36).substr(2, 9)}
+                    scheduleData={schedulesForOthersData}
+                    currentDate={editDateContent.currentDate}
+                    onPressDate={onPressDate}
+                  />
+                )}
+              </StyledContent>
+            </TabItem>
+          </TabView>
+        </StyledTabView>
+        <TrackButton
+          buttonText="予定追加"
+          iconName="plus"
+          onPress={() => {
+            scheduleRoute.navigation.navigate("edit", {
+              id: null,
+              oshiId: oshiId(""),
+              artistId: artistId(""),
+              date: dayjs(editDateContent.currentDate).format("YYYY-MM-DD"),
+              calendarType: "me",
+              connectedScheduleId: null,
+              oshiName: "",
+              endDate: "",
+              startDate: "",
+              title: "",
+              memo: "",
+            });
+          }}
+        />
+      </StyledWrap>
     </>
   );
 };

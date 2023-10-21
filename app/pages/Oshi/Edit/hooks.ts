@@ -53,7 +53,7 @@ export const useOshiEdit = (
 
       if (values === null) return;
 
-      const { data, error } = await createOshi({
+      const { error } = await createOshi({
         user_id: userId,
         artist_id: artistId(values.artistId),
         image_url: params?.image || "",
@@ -64,7 +64,7 @@ export const useOshiEdit = (
 
       if (error !== null) throw error;
 
-      return data;
+      return values;
     },
     {
       onSuccess: (data) => {

@@ -1,4 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useState } from "react";
 
 import { DEFAULT_MESSAGE, getOshis, getUser } from "../../../../api";
 import { UseNavigationOfRoot, UseRouteOfRoot } from "../../../types";
@@ -10,6 +11,7 @@ import { convertOrigenalToModelForOshi } from "../../../../model/oshis";
 export const useCheckLoginUser = () => {
   const setUserId = useUserStore((store) => store.setUserId);
   const navigation = useNavigation<UseNavigationOfRoot>();
+  const [isFetchedOshisOnce, setIsFetchedOshisOnce] = useState(false);
   const route = useRoute<UseRouteOfRoot>();
 
   const { isLoading: isLoadingInit } = useQuery(
@@ -32,26 +34,33 @@ export const useCheckLoginUser = () => {
     },
   );
 
-  const { isLoading: isLoadingOshi } = useQuery("getOshis", async () => {
-    if (route.name !== "app") return;
+  const { isLoading: isLoadingOshi } = useQuery(
+    "getOshis",
+    async () => {
+      if (route.name !== "app") return;
+      setIsFetchedOshisOnce(true);
 
-    const { data: userData } = await getUser();
+      const { data: userData } = await getUser();
 
-    if (userData.user === null) throw new Error(DEFAULT_MESSAGE);
+      if (userData.user === null) throw new Error(DEFAULT_MESSAGE);
 
-    const userId = profileId(userData.user.id);
+      const userId = profileId(userData.user.id);
 
-    const { data, error } = await getOshis(userId);
+      const { data, error } = await getOshis(userId);
 
-    if (error !== null) throw new Error(DEFAULT_MESSAGE);
+      if (error !== null) throw new Error(DEFAULT_MESSAGE);
 
-    return data.map((oshi) =>
-      convertOrigenalToModelForOshi(
-        { ...oshi, created_at: "", updated_at: "", user_id: userId },
-        oshi.artists,
-      ),
-    );
-  });
+      return data.map((oshi) =>
+        convertOrigenalToModelForOshi(
+          { ...oshi, created_at: "", updated_at: "", user_id: userId },
+          oshi.artists,
+        ),
+      );
+    },
+    {
+      enabled: !isFetchedOshisOnce,
+    },
+  );
 
   return {
     isLoading: isLoadingOshi || isLoadingInit,

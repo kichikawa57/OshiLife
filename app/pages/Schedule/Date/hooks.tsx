@@ -1,6 +1,7 @@
+import React from "react";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useQuery, useQueryClient } from "../../../query";
 import { getSchedulesForMe, getSchedulesForOthers } from "../../../api/schedules";
@@ -10,9 +11,12 @@ import { DEFAULT_MESSAGE, getOshis } from "../../../api";
 import { convertOrigenalToModelForSchedule } from "../../../model/schedules";
 import { OshiId, convertOrigenalToModelForOshi, getArtistOfOshi } from "../../../model/oshis";
 import { CalendarType } from "../../../shared/types/components/schedules";
+import { CheckBoxItem } from "../../../components/CheckBox/Item";
 
 export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   const userId = useUserStore((store) => store.userId);
+
+  const [displayedOshis, setDisplayedOshis] = useState<OshiId[] | null>(null);
 
   const { getQueryData } = useQueryClient();
 
@@ -77,6 +81,15 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
     },
   );
 
+  const scheduleData = useMemo(() => {
+    if (!data) return [];
+    if (displayedOshis === null) return data;
+
+    return data.filter((schedule) =>
+      displayedOshis.some((displayedOshi) => displayedOshi === schedule.oshi_id),
+    );
+  }, [data, displayedOshis]);
+
   const getArtistOfOshiById = useCallback(
     (oshiId: OshiId) => {
       if (!oshiData) return null;
@@ -85,9 +98,53 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
     [oshiData],
   );
 
+  const updateDisplayedOshis = useCallback(
+    (oshiId: OshiId) => {
+      setDisplayedOshis((props) => {
+        const oshis = getQueryData("getOshis");
+        if (props === null) {
+          return oshis?.map((oshi) => oshi.id).filter((id) => id !== oshiId) || [oshiId];
+        }
+
+        if (props.some((prop) => prop === oshiId)) {
+          return props.filter((prop) => prop !== oshiId);
+        } else {
+          return [...props, oshiId];
+        }
+      });
+    },
+    [getQueryData],
+  );
+
+  const checkBoxItems = useMemo(() => {
+    if (!oshiData || !data) return null;
+
+    return oshiData
+      .filter((oshi) => {
+        return data.some((schedule) => schedule.oshi_id === oshi.id);
+      })
+      .map((oshi) => {
+        const isSelected =
+          displayedOshis === null ||
+          displayedOshis.some((displayedOshi) => displayedOshi === oshi.id);
+
+        return (
+          <CheckBoxItem
+            key={oshi.id}
+            imageUrl={oshi.image_url || ""}
+            isSelected={isSelected}
+            name={oshi.artists?.name || ""}
+            onPress={() => updateDisplayedOshis(oshi.id)}
+            isMarginRight
+          />
+        );
+      });
+  }, [data, displayedOshis, oshiData, updateDisplayedOshis]);
+
   return {
-    data,
+    scheduleData,
     isLoading: isLoadingOshiData || isLoading,
+    checkBoxItems,
     getArtistOfOshiById,
   };
 };

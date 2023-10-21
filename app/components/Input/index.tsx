@@ -18,7 +18,7 @@ export const Input: FC<Omit<Props, "autoCapitalize" | "ref" | "errorStyle" | "co
 }) => {
   return (
     <StyledWrap>
-      <StyledTitle>{title}</StyledTitle>
+      {title && <StyledTitle>{title}</StyledTitle>}
       <StyledInputWrap>
         {onPress && <StyledTouchableOpacity onPress={onPress} />}
         <InputOfRneui

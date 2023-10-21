@@ -5,7 +5,6 @@ import { colors, dateColors } from "../../shared/styles/color";
 export const StyledView = styled.View`
   flex: 1;
   width: auto;
-  padding: 20px 0 0;
 `;
 
 export const StyledCalendarContentWrap = styled.View`

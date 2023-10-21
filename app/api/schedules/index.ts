@@ -28,14 +28,20 @@ type CreateSchedule = {
 };
 type UpdateSchedule = {
   scheduleId: ScheduleId;
-  artistId: ArtistId;
   title: string;
   memo: string | null;
   isPublic: boolean;
   startAt: string;
   endAt: string;
-  oshiId: OshiId;
   connectedScheduleId: ScheduleId | null;
+};
+type UpdateAllConnectedSchedules = {
+  connectedScheduleId: ScheduleId;
+  title: string;
+  memo: string | null;
+  isPublic: boolean;
+  startAt: string;
+  endAt: string;
 };
 type DeleteConnectedSchedule = { userId: ProfileId; connectedScheduleId: ScheduleId };
 
@@ -87,6 +93,7 @@ export const getSchedulesForOthers = async (param: GetSchedulesForOthers) => {
     .gte("end_at", startAt)
     .lte("start_at", endAt)
     .in("artist_id", artistIds)
+    .is("connected_schedule_id", null)
     .is("deleted_at", null);
 
   return data;
@@ -96,7 +103,6 @@ export const updateSchedule = async (param: UpdateSchedule) => {
   const data = await supabase
     .from("schedules")
     .update({
-      oshi_id: param.oshiId,
       title: param.title,
       start_at: param.startAt,
       end_at: param.endAt,
@@ -105,6 +111,22 @@ export const updateSchedule = async (param: UpdateSchedule) => {
       connected_schedule_id: param.connectedScheduleId,
     })
     .eq("id", param.scheduleId);
+
+  return data;
+};
+
+export const updateAllConnectedSchedules = async (param: UpdateAllConnectedSchedules) => {
+  const data = await supabase
+    .from("schedules")
+    .update({
+      title: param.title,
+      start_at: param.startAt,
+      end_at: param.endAt,
+      is_public: param.isPublic,
+      memo: param.memo,
+      connected_schedule_id: param.connectedScheduleId,
+    })
+    .eq("connected_schedule_id", param.connectedScheduleId);
 
   return data;
 };
