@@ -34,6 +34,7 @@ export const validateEditSchedule = {
   oshiId: z.string().nonempty("推しを選択してください"),
   artistId: z.string().nonempty("推しを選択してください"),
   oshiName: z.string().nonempty("推しを選択してください"),
+  isPublic: z.boolean(),
   memo: z.string().optional(),
 };
 

@@ -62,6 +62,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                         startDate: schdule.start_at,
                         endDate: schdule.end_at,
                         date: params.date,
+                        isPublic: schdule.is_public,
                         calendarType: params.calendarType,
                       });
                     }}
@@ -111,6 +112,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                 startDate: params.date,
                 title: "",
                 memo: "",
+                isPublic: true,
                 calendarType: params.calendarType,
               });
             }}

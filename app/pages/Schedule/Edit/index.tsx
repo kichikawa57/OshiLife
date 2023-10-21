@@ -13,6 +13,7 @@ import { Textarea } from "../../../components/Textarea";
 import { Header } from "../../../components/Header/Normal";
 import { Icon } from "../../../components/Icon";
 import { SelectOshiListContent } from "../../../components/BottomSheetContents/SelectOshiListContent";
+import { SwitchList } from "../../../components/Switch/List";
 
 import { useScheduleEdit } from "./hooks";
 import { StyledWrap, StyledContent, StyledDatePickerError, StyledInner } from "./style";
@@ -97,6 +98,23 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
                   onPress={() => params.id === null && setIsModal(true)}
                   editable={false}
                   errorMessage={error && error.message}
+                />
+              )}
+            />
+          </StyledContent>
+          <StyledContent>
+            <Controller
+              control={control}
+              name={"isPublic"}
+              render={({ field: { value, onChange } }) => (
+                <SwitchList
+                  text="このスケジュールを他のユーザーに共有する"
+                  switchProps={{
+                    value,
+                    onChange: () => {
+                      onChange(!value);
+                    },
+                  }}
                 />
               )}
             />

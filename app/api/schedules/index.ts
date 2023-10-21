@@ -51,9 +51,10 @@ export const getSchedulesForMe = async (param: GetSchedulesForMe) => {
   let query = supabase
     .from("schedules")
     .select(
-      "id, memo, oshi_id, artist_id, start_at, end_at, title, connected_schedule_id, created_at, deleted_at, oshis!inner (color), artists!inner (name)",
+      "id, memo, oshi_id, artist_id, start_at, end_at, title, connected_schedule_id, created_at, deleted_at, is_public, oshis!inner (color), artists!inner (name)",
     )
     .eq("user_id", userId)
+    .order("created_at", { ascending: false })
     .gte("end_at", startAt)
     .lte("start_at", endAt)
     .is("deleted_at", null);
@@ -87,13 +88,15 @@ export const getSchedulesForOthers = async (param: GetSchedulesForOthers) => {
   const data = await supabase
     .from("schedules")
     .select(
-      "id, memo, oshi_id, artist_id, start_at, end_at, title, connected_schedule_id, created_at, deleted_at, oshis!inner (color), artists!inner (name)",
+      "id, memo, oshi_id, artist_id, start_at, end_at, title, connected_schedule_id, created_at, deleted_at, is_public, oshis!inner (color), artists!inner (name)",
     )
     .neq("user_id", userId)
     .gte("end_at", startAt)
     .lte("start_at", endAt)
+    .order("created_at", { ascending: false })
     .in("artist_id", artistIds)
     .is("connected_schedule_id", null)
+    .is("is_public", true)
     .is("deleted_at", null);
 
   return data;

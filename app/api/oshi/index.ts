@@ -10,7 +10,7 @@ export const getOshis = async (userId: ProfileId) => {
   const data = await supabase
     .from("oshis")
     .select(
-      "id, artist_id, artist_id, memo, color, is_edit_color, image_url, deleted_at, artists(name)",
+      "id, artist_id, memo, color, is_edit_color, image_url, deleted_at, artists!inner (name)",
     )
     .order("updated_at", { ascending: false })
     .eq("user_id", userId)

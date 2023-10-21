@@ -134,6 +134,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
               startDate: "",
               title: "",
               memo: "",
+              isPublic: true,
             });
           }}
         />

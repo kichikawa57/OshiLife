@@ -32,6 +32,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
       oshiId: params.oshiId || "",
       artistId: params.artistId || "",
       oshiName: params.oshiName || "",
+      isPublic: params.isPublic,
       memo: params.memo || "",
     },
   });
@@ -77,7 +78,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         artistId: artistId(values.artistId),
         connectedScheduleId: null,
         title: values.title,
-        isPublic: true,
+        isPublic: values.isPublic,
         startAt: values.startDate,
         endAt: values.endDate,
         memo: values.memo || "",
@@ -112,7 +113,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         scheduleId: params.id,
         title: values.title,
         connectedScheduleId: null,
-        isPublic: true,
+        isPublic: values.isPublic,
         startAt: values.startDate,
         endAt: values.endDate,
         memo: values.memo || "",
@@ -131,7 +132,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         updateAllConnectedSchedules({
           connectedScheduleId: data.id,
           title: values.title,
-          isPublic: true,
+          isPublic: values.isPublic,
           startAt: values.startDate,
           endAt: values.endDate,
           memo: values.memo || "",
@@ -149,6 +150,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
           endDate: values.endDate,
           startDate: values.startDate,
           title: values.title,
+          isPublic: values.isPublic,
           memo: values.memo,
         });
       },

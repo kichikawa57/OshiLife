@@ -47,7 +47,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
 
       return data.map((schedule) =>
         convertOrigenalToModelForSchedule(
-          { ...schedule, is_public: true, updated_at: "", user_id: userId },
+          { ...schedule, updated_at: "", user_id: userId },
           schedule.artists,
           schedule.oshis,
         ),

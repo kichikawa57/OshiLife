@@ -1,4 +1,4 @@
-import { ArtistId, artistId } from "../../model/artists";
+import { ArtistId } from "../../model/artists";
 import { supabase } from "../init";
 
 export type ArtistsInGetArtistsGroups = {
@@ -16,7 +16,7 @@ export type ResponseForGetArtistsGroups = {
 export const getArtistsGroups = async () => {
   const res = await supabase
     .from("artists_groups")
-    .select("id, name, furigana, deleted_at, artists(id, name, furigana)")
+    .select("id, name, furigana, deleted_at, artists!inner (id, name, furigana)")
     .is("deleted_at", null);
 
   return res;

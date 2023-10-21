@@ -48,7 +48,7 @@ export const useScheduleDetail = (
         artistId: artistId(param.artistId),
         connectedScheduleId: param.id,
         title: param.title,
-        isPublic: false,
+        isPublic: param.isPublic,
         startAt: param.startDate,
         endAt: param.endDate,
         memo: param.memo || "",
