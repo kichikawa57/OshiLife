@@ -33,7 +33,7 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
                 <StyledList key={idnex}>
                   <ListItem
                     title={oshi.artists?.name || ""}
-                    avatarUrl="https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+                    avatarUrl={oshi.image_url || ""}
                     bottomDivider={true}
                     onPress={() =>
                       oshiRoute.navigation.navigate("detail", {

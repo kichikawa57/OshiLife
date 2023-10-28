@@ -7,15 +7,13 @@ const ratio = {
 };
 
 interface Props extends ImageProps {
-  url: string;
   ratioType?: keyof typeof ratio;
 }
 
-export const Image: FC<Omit<Props, "source">> = ({ url, ratioType = "1*1", ...props }) => {
+export const Image: FC<Props> = ({ ratioType = "1*1", ...props }) => {
   return (
     <ImageOfRneui
       {...props}
-      source={{ uri: url }}
       style={{
         aspectRatio: ratio[ratioType],
         width: "100%",

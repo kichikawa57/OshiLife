@@ -42,7 +42,7 @@ export const FilterScheduleContent: FC<Props> = ({
                 return (
                   <CheckBoxItem
                     key={`${oshi.id}`}
-                    imageUrl="testr"
+                    imageUrl={oshi.image_url || ""}
                     isSelected={
                       displayedOshis !== null
                         ? displayedOshis.some((displayedOshi) => displayedOshi === oshi.id)

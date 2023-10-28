@@ -29,6 +29,7 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
 
   const {
     control,
+    uploadImageMutation,
     clearErrors,
     setIsEditColor,
     setIsOpenSelectedColorModal,
@@ -106,20 +107,14 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           <Controller
             control={control}
             name={"image"}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { value } }) => (
               <StyledImageTouch
                 onPress={async () => {
-                  const image = await ImagePicker.openPicker({
-                    width: 300,
-                    height: 300,
-                    cropping: true,
-                  });
-
-                  onChange(image.path);
+                  uploadImageMutation.mutate();
                 }}
               >
                 <Image
-                  source={value !== "" ? { uri: value } : require("./person.png")}
+                  source={value !== "" ? { uri: value } : require("../../../images/person.png")}
                   style={{ width: 100, height: 100 }}
                 />
               </StyledImageTouch>

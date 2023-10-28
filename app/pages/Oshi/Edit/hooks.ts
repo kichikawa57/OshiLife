@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { Alert } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
+import { decode } from "base64-arraybuffer";
 
 import { EditAndDetailParams, RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { DEFAULT_MESSAGE, createOshi, updateOshi } from "../../../api";
@@ -9,6 +11,7 @@ import { artistId } from "../../../model/artists";
 import { useUserStore } from "../../../store/user";
 import { oshiId } from "../../../model/oshis";
 import { useQueryClient } from "../../../query";
+import { uploadImage } from "../../../api/image";
 
 import { FormData, formValidation } from "./validate";
 
@@ -88,7 +91,7 @@ export const useOshiEdit = (
 
       const { data, error } = await updateOshi(oshiId(params.id), {
         artist_id: artistId(values.artistId),
-        image_url: params?.image || "",
+        image_url: values.image || "",
         color: values.color,
         memo: values.memo || null,
         is_edit_color: isEditColor,
@@ -130,12 +133,40 @@ export const useOshiEdit = (
     }
   }, [createOshiMutation, params, updateOshiMutation]);
 
+  const uploadImageMutation = useMutation(
+    async () => {
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+      });
+
+      if (!image.path) return;
+
+      const { data, error } = await uploadImage(userId, image.path);
+
+      if (error !== null) throw error;
+
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        if (!data) return;
+        setValue("image", data.publicUrl);
+      },
+      onError: () => {
+        Alert.alert("画像のアップロードに失敗しました");
+      },
+    },
+  );
+
   return {
     isLoading: createOshiMutation.isLoading || updateOshiMutation.isLoading,
     isOpenSelectedColorModal,
     isOpenSelectedOshiModal,
     control,
     isEditColor,
+    uploadImageMutation,
     setValue,
     setIsEditColor,
     clearErrors,

@@ -39,7 +39,10 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
       <StyledWrap>
         <StyledContentsWrap>
           <ImageWrap>
-            <Image url={params.image || ""} ratioType="16*9" />
+            <Image
+              source={params.image ? { uri: params.image } : require("../../../images/person.png")}
+              ratioType="1*1"
+            />
           </ImageWrap>
           <StyledListWrap>
             <StyledList>

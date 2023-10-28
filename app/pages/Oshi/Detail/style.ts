@@ -5,6 +5,7 @@ import { colors } from "../../../shared/styles/color";
 export const StyledWrap = styled.View`
   flex: 1;
   width: 100%;
+  position: relative;
 `;
 
 export const StyledContentsWrap = styled.ScrollView`

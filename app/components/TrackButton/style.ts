@@ -1,11 +1,9 @@
 import { styled } from "styled-components/native";
 
 export const StyledWrap = styled.View`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding: 20px 14px 20px 0;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 `;
 
 export const StyledInner = styled.View`

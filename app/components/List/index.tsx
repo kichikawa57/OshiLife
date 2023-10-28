@@ -1,7 +1,8 @@
 import React, { FC, ReactNode, useMemo } from "react";
-import { Avatar, ListItem as ListItemOfRneui, ListItemProps } from "@rneui/themed";
+import { ListItem as ListItemOfRneui, ListItemProps } from "@rneui/themed";
 
 import { Colors, colors } from "../../shared/styles/color";
+import { Avatar } from "../Avatar";
 
 interface Props extends ListItemProps {
   title: string;
@@ -24,8 +25,8 @@ export const ListItem: FC<Props> = ({
   const listContent = useMemo(() => {
     return (
       <>
-        {avatarUrl && (
-          <Avatar rounded source={{ uri: avatarUrl }} containerStyle={{ marginRight: 10 }} />
+        {avatarUrl !== undefined && (
+          <Avatar rounded url={avatarUrl} containerStyle={{ marginRight: 10 }} />
         )}
         <ListItemOfRneui.Content>
           <ListItemOfRneui.Title

@@ -1,11 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
 import { RoutingPropsOfSchedule } from "../../../router/app/Schedule/types";
-import { SwitchList } from "../../../components/Switch/List";
 import { TrackButton } from "../../../components/TrackButton";
 import { DEFAULT_MESSAGE } from "../../../api";
 import { Button } from "../../../components/Button";
@@ -18,7 +17,6 @@ import {
   StyledButtonWrap,
   StyledDate,
   StyledInner,
-  StyledSwitch,
   StyledTitle,
   StyledWrap,
 } from "./style";
@@ -31,7 +29,6 @@ type Props = {
 
 export const Detail: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
-  const [isChack, setIsCheck] = useState(false);
 
   const { onPressConnectedButton, isLoading, isConnected, onPressUnConnectedButtonForMe } =
     useScheduleDetail(scheduleRoute, params);
@@ -50,19 +47,6 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
           <StyledDate>{`日時: ${dayjs(params.startDate).format("MM月DD日 HH:mm")} ~ ${dayjs(
             params.endDate,
           ).format("MM月DD日 HH:mm")}`}</StyledDate>
-          {params.calendarType === "others" && (
-            <StyledSwitch>
-              <SwitchList
-                text="自分のカレンダーに登録する"
-                switchProps={{
-                  value: isChack,
-                  onChange: () => {
-                    setIsCheck(!isChack);
-                  },
-                }}
-              />
-            </StyledSwitch>
-          )}
           {params.memo && (
             <MemoWrap>
               <MemoTitle>メモ</MemoTitle>
