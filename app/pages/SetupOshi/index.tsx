@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { Controller } from "react-hook-form";
 import { Modal } from "react-native";
 import { Image } from "@rneui/base";
-import ImagePicker from "react-native-image-crop-picker";
 
 import { Input } from "../../components/Input";
 import { RoutingPropsOfRoot } from "../../router/types";
@@ -28,7 +27,7 @@ type Props = {
 };
 
 export const SetupOshi: FC<Props> = ({ rootRoute }) => {
-  const { control, clearErrors, onPress, editColor, selectedOshi, setValue } =
+  const { control, clearErrors, onPress, editColor, selectedOshi, setValue, uploadImageMutation } =
     useSetupOshi(rootRoute);
   return (
     <>
@@ -80,16 +79,10 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
             <Controller
               control={control}
               name={"image"}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { value } }) => (
                 <StyledImageTouch
                   onPress={async () => {
-                    const image = await ImagePicker.openPicker({
-                      width: 300,
-                      height: 300,
-                      cropping: true,
-                    });
-
-                    onChange(image.path);
+                    uploadImageMutation.mutate();
                   }}
                 >
                   <Image

@@ -3,7 +3,6 @@ import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { Alert } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import { decode } from "base64-arraybuffer";
 
 import { EditAndDetailParams, RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { DEFAULT_MESSAGE, createOshi, updateOshi } from "../../../api";

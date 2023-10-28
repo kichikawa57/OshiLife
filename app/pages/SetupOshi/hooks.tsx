@@ -2,11 +2,13 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { Alert } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { DEFAULT_MESSAGE, createOshi, getUser } from "../../api";
 import { artistId } from "../../model/artists";
 import { useUserStore } from "../../store/user";
+import { uploadImage } from "../../api/image";
 
 import { FormData, formValidation } from "./validate";
 
@@ -85,6 +87,33 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     },
   );
 
+  const uploadImageMutation = useMutation(
+    async () => {
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+      });
+
+      if (!image.path) return;
+
+      const { data, error } = await uploadImage(userId, image.path);
+
+      if (error !== null) throw error;
+
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        if (!data) return;
+        setValue("image", data.publicUrl);
+      },
+      onError: () => {
+        Alert.alert("画像のアップロードに失敗しました");
+      },
+    },
+  );
+
   useEffect(() => {
     validateSession.mutate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,6 +124,7 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     clearErrors,
     onPress: onPress.mutate,
     setValue,
+    uploadImageMutation,
     editColor: {
       isModal: isOpenSelectedColorModal,
       isEditColor,
