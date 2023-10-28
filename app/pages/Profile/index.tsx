@@ -5,6 +5,8 @@ import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfProfile } from "../../router/app/Profile/types";
 import { TrackButton } from "../../components/TrackButton";
 import { Loading } from "../../components/Loading";
+import { Header } from "../../components/Header/Normal";
+import { Icon } from "../../components/Icon";
 
 import {
   StyledWrap,
@@ -31,6 +33,19 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
         <Loading />
       ) : (
         <>
+          <Header
+            title={"プロフィール編集"}
+            isDisabled={isLoading}
+            right={
+              <Icon
+                name="gear"
+                onPress={() => {
+                  profileRoute.navigation.navigate("setting");
+                }}
+                disabled={isLoading}
+              />
+            }
+          />
           <StyledWrap>
             <StyledListWrap>
               <StyledList>

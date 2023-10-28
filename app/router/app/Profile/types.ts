@@ -9,6 +9,7 @@ export type EditParams = { id: string } & z.infer<typeof formData>;
 export type RoutingOfProfile = {
   top: undefined;
   edit: EditParams;
+  setting: undefined;
 };
 
 export type RoutingPropsOfProfile<K extends keyof RoutingOfProfile> = NavigationProps<

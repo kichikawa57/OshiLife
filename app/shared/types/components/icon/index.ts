@@ -18,4 +18,5 @@ export type IconName =
   | "caret-right"
   | "check"
   | "search"
-  | "close";
+  | "close"
+  | "gear";
