@@ -58,7 +58,7 @@ export const useOshiEdit = (
       const { error } = await createOshi({
         user_id: userId,
         artist_id: artistId(values.artistId),
-        image_url: params?.image || "",
+        image_url: values.image || "",
         color: values.color,
         memo: values.memo || null,
         is_edit_color: isEditColor,

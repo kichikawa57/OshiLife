@@ -53,7 +53,6 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
                           Alert.alert("本当に削除してよろしいでしょうか？", "", [
                             {
                               text: "キャンセル",
-                              onPress: () => console.log("User pressed No"),
                               style: "cancel",
                             },
                             {

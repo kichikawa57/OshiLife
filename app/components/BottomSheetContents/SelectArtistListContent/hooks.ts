@@ -1,14 +1,19 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Alert } from "react-native";
 
 import { DEFAULT_MESSAGE, getArtistsGroups } from "../../../api";
-import { getMinutes } from "../../../shared/utils";
-import { useQuery } from "../../../query";
-import { ArtistsGroups, convertOrigenalToModelForArtistGroup } from "../../../model/artists";
+import { useQuery, useQueryClient } from "../../../query";
+import {
+  Artists,
+  ArtistsGroups,
+  convertOrigenalToModelForArtistGroup,
+} from "../../../model/artists";
 
 export const useSelectArtistListContent = () => {
   const [searchText, setSearchText] = useState("");
   const [prevSearchText, setPrevSearchText] = useState("");
+
+  const { getQueryData } = useQueryClient();
 
   const { data, isLoading } = useQuery(
     "getArtists",
@@ -28,8 +33,6 @@ export const useSelectArtistListContent = () => {
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);
       },
-      cacheTime: getMinutes(30),
-      staleTime: getMinutes(30),
     },
   );
 
@@ -41,23 +44,39 @@ export const useSelectArtistListContent = () => {
     setPrevSearchText("");
   };
 
+  const checkUnselectedOshi = useCallback(
+    (artist: Artists) => {
+      const oshis = getQueryData("getOshis");
+      if (!oshis) return true;
+
+      const isSelected = oshis.some((oshi) => artist.id === oshi.artist_id);
+
+      return !isSelected;
+    },
+    [getQueryData],
+  );
+
   const filterArtistsGroups = useMemo<ArtistsGroups[]>(() => {
     if (!data) return [];
-    if (prevSearchText === "") return data;
 
     return data
       .reduce<ArtistsGroups[]>((prev, current) => {
         if (current.artists === null) return prev;
 
         const filterArtists = current.artists.filter((artist) => {
+          if (prevSearchText === "") {
+            return checkUnselectedOshi(artist);
+          }
+
           if (artist.furigana === null) {
             return artist.name.indexOf(prevSearchText) !== -1;
           }
 
-          return (
+          const isSearchedName =
             artist.name.indexOf(prevSearchText) !== -1 ||
-            artist.furigana.indexOf(prevSearchText) !== -1
-          );
+            artist.furigana.indexOf(prevSearchText) !== -1;
+
+          return checkUnselectedOshi(artist) && isSearchedName;
         });
 
         prev.push({
@@ -67,8 +86,12 @@ export const useSelectArtistListContent = () => {
 
         return prev;
       }, [])
-      .filter((groups) => (groups.artists ? groups.artists.length !== 0 : false));
-  }, [data, prevSearchText]);
+      .filter((groups) => {
+        if (!groups.artists) return false;
+
+        return groups.artists.length !== 0;
+      });
+  }, [checkUnselectedOshi, data, prevSearchText]);
 
   return {
     isLoading,

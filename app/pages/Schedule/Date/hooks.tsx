@@ -2,13 +2,14 @@ import React from "react";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
 import { useCallback, useMemo, useState } from "react";
+import { useMutation } from "react-query";
 
 import { useQuery, useQueryClient } from "../../../query";
-import { getSchedulesForMe, getSchedulesForOthers } from "../../../api/schedules";
+import { deleteSchedule, getSchedulesForMe, getSchedulesForOthers } from "../../../api/schedules";
 import { useUserStore } from "../../../store/user";
 import { getDayRange } from "../../../shared/utils";
 import { DEFAULT_MESSAGE, getOshis } from "../../../api";
-import { convertOrigenalToModelForSchedule } from "../../../model/schedules";
+import { ScheduleId, convertOrigenalToModelForSchedule } from "../../../model/schedules";
 import { OshiId, convertOrigenalToModelForOshi, getArtistOfOshi } from "../../../model/oshis";
 import { CalendarType } from "../../../shared/types/components/schedules";
 import { CheckBoxItem } from "../../../components/CheckBox/Item";
@@ -18,7 +19,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
 
   const [displayedOshis, setDisplayedOshis] = useState<OshiId[] | null>(null);
 
-  const { getQueryData } = useQueryClient();
+  const { getQueryData, removeQueries } = useQueryClient();
 
   const { data, isLoading } = useQuery(
     [calendarType === "me" ? "getScheduleAtDateForMe" : "getScheduleAtDateForOthers", date],
@@ -75,6 +76,25 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
       );
     },
     {
+      onError: () => {
+        Alert.alert(DEFAULT_MESSAGE);
+      },
+    },
+  );
+
+  const deleteScheduleMutation = useMutation(
+    async ({ id }: { id: ScheduleId }) => {
+      const { error } = await deleteSchedule(id);
+
+      if (error !== null) throw error;
+
+      return id;
+    },
+    {
+      onSuccess: () => {
+        removeQueries(["getScheduleForMe", dayjs(date).format("YYYY-MM")]);
+        removeQueries(["getScheduleAtDateForMe", dayjs(date).format("YYYY-MM-DD")]);
+      },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);
       },
@@ -146,5 +166,6 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
     isLoading: isLoadingOshiData || isLoading,
     checkBoxItems,
     getArtistOfOshiById,
+    deleteScheduleMutation,
   };
 };

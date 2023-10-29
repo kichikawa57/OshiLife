@@ -30,10 +30,8 @@ type Props = {
 export const Date: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
 
-  const { scheduleData, isLoading, checkBoxItems, getArtistOfOshiById } = useScheduleDate(
-    params.date,
-    params.calendarType,
-  );
+  const { scheduleData, isLoading, checkBoxItems, getArtistOfOshiById, deleteScheduleMutation } =
+    useScheduleDate(params.date, params.calendarType);
 
   return (
     <>
@@ -71,6 +69,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                     rightContent={
                       <Button
                         title="Delete"
+                        disabled={deleteScheduleMutation.isLoading}
                         onPress={() =>
                           Alert.alert("本当に削除してよろしいでしょうか？", "", [
                             {
@@ -81,7 +80,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                             {
                               text: "確定",
                               onPress: () => {
-                                console.log("User pressed Yes");
+                                deleteScheduleMutation.mutate({ id: schdule.id });
                               },
                             },
                           ])

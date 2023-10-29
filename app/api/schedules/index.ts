@@ -44,6 +44,7 @@ type UpdateAllConnectedSchedules = {
   endAt: string;
 };
 type DeleteConnectedSchedule = { userId: ProfileId; connectedScheduleId: ScheduleId };
+type DeleteAllSchedulesRelatedToOshi = { userId: ProfileId; oshiId: OshiId };
 
 export const getSchedulesForMe = async (param: GetSchedulesForMe) => {
   const { userId, startAt, endAt, oshiIds } = param;
@@ -161,6 +162,19 @@ export const deleteSchedule = async (id: ScheduleId) => {
       deleted_at,
     })
     .eq("id", id);
+
+  return data;
+};
+
+export const deleteAllSchedulesRelatedToOshi = async (params: DeleteAllSchedulesRelatedToOshi) => {
+  const deleted_at = dayjs().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+  const data = await supabase
+    .from("schedules")
+    .update({
+      deleted_at,
+    })
+    .eq("user_id", params.userId)
+    .eq("oshi_id", params.oshiId);
 
   return data;
 };

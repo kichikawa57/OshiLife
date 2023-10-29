@@ -5,6 +5,7 @@ import { useUserStore } from "../../store/user";
 import { getOshis, deleteOshi, DEFAULT_MESSAGE } from "../../api";
 import { useQuery, useQueryClient } from "../../query";
 import { OshiId, convertOrigenalToModelForOshi } from "../../model/oshis";
+import { deleteAllSchedulesRelatedToOshi } from "../../api/schedules";
 
 export const useOshi = () => {
   const userId = useUserStore((store) => store.userId);
@@ -38,11 +39,20 @@ export const useOshi = () => {
 
       if (error !== null) throw error;
 
+      const deleteAllSchedulesRelatedToOshiResponse = await deleteAllSchedulesRelatedToOshi({
+        userId,
+        oshiId: params.id,
+      });
+
+      if (deleteAllSchedulesRelatedToOshiResponse.error !== null)
+        throw deleteAllSchedulesRelatedToOshiResponse.error;
+
       return params.id;
     },
     {
       onSuccess: () => {
         queryClient.removeQueries("getOshis");
+        queryClient.removeAllQueriesForSchedules();
         refetch();
       },
       onError: () => {

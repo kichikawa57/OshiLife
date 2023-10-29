@@ -69,6 +69,7 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
               artistId: params.artistId,
               color: params.color,
               memo: params.memo,
+              image: params.image,
               isEditColor: params.isEditColor,
             });
           }}
