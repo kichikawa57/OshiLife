@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { ContentBase } from "../ContentBase";
 import { CheckBoxGroup } from "../../CheckBox/Group";
 import { CheckBoxItem } from "../../CheckBox/Item";
-import { TabList } from "../../Tab/List";
 import { OshiId } from "../../../model/oshis";
 import { useQueryClient } from "../../../query";
 
