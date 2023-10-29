@@ -1,5 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SplashScreen from "react-native-splash-screen";
 
 import { DEFAULT_MESSAGE, getOshis, getUser } from "../../../../api";
 import { UseNavigationOfRoot, UseRouteOfRoot } from "../../../types";
@@ -14,7 +15,7 @@ export const useCheckLoginUser = () => {
   const [isFetchedOshisOnce, setIsFetchedOshisOnce] = useState(false);
   const route = useRoute<UseRouteOfRoot>();
 
-  const { isLoading: isLoadingInit } = useQuery(
+  const { isLoading: isLoadingInit, isError } = useQuery(
     "init",
     async () => {
       if (route.name !== "app") return;
@@ -62,7 +63,14 @@ export const useCheckLoginUser = () => {
     },
   );
 
+  useEffect(() => {
+    if (!isLoadingInit && !isLoadingInit) {
+      SplashScreen.hide();
+    }
+  }, [isLoadingOshi, isLoadingInit]);
+
   return {
     isLoading: isLoadingOshi || isLoadingInit,
+    isError,
   };
 };

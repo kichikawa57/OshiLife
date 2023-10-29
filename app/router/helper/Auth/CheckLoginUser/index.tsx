@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const CheckLoginUser: FC<Props> = ({ children }) => {
-  const { isLoading } = useCheckLoginUser();
+  const { isLoading, isError } = useCheckLoginUser();
 
-  return <>{isLoading ? <Loading /> : children}</>;
+  return <>{isLoading || isError ? <Loading /> : children}</>;
 };
