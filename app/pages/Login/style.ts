@@ -1,16 +1,22 @@
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import styled from "styled-components/native";
+
+import { colors } from "../../shared/styles/color";
 
 export const StyledWrap = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  padding: 0 20px;
+  padding: ${getStatusBarHeight() + 10}px 20px 0;
 `;
 
-export const StyledTitle = styled.Text`
-  margin-bottom: 40px;
-  font-size: 40px;
+export const StyledTitle = styled.View`
+  flex-direction: row;
+  justify-content: center;
+`;
+
+export const StyledImage = styled.View`
+  width: 180px;
+  height: 180px;
 `;
 
 export const StyledForm = styled.View`
@@ -26,9 +32,11 @@ export const StyledInput = styled.View<{ isMarginBottom: boolean }>`
 export const StyledButtonWrap = styled.View`
   align-items: center;
   width: 100%;
+  padding: 24px 0;
+  background-color: ${colors.bgLight};
 `;
 
 export const StyledButton = styled.View<{ isMarginBottom: boolean }>`
-  width: 80%;
-  margin-bottom: ${({ isMarginBottom }) => (isMarginBottom ? 20 : 0)}px;
+  width: 90%;
+  margin-bottom: ${({ isMarginBottom }) => (isMarginBottom ? 10 : 0)}px;
 `;
