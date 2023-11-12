@@ -11,6 +11,7 @@ import { DEFAULT_MESSAGE } from "../../api";
 import { useQuery, useQueryClient } from "../../query";
 import { CalendarType } from "../../shared/types/components/schedules";
 import { OshiId } from "../../model/oshis";
+import { yyyymmddhhmmss } from "../../shared/constants/date/dayJs";
 
 export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -23,6 +24,10 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   const userId = useUserStore((props) => props.userId);
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+
+  const today = useMemo(() => {
+    return dayjs();
+  }, []);
 
   const schedulesForMe = useQuery(
     ["getScheduleForMe", currentDate.format("YYYY-MM")],
@@ -116,6 +121,12 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     setIsOpenDate(false);
   };
 
+  const switchCalendarType = (index: number) => {
+    if (index > 1) return;
+
+    setCalendarTypeIndex(index);
+  };
+
   const calendarType = useMemo<CalendarType>(() => {
     return calendarTypeIndex === 0 ? "me" : "others";
   }, [calendarTypeIndex]);
@@ -175,6 +186,28 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     );
   }, [displayedOshis, schedulesForOthers]);
 
+  const startDate = useMemo(() => {
+    const thisMonth = today.format("YYYYMM");
+    const currentMonth = currentDate.format("YYYYMM");
+
+    if (thisMonth === currentMonth) {
+      return currentDate.startOf("day").format(yyyymmddhhmmss);
+    }
+
+    return currentDate.startOf("month").startOf("day").format(yyyymmddhhmmss);
+  }, [currentDate, today]);
+
+  const endDate = useMemo(() => {
+    const thisMonth = today.format("YYYYMM");
+    const currentMonth = currentDate.format("YYYYMM");
+
+    if (thisMonth === currentMonth) {
+      return currentDate.endOf("day").format(yyyymmddhhmmss);
+    }
+
+    return currentDate.startOf("month").endOf("day").format(yyyymmddhhmmss);
+  }, [currentDate, today]);
+
   return {
     isLoadingSchedulesForMe: schedulesForMe.isLoading,
     isLoadingSchedulesForOthers: schedulesForOthers.isLoading,
@@ -182,7 +215,9 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     schedulesForOthersData,
     calendarTypeIndex,
     displayedOshis,
-    setCalendarTypeIndex,
+    startDate,
+    endDate,
+    switchCalendarType,
     onPressDate,
     onPressNextButton,
     onPressPrevButton,

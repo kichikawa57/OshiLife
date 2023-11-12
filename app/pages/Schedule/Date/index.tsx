@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Alert } from "react-native";
+import dayjs from "dayjs";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -11,9 +12,12 @@ import { Button } from "../../../components/Button";
 import { Loading } from "../../../components/Loading";
 import { oshiId } from "../../../model/oshis";
 import { artistId } from "../../../model/artists";
+import { yyyymmddhhmmss } from "../../../shared/constants/date/dayJs";
 
 import {
   StyledCheckBox,
+  StyledEmpty,
+  StyledEmptyText,
   StyledScrollView,
   StyledScrollViewInner,
   StyledScrollViewWrap,
@@ -36,13 +40,15 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
   return (
     <>
       <StyledWrap>
-        <StyledCheckBox>
-          <CheckBoxGroup>{checkBoxItems}</CheckBoxGroup>
-        </StyledCheckBox>
+        {scheduleData.length !== 0 && (
+          <StyledCheckBox>
+            <CheckBoxGroup>{checkBoxItems}</CheckBoxGroup>
+          </StyledCheckBox>
+        )}
         <StyledScrollViewWrap>
           {isLoading ? (
             <Loading />
-          ) : (
+          ) : scheduleData.length !== 0 ? (
             <StyledScrollView>
               <StyledScrollViewInner>
                 {scheduleData.map((schdule, index) => (
@@ -93,6 +99,10 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                 ))}
               </StyledScrollViewInner>
             </StyledScrollView>
+          ) : (
+            <StyledEmpty>
+              <StyledEmptyText>スケジュールはありません</StyledEmptyText>
+            </StyledEmpty>
           )}
         </StyledScrollViewWrap>
         {params.calendarType === "me" && (
@@ -107,7 +117,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                 date: params.date,
                 connectedScheduleId: null,
                 oshiName: "",
-                endDate: params.date,
+                endDate: dayjs(params.date).endOf("day").format(yyyymmddhhmmss),
                 startDate: params.date,
                 title: "",
                 memo: "",

@@ -15,6 +15,7 @@ import { Loading } from "../../components/Loading";
 import { oshiId } from "../../model/oshis";
 import { artistId } from "../../model/artists";
 import { TabList } from "../../components/Tab/List";
+import { yyyymmdd } from "../../shared/constants/date/dayJs";
 
 import { ScheduleHeader } from "./components/ScheduleHeader";
 import { StyledContent, StyledTabList, StyledTabView, StyledWrap } from "./style";
@@ -38,8 +39,10 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
     schedulesForOthersData,
     calendarTypeIndex,
     displayedOshis,
+    startDate,
+    endDate,
     updateDisplayedOshis,
-    setCalendarTypeIndex,
+    switchCalendarType,
     onPressNextButton,
     onPressPrevButton,
     onPressCurrentDate,
@@ -61,7 +64,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           updateDisplayedOshis={updateDisplayedOshis}
           setDateType={setDateType}
           calendarType={calendarTypeIndex}
-          setCalendarType={setCalendarTypeIndex}
+          setCalendarType={switchCalendarType}
           onPressCancel={() => filetrContent.setIsOpenFilter(false)}
         />
       </Modal>
@@ -82,12 +85,12 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           <TabList
             list={["自分の", "それ以外"]}
             value={calendarTypeIndex}
-            onClick={setCalendarTypeIndex}
+            onClick={switchCalendarType}
             type="panel"
           />
         </StyledTabList>
         <StyledTabView>
-          <TabView value={calendarTypeIndex} onChange={setCalendarTypeIndex}>
+          <TabView value={calendarTypeIndex} onChange={switchCalendarType}>
             <TabItem>
               <StyledContent>
                 {isLoadingSchedulesForMe ? (
@@ -126,12 +129,12 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
               id: null,
               oshiId: oshiId(""),
               artistId: artistId(""),
-              date: dayjs(editDateContent.currentDate).format("YYYY-MM-DD"),
+              date: dayjs(editDateContent.currentDate).format(yyyymmdd),
               calendarType: "me",
               connectedScheduleId: null,
               oshiName: "",
-              endDate: "",
-              startDate: "",
+              endDate,
+              startDate,
               title: "",
               memo: "",
               isPublic: true,

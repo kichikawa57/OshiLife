@@ -9,7 +9,7 @@ type Props = {
 
 export const TabView: FC<Props> = ({ value, children, onChange }) => {
   return (
-    <TabViewOfRneui disableSwipe={true} value={value} onChange={onChange} animationType="spring">
+    <TabViewOfRneui value={value} onChange={onChange} animationType="spring">
       {children}
     </TabViewOfRneui>
   );

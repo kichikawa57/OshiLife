@@ -21,6 +21,18 @@ export const StyledScrollViewInner = styled.View`
   padding: 20px 20px 0;
 `;
 
+export const StyledEmpty = styled.View`
+  width: 100%;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+export const StyledEmptyText = styled.Text`
+  font-size: 14px;
+  color: ${colors.textDark};
+  padding: 20px 0;
+`;
+
 export const StyledCheckBox = styled.View`
   padding: 10px 0;
   border-bottom-color: ${colors.borderDark};
