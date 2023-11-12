@@ -1,5 +1,5 @@
 import { Database } from "../../api/schema";
-import { artistGroupId, artistId } from "../artists";
+import { ArtistId, artistGroupId, artistId } from "../artists";
 import { profileId } from "../profiles";
 
 import { OshiId, Oshis } from "./types";
@@ -8,10 +8,10 @@ export * from "./types";
 
 export const oshiId = (n: string) => n as OshiId;
 
-export const getArtistOfOshi = (oshiId: OshiId, oshis: Oshis[]) => {
+export const getArtistOfOshi = (artistId: ArtistId, oshis: Oshis[]) => {
   if (!oshis) return null;
 
-  const oshi = oshis.find(({ id }) => oshiId === id);
+  const oshi = oshis.find(({ artist_id }) => artistId === artist_id);
 
   if (oshi === undefined || oshi.artists === null) return null;
 

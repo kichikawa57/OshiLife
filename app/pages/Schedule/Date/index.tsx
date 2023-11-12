@@ -53,7 +53,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                       scheduleRoute.navigation.navigate("detail", {
                         id: schdule.id,
                         oshiId: schdule.oshi_id,
-                        oshiName: getArtistOfOshiById(schdule.oshi_id)?.name || "",
+                        oshiName: getArtistOfOshiById(schdule.artist_id)?.name || "",
                         artistId: schdule.artist_id,
                         connectedScheduleId: schdule.connected_schedule_id,
                         title: schdule.title,
@@ -64,7 +64,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                         calendarType: params.calendarType,
                       });
                     }}
-                    avatarUrl={getArtistOfOshiById(schdule.oshi_id)?.imageUrl || ""}
+                    avatarUrl={getArtistOfOshiById(schdule.artist_id)?.imageUrl || ""}
                     bottomDivider={scheduleData.length + 1 !== index}
                     rightContent={
                       <Button

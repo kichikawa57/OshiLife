@@ -13,6 +13,7 @@ import { ScheduleId, convertOrigenalToModelForSchedule } from "../../../model/sc
 import { OshiId, convertOrigenalToModelForOshi, getArtistOfOshi } from "../../../model/oshis";
 import { CalendarType } from "../../../shared/types/components/schedules";
 import { CheckBoxItem } from "../../../components/CheckBox/Item";
+import { ArtistId } from "../../../model/artists";
 
 export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   const userId = useUserStore((store) => store.userId);
@@ -111,9 +112,9 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   }, [data, displayedOshis]);
 
   const getArtistOfOshiById = useCallback(
-    (oshiId: OshiId) => {
+    (artistId: ArtistId) => {
       if (!oshiData) return null;
-      return getArtistOfOshi(oshiId, oshiData);
+      return getArtistOfOshi(artistId, oshiData);
     },
     [oshiData],
   );
