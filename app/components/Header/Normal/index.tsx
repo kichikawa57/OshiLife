@@ -3,7 +3,15 @@ import { FC } from "react";
 
 import { Icon } from "../../Icon";
 
-import { StyledInner, StyledSpare, StyledTitle, StyledWrap } from "./style";
+import {
+  StyledCenter,
+  StyledInner,
+  StyledLeft,
+  StyledRight,
+  StyledSpare,
+  StyledTitle,
+  StyledWrap,
+} from "./style";
 
 type Props = {
   title?: string;
@@ -16,13 +24,17 @@ export const Header: FC<Props> = ({ title, onPressLeft, right, isDisabled }) => 
   return (
     <StyledWrap>
       <StyledInner>
-        {onPressLeft ? (
-          <Icon name="chevron-left" onPress={onPressLeft} disabled={isDisabled} />
-        ) : (
-          <StyledSpare />
-        )}
-        {title ? <StyledTitle>{title}</StyledTitle> : <StyledSpare />}
-        {right ? right : <StyledSpare />}
+        <StyledLeft>
+          {onPressLeft ? (
+            <Icon name="chevron-left" onPress={onPressLeft} disabled={isDisabled} />
+          ) : (
+            <StyledSpare />
+          )}
+        </StyledLeft>
+        <StyledCenter>
+          {title ? <StyledTitle numberOfLines={1}>{title}</StyledTitle> : <StyledSpare />}
+        </StyledCenter>
+        <StyledRight>{right ? right : <StyledSpare />}</StyledRight>
       </StyledInner>
     </StyledWrap>
   );

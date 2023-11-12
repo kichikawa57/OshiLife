@@ -5,6 +5,7 @@ import { Image } from "react-native";
 import { RoutingPropsOfRoot } from "../../router/types";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
+import { KeyboardWrapper } from "../../components/KeyboardWrapper";
 
 import {
   StyledWrap,
@@ -26,54 +27,56 @@ export const Login: FC<Props> = ({ rootRoute }) => {
 
   return (
     <>
-      <StyledWrap>
-        <StyledTitle>
-          <StyledImage>
-            <Image
-              source={require("../../images/logo.png")}
-              style={{ width: "100%", height: "100%" }}
-              resizeMode="contain"
-            />
-          </StyledImage>
-        </StyledTitle>
-        <StyledForm>
-          <StyledInput isMarginBottom={true}>
-            <Controller
-              control={control}
-              name={"email"}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Input
-                  title="メールアドレス"
-                  value={value}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    clearErrors("email");
-                  }}
-                  errorMessage={error && error.message}
-                />
-              )}
-            />
-          </StyledInput>
-          <StyledInput isMarginBottom={false}>
-            <Controller
-              control={control}
-              name={"password"}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Input
-                  title="パスワード"
-                  value={value}
-                  secureTextEntry={true}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    clearErrors("password");
-                  }}
-                  errorMessage={error && error.message}
-                />
-              )}
-            />
-          </StyledInput>
-        </StyledForm>
-      </StyledWrap>
+      <KeyboardWrapper>
+        <StyledWrap>
+          <StyledTitle>
+            <StyledImage>
+              <Image
+                source={require("../../images/logo.png")}
+                style={{ width: "100%", height: "100%" }}
+                resizeMode="contain"
+              />
+            </StyledImage>
+          </StyledTitle>
+          <StyledForm>
+            <StyledInput isMarginBottom={true}>
+              <Controller
+                control={control}
+                name={"email"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Input
+                    title="メールアドレス"
+                    value={value}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      clearErrors("email");
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
+              />
+            </StyledInput>
+            <StyledInput isMarginBottom={false}>
+              <Controller
+                control={control}
+                name={"password"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Input
+                    title="パスワード"
+                    value={value}
+                    secureTextEntry={true}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      clearErrors("password");
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
+              />
+            </StyledInput>
+          </StyledForm>
+        </StyledWrap>
+      </KeyboardWrapper>
       <StyledButtonWrap>
         <StyledButton isMarginBottom={true}>
           <Button title="ログイン" disabled={isLoading} onPress={() => onPress()} />

@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { colors } from "../../shared/styles/color";
 
 export const StyledWrap = styled.ScrollView`
-  flex: 1;
   width: 100%;
   padding: 40px 20px 0;
 `;

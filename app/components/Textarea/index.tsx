@@ -28,7 +28,7 @@ export const Textarea: FC<Omit<Props, "autoCapitalize" | "ref" | "multiline">> =
             paddingRight: 0,
           }}
           inputContainerStyle={{ borderBottomWidth: 0 }}
-          inputStyle={{ minHeight: 100, maxHeight: 100, borderWidth: 1 }}
+          inputStyle={{ minHeight: 180, maxHeight: 180, borderWidth: 1 }}
           errorStyle={{
             marginLeft: 0,
             marginRight: 0,

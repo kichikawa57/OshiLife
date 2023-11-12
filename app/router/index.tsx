@@ -56,13 +56,10 @@ export const Router: FC = () => {
         >
           {(props) => <Login rootRoute={props} />}
         </Stack.Screen>
-        <Stack.Screen
-          name="setupOshi"
-          options={{ headerTitle: "推しを選択", headerLeft: () => null }}
-        >
+        <Stack.Screen name="setupOshi" options={{ headerShown: false }}>
           {(props) => <SetupOshi rootRoute={props} />}
         </Stack.Screen>
-        <Stack.Screen name="setupUser" options={{ headerTitle: "ユーザー情報" }}>
+        <Stack.Screen name="setupUser" options={{ headerShown: false }}>
           {(props) => <SetupUser rootRoute={props} />}
         </Stack.Screen>
       </Stack.Navigator>

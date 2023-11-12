@@ -10,6 +10,8 @@ import { Button } from "../../components/Button";
 import { EditColorContent } from "../../components/BottomSheetContents/EditColorContent";
 import { Textarea } from "../../components/Textarea";
 import { SelectArtistListContent } from "../../components/BottomSheetContents/SelectArtistListContent";
+import { KeyboardWrapper } from "../../components/KeyboardWrapper";
+import { Header } from "../../components/Header/Normal";
 
 import {
   StyledButton,
@@ -72,85 +74,88 @@ export const SetupOshi: FC<Props> = ({ rootRoute }) => {
           )}
         />
       </Modal>
-      <StyledWrap>
-        <StyledForm>
-          <StyledInput isMarginBottom={true}>
-            <StyledTitle>画像選択</StyledTitle>
-            <Controller
-              control={control}
-              name={"image"}
-              render={({ field: { value } }) => (
-                <StyledImageTouch
-                  onPress={async () => {
-                    uploadImageMutation.mutate();
-                  }}
-                >
-                  <Image
-                    source={value !== "" ? { uri: value } : require("./person.png")}
-                    style={{ width: 100, height: 100 }}
+      <Header title={"推しを選択"} />
+      <KeyboardWrapper isKeyboardAvoidingView isEnabledKeyboardAvoiding>
+        <StyledWrap>
+          <StyledForm>
+            <StyledInput isMarginBottom={true}>
+              <StyledTitle>画像選択</StyledTitle>
+              <Controller
+                control={control}
+                name={"image"}
+                render={({ field: { value } }) => (
+                  <StyledImageTouch
+                    onPress={async () => {
+                      uploadImageMutation.mutate();
+                    }}
+                  >
+                    <Image
+                      source={value !== "" ? { uri: value } : require("./person.png")}
+                      style={{ width: 100, height: 100 }}
+                    />
+                  </StyledImageTouch>
+                )}
+              />
+            </StyledInput>
+            <StyledInput isMarginBottom={true}>
+              <Controller
+                control={control}
+                name={"name"}
+                render={({ field: { value }, fieldState: { error } }) => (
+                  <Input
+                    title="推し選択"
+                    value={value}
+                    onPress={() => {
+                      selectedOshi.setIsOpenSelectedOshiModal(true);
+                    }}
+                    errorMessage={error && error.message}
                   />
-                </StyledImageTouch>
-              )}
-            />
-          </StyledInput>
-          <StyledInput isMarginBottom={true}>
-            <Controller
-              control={control}
-              name={"name"}
-              render={({ field: { value }, fieldState: { error } }) => (
-                <Input
-                  title="推し選択"
-                  value={value}
-                  onPress={() => {
-                    selectedOshi.setIsOpenSelectedOshiModal(true);
-                  }}
-                  errorMessage={error && error.message}
-                />
-              )}
-            />
-          </StyledInput>
-          <StyledInput isMarginBottom={true}>
-            <Controller
-              control={control}
-              name={"color"}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <CircleList
-                  title="推しの色を選択してください"
-                  selectColor={value}
-                  onClick={(color) => {
-                    editColor.setIsEditColor(false);
-                    onChange(color !== value ? color : "");
-                    clearErrors("color");
-                  }}
-                  isSelectedEdit={editColor.isEditColor}
-                  onClickEdit={() => {
-                    !editColor.isEditColor && onChange("");
-                    editColor.setIsModal(true);
-                  }}
-                  errorMessage={error && error.message}
-                />
-              )}
-            />
-          </StyledInput>
-          <StyledInput isMarginBottom={true}>
-            <Controller
-              control={control}
-              name={"memo"}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Textarea
-                  title="メモ"
-                  value={value}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    clearErrors("memo");
-                  }}
-                  errorMessage={error && error.message}
-                />
-              )}
-            />
-          </StyledInput>
-        </StyledForm>
-      </StyledWrap>
+                )}
+              />
+            </StyledInput>
+            <StyledInput isMarginBottom={true}>
+              <Controller
+                control={control}
+                name={"color"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <CircleList
+                    title="推しの色を選択してください"
+                    selectColor={value}
+                    onClick={(color) => {
+                      editColor.setIsEditColor(false);
+                      onChange(color !== value ? color : "");
+                      clearErrors("color");
+                    }}
+                    isSelectedEdit={editColor.isEditColor}
+                    onClickEdit={() => {
+                      !editColor.isEditColor && onChange("");
+                      editColor.setIsModal(true);
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
+              />
+            </StyledInput>
+            <StyledInput isMarginBottom={true}>
+              <Controller
+                control={control}
+                name={"memo"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Textarea
+                    title="メモ"
+                    value={value}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      clearErrors("memo");
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
+              />
+            </StyledInput>
+          </StyledForm>
+        </StyledWrap>
+      </KeyboardWrapper>
       <StyledButtonWrap>
         <StyledButton>
           <Button title="次へ" onPress={() => onPress()} />

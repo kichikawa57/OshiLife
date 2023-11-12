@@ -14,9 +14,10 @@ import { RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
 import { CircleList } from "../../../components/CircleForColor/CircleList";
 import { EditColorContent } from "../../../components/BottomSheetContents/EditColorContent";
 import { SelectArtistListContent } from "../../../components/BottomSheetContents/SelectArtistListContent";
+import { KeyboardWrapper } from "../../../components/KeyboardWrapper";
 
 import { useOshiEdit } from "./hooks";
-import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch } from "./style";
+import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch, StyledInner } from "./style";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -101,82 +102,86 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           />
         }
       />
-      <StyledWrap>
-        <StyledContent>
-          <StyledTitle>画像選択</StyledTitle>
-          <Controller
-            control={control}
-            name={"image"}
-            render={({ field: { value } }) => (
-              <StyledImageTouch
-                onPress={async () => {
-                  uploadImageMutation.mutate();
-                }}
-              >
-                <Image
-                  source={value !== "" ? { uri: value } : require("../../../images/person.png")}
-                  style={{ width: 100, height: 100 }}
-                />
-              </StyledImageTouch>
-            )}
-          />
-        </StyledContent>
-        <StyledContent>
-          <Controller
-            control={control}
-            name={"name"}
-            render={({ field: { value }, fieldState: { error } }) => (
-              <Input
-                title="推しの名前"
-                value={value}
-                onPress={() => {
-                  setIsOpenSelectedOshiModal(true);
-                }}
-                errorMessage={error && error.message}
+      <KeyboardWrapper isKeyboardAvoidingView isEnabledKeyboardAvoiding>
+        <StyledWrap>
+          <StyledInner>
+            <StyledContent>
+              <StyledTitle>画像選択</StyledTitle>
+              <Controller
+                control={control}
+                name={"image"}
+                render={({ field: { value } }) => (
+                  <StyledImageTouch
+                    onPress={async () => {
+                      uploadImageMutation.mutate();
+                    }}
+                  >
+                    <Image
+                      source={value !== "" ? { uri: value } : require("../../../images/person.png")}
+                      style={{ width: 100, height: 100 }}
+                    />
+                  </StyledImageTouch>
+                )}
               />
-            )}
-          />
-        </StyledContent>
-        <StyledContent>
-          <Controller
-            control={control}
-            name={"color"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <CircleList
-                title="推しの色を選択してください"
-                selectColor={value}
-                isSelectedEdit={isEditColor}
-                onClick={(color) => {
-                  setIsEditColor(false);
-                  onChange(color !== value ? color : "");
-                  clearErrors("color");
-                }}
-                onClickEdit={() => {
-                  setIsOpenSelectedColorModal(true);
-                }}
-                errorMessage={error && error.message}
+            </StyledContent>
+            <StyledContent>
+              <Controller
+                control={control}
+                name={"name"}
+                render={({ field: { value }, fieldState: { error } }) => (
+                  <Input
+                    title="推しの名前"
+                    value={value}
+                    onPress={() => {
+                      setIsOpenSelectedOshiModal(true);
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
               />
-            )}
-          />
-        </StyledContent>
-        <StyledContent isHideMarginBottom>
-          <Controller
-            control={control}
-            name={"memo"}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <Textarea
-                title="メモ"
-                value={value}
-                onChangeText={(value) => {
-                  onChange(value);
-                  clearErrors("memo");
-                }}
-                errorMessage={error && error.message}
+            </StyledContent>
+            <StyledContent>
+              <Controller
+                control={control}
+                name={"color"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <CircleList
+                    title="推しの色を選択してください"
+                    selectColor={value}
+                    isSelectedEdit={isEditColor}
+                    onClick={(color) => {
+                      setIsEditColor(false);
+                      onChange(color !== value ? color : "");
+                      clearErrors("color");
+                    }}
+                    onClickEdit={() => {
+                      setIsOpenSelectedColorModal(true);
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
               />
-            )}
-          />
-        </StyledContent>
-      </StyledWrap>
+            </StyledContent>
+            <StyledContent isHideMarginBottom>
+              <Controller
+                control={control}
+                name={"memo"}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <Textarea
+                    title="メモ"
+                    value={value}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      clearErrors("memo");
+                    }}
+                    errorMessage={error && error.message}
+                  />
+                )}
+              />
+            </StyledContent>
+          </StyledInner>
+        </StyledWrap>
+      </KeyboardWrapper>
     </>
   );
 };

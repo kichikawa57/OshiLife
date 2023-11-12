@@ -3,6 +3,7 @@ import { SearchBar } from "@rneui/base";
 
 import { colors } from "../../../shared/styles/color";
 import { Icon } from "../../Icon";
+import { KeyboardWrapper } from "../../KeyboardWrapper";
 
 import {
   StyledHeader,
@@ -98,39 +99,41 @@ export const ContentBase: FC<Props> = ({
   }, [searchProps]);
 
   return (
-    <StyledView isFullHeight={isFullHeight} isStatusBar={isStatusBar}>
-      <StyledViewInner isFullHeight={isFullHeight}>
-        <StyledHeaderWrap>
-          {!isHideHeader && (
-            <StyledHeader headerPosition={headerPosition} isDisplaySearch={!!search}>
-              {onPressCancel ? (
-                <StyledTextButtonWrap>
-                  <StyledTextButton onPress={onPressCancel}>キャンセル</StyledTextButton>
-                </StyledTextButtonWrap>
-              ) : (
-                <></>
-              )}
-              {onPressComplete ? (
-                <StyledTextButtonWrap>
-                  <StyledTextButton onPress={onPressComplete}>完了</StyledTextButton>
-                </StyledTextButtonWrap>
-              ) : (
-                <></>
-              )}
-            </StyledHeader>
-          )}
-          {search && search}
-        </StyledHeaderWrap>
-        <StyledScrollView
-          scrollEnabled={isAbleToScroll}
-          contentContainerStyle={
-            !isAbleToScroll &&
-            isCenter && { justifyContent: "center", alignItems: "center", flex: 1 }
-          }
-        >
-          {children}
-        </StyledScrollView>
-      </StyledViewInner>
-    </StyledView>
+    <KeyboardWrapper>
+      <StyledView isFullHeight={isFullHeight} isStatusBar={isStatusBar}>
+        <StyledViewInner isFullHeight={isFullHeight}>
+          <StyledHeaderWrap>
+            {!isHideHeader && (
+              <StyledHeader headerPosition={headerPosition} isDisplaySearch={!!search}>
+                {onPressCancel ? (
+                  <StyledTextButtonWrap>
+                    <StyledTextButton onPress={onPressCancel}>キャンセル</StyledTextButton>
+                  </StyledTextButtonWrap>
+                ) : (
+                  <></>
+                )}
+                {onPressComplete ? (
+                  <StyledTextButtonWrap>
+                    <StyledTextButton onPress={onPressComplete}>完了</StyledTextButton>
+                  </StyledTextButtonWrap>
+                ) : (
+                  <></>
+                )}
+              </StyledHeader>
+            )}
+            {search && search}
+          </StyledHeaderWrap>
+          <StyledScrollView
+            scrollEnabled={isAbleToScroll}
+            contentContainerStyle={
+              !isAbleToScroll &&
+              isCenter && { justifyContent: "center", alignItems: "center", flex: 1 }
+            }
+          >
+            {children}
+          </StyledScrollView>
+        </StyledViewInner>
+      </StyledView>
+    </KeyboardWrapper>
   );
 };

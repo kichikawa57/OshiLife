@@ -4,7 +4,11 @@ import { colors } from "../../../shared/styles/color";
 
 export const StyledWrap = styled.ScrollView`
   width: 100%;
-  padding: 40px 20px 0;
+  padding: 40px 20px 80px;
+`;
+
+export const StyledInner = styled.View`
+  width: 100%;
 `;
 
 export const StyledContent = styled.View<{ isHideMarginBottom?: boolean }>`
