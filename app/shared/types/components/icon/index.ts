@@ -19,4 +19,5 @@ export type IconName =
   | "check"
   | "search"
   | "close"
-  | "gear";
+  | "gear"
+  | "refresh";

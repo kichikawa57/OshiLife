@@ -43,6 +43,8 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
                   profileRoute.navigation.navigate("setting");
                 }}
                 disabled={isLoading}
+                touchableWidth={300}
+                touchableHeight={100}
               />
             }
           />

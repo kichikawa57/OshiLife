@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { Alert } from "react-native";
+import { Alert, PanResponder } from "react-native";
 
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
 import { getSchedulesForMe, getSchedulesForOthers } from "../../api/schedules";
@@ -18,12 +18,33 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   const [isOpenDate, setIsOpenDate] = useState(false);
   const [calendarTypeIndex, setCalendarTypeIndex] = useState(0);
   const [displayedOshis, setDisplayedOshis] = useState<OshiId[] | null>(null);
+  const params = scheduleRoute.route.params;
 
-  const { setQueryData, getQueryData } = useQueryClient();
+  const { setQueryData, getQueryData, removeAllQueriesForSchedules } = useQueryClient();
 
   const userId = useUserStore((props) => props.userId);
 
-  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+  const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs(params?.date || undefined));
+
+  const swipeCalendar = useRef(
+    PanResponder.create({
+      // ユーザーがタッチしたときにレスポンダーになるべきかどうかを決定
+      onStartShouldSetPanResponder: () => true,
+      // すべての移動イベントをこのレスポンダで処理
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderRelease: (_, gestureState) => {
+        // スワイプ中の処理
+        // gestureState.dx はスワイプの水平方向の距離
+        if (gestureState.dx > 80) {
+          // 右にスワイプした時の処理
+          onPressPrevButton();
+        } else if (gestureState.dx < -80) {
+          // 左にスワイプした時の処理
+          onPressNextButton();
+        }
+      },
+    }),
+  ).current;
 
   const today = useMemo(() => {
     return dayjs();
@@ -33,6 +54,7 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     ["getScheduleForMe", currentDate.format("YYYY-MM")],
     async () => {
       const { start, end } = getCalendarBounds(currentDate);
+      const oshis = getQueryData("getOshis");
 
       const { data, error } = await getSchedulesForMe({
         userId,
@@ -43,6 +65,8 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
       if (error !== null) throw error;
 
       return data.map<Schedules>((schedule) => {
+        const oshi = oshis?.find((oshi) => schedule.artist_id === oshi.artist_id) ?? null;
+
         return convertOrigenalToModelForSchedule(
           {
             ...schedule,
@@ -52,7 +76,7 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
             deleted_at: "",
           },
           schedule.artists,
-          schedule.oshis,
+          oshi,
         );
       });
     },
@@ -64,7 +88,7 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
   );
 
   const schedulesForOthers = useQuery(
-    ["getScheduleAtDateForOthers", currentDate.format("YYYY-MM")],
+    ["getScheduleForOthers", currentDate.format("YYYY-MM")],
     async () => {
       const { start, end } = getCalendarBounds(currentDate);
 
@@ -80,6 +104,8 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
       if (error !== null) throw error;
 
       return data.map<Schedules>((schedule) => {
+        const oshi = oshis?.find((oshi) => schedule.artist_id === oshi.artist_id) ?? null;
+
         return convertOrigenalToModelForSchedule(
           {
             ...schedule,
@@ -89,7 +115,7 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
             deleted_at: "",
           },
           schedule.artists,
-          schedule.oshis,
+          oshi,
         );
       });
     },
@@ -164,6 +190,12 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     });
   };
 
+  const onPressRefresh = () => {
+    removeAllQueriesForSchedules();
+    schedulesForMe.refetch();
+    schedulesForOthers.refetch();
+  };
+
   const schedulesForMeData = useMemo<Schedules[]>(() => {
     const { data: schedules } = schedulesForMe;
 
@@ -217,12 +249,14 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
     displayedOshis,
     startDate,
     endDate,
+    swipeCalendar,
     switchCalendarType,
     onPressDate,
     onPressNextButton,
     onPressPrevButton,
     onPressCurrentDate,
     updateDisplayedOshis,
+    onPressRefresh,
     filetrContent: {
       isOpenFilter,
       setIsOpenFilter,

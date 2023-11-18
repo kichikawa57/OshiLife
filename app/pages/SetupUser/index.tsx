@@ -16,6 +16,7 @@ import {
   StyledSexWrap,
   StyledWrap,
   StyledError,
+  CircleCheckBoxWrap,
 } from "./style";
 import { useSetupUser } from "./hooks";
 
@@ -74,14 +75,16 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                   <>
                     <StyledSexWrap>
-                      <CircleCheckBox
-                        title="男性"
-                        checked={value === "men"}
-                        onPress={() => {
-                          onChange("men");
-                          clearErrors("sex");
-                        }}
-                      />
+                      <CircleCheckBoxWrap>
+                        <CircleCheckBox
+                          title="男性"
+                          checked={value === "men"}
+                          onPress={() => {
+                            onChange("men");
+                            clearErrors("sex");
+                          }}
+                        />
+                      </CircleCheckBoxWrap>
                       <CircleCheckBox
                         title="女性"
                         checked={value === "women"}

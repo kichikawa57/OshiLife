@@ -20,7 +20,6 @@ export const StyledInput = styled.View<{ isMarginBottom: boolean }>`
 
 export const StyledSexWrap = styled.View`
   width: 100%;
-  justify-content: space-between;
   flex-direction: row;
   align-items: center;
 `;
@@ -40,4 +39,8 @@ export const StyledError = styled.Text`
   margin-top: 20px;
   font-size: 12px;
   color: ${colors.error};
+`;
+
+export const CircleCheckBoxWrap = styled.View`
+  margin-right: 40px;
 `;

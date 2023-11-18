@@ -16,7 +16,7 @@ export type Params = {
 } & z.infer<typeof formData>;
 
 export type RoutingOfSchedule = {
-  top: undefined;
+  top: { date?: string };
   date: { date: string; calendarType: CalendarType };
   detail: Params;
   edit: Params;

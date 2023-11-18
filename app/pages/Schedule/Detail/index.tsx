@@ -8,6 +8,7 @@ import { RoutingPropsOfSchedule } from "../../../router/app/Schedule/types";
 import { TrackButton } from "../../../components/TrackButton";
 import { DEFAULT_MESSAGE } from "../../../api";
 import { Button } from "../../../components/Button";
+import { Header } from "../../../components/Header/Normal";
 
 import {
   Memo,
@@ -41,6 +42,11 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
 
   return (
     <>
+      <Header
+        onPressLeft={() => {
+          scheduleRoute.navigation.goBack();
+        }}
+      />
       <StyledWrap>
         <StyledInner>
           <StyledTitle>{params.title}</StyledTitle>

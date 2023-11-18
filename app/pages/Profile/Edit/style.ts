@@ -27,7 +27,10 @@ export const StyledError = styled.Text`
 
 export const StyledSexWrap = styled.View`
   width: 100%;
-  justify-content: space-between;
   flex-direction: row;
   align-items: center;
+`;
+
+export const CircleCheckBoxWrap = styled.View`
+  margin-right: 40px;
 `;

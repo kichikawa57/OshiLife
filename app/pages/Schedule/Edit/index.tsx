@@ -2,8 +2,7 @@ import React, { FC, useState } from "react";
 import { Controller } from "react-hook-form";
 import DatePicker from "react-native-date-picker";
 import dayjs from "dayjs";
-import { Keyboard, Modal } from "react-native";
-import { TouchableWithoutFeedback } from "react-native";
+import { Modal } from "react-native";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
 import { RoutingPropsOfApp } from "../../../router/app/types";
@@ -68,6 +67,8 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
             onPress={() => {
               onPressComplete();
             }}
+            touchableWidth={300}
+            touchableHeight={100}
           />
         }
       />

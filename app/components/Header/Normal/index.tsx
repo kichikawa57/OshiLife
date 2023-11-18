@@ -26,7 +26,13 @@ export const Header: FC<Props> = ({ title, onPressLeft, right, isDisabled }) => 
       <StyledInner>
         <StyledLeft>
           {onPressLeft ? (
-            <Icon name="chevron-left" onPress={onPressLeft} disabled={isDisabled} />
+            <Icon
+              name="chevron-left"
+              onPress={onPressLeft}
+              disabled={isDisabled}
+              touchableWidth={300}
+              touchableHeight={100}
+            />
           ) : (
             <StyledSpare />
           )}

@@ -14,6 +14,7 @@ import {
   StyledIconLeftInner,
   StyledIconRightInner,
   StyledIconCenter,
+  StyledIconRefresh,
 } from "./style";
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
   onPressNextButton: () => void;
   onPressPrevButton: () => void;
   onPressDate: () => void;
+  onPressRefresh: () => void;
   onPressCurrentDate: () => void;
   onPressFilter: () => void;
 };
@@ -31,6 +33,7 @@ export const ScheduleHeader: FC<Props> = ({
   onPressNextButton,
   onPressPrevButton,
   onPressCurrentDate,
+  onPressRefresh,
   currentDate,
 }) => {
   return (
@@ -55,9 +58,13 @@ export const ScheduleHeader: FC<Props> = ({
             <Icon name="caret-right" />
           </StyledIconRightInner>
         </StyledIcon>
+
+        <StyledIconRefresh>
+          <Icon name="refresh" onPress={onPressRefresh} />
+        </StyledIconRefresh>
       </StyledHeaderLeft>
-      <StyledFilterWrap onPress={onPressFilter}>
-        <Icon name="filter" />
+      <StyledFilterWrap>
+        <Icon name="filter" onPress={onPressFilter} />
       </StyledFilterWrap>
     </StyledHeader>
   );

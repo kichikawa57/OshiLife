@@ -7,7 +7,6 @@ import { RoutingPropsOfRoot } from "../../types";
 import { Schedule as SchedulePage } from "../../../pages/Schedule";
 import { Date } from "../../../pages/Schedule/Date";
 import { Detail } from "../../../pages/Schedule/Detail";
-import { Header } from "../../../components/Header/Normal";
 import { Edit } from "../../../pages/Schedule/Edit";
 
 import { RoutingOfSchedule } from "./types";
@@ -30,14 +29,7 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
       <Screen
         name="date"
         options={{
-          header: ({ navigation }) => (
-            <Header
-              title={"2023/01/10"}
-              onPressLeft={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
+          headerShown: false,
         }}
       >
         {(props) => <Date rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
@@ -45,13 +37,7 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
       <Screen
         name="detail"
         options={{
-          header: ({ navigation }) => (
-            <Header
-              onPressLeft={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
+          headerShown: false,
         }}
       >
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}

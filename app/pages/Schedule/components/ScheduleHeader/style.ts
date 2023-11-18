@@ -24,12 +24,16 @@ export const StyledIcon = styled.TouchableOpacity`
   border-radius: 50px;
 `;
 
+export const StyledIconRefresh = styled.View`
+  margin-left: 30px;
+`;
+
 export const StyledIconLeft = styled(StyledIcon)`
-  margin-right: 20px;
+  margin-right: 14px;
 `;
 
 export const StyledIconCenter = styled(StyledIcon)`
-  margin-right: 20px;
+  margin-right: 14px;
 `;
 
 export const StyledIconLeftInner = styled.View`
@@ -49,6 +53,6 @@ export const StyledText = styled.Text`
   font-size: 24px;
 `;
 
-export const StyledFilterWrap = styled.TouchableOpacity`
+export const StyledFilterWrap = styled.View`
   width: auto;
 `;

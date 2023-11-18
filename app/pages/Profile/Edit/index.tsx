@@ -10,7 +10,7 @@ import { RoutingPropsOfProfile } from "../../../router/app/Profile/types";
 import { CircleCheckBox } from "../../../components/CheckBox/Circle";
 
 import { useProfileEdit } from "./hooks";
-import { StyledWrap, StyledContent, StyledError, StyledSexWrap } from "./style";
+import { StyledWrap, StyledContent, StyledError, StyledSexWrap, CircleCheckBoxWrap } from "./style";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
@@ -31,7 +31,15 @@ export const Edit: FC<Props> = ({ profileRoute }) => {
         onPressLeft={() => {
           profileRoute.navigation.goBack();
         }}
-        right={<Icon name="check" onPress={() => onPressComplete()} disabled={isLoading} />}
+        right={
+          <Icon
+            name="check"
+            onPress={() => onPressComplete()}
+            disabled={isLoading}
+            touchableWidth={300}
+            touchableHeight={100}
+          />
+        }
       />
       <StyledWrap>
         <StyledContent>
@@ -75,14 +83,16 @@ export const Edit: FC<Props> = ({ profileRoute }) => {
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
                 <StyledSexWrap>
-                  <CircleCheckBox
-                    title="男性"
-                    checked={value === "men"}
-                    onPress={() => {
-                      onChange("men");
-                      clearErrors("sex");
-                    }}
-                  />
+                  <CircleCheckBoxWrap>
+                    <CircleCheckBox
+                      title="男性"
+                      checked={value === "men"}
+                      onPress={() => {
+                        onChange("men");
+                        clearErrors("sex");
+                      }}
+                    />
+                  </CircleCheckBoxWrap>
                   <CircleCheckBox
                     title="女性"
                     checked={value === "women"}

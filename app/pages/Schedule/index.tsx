@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Modal } from "react-native";
+import { Modal, View } from "react-native";
 import dayjs from "dayjs";
 
 import { RoutingPropsOfRoot } from "../../router/types";
@@ -41,11 +41,13 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
     displayedOshis,
     startDate,
     endDate,
+    swipeCalendar,
     updateDisplayedOshis,
     switchCalendarType,
     onPressNextButton,
     onPressPrevButton,
     onPressCurrentDate,
+    onPressRefresh,
   } = useSchedule(scheduleRoute);
 
   return (
@@ -73,6 +75,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
         onPressNextButton={onPressNextButton}
         onPressPrevButton={onPressPrevButton}
         onPressCurrentDate={onPressCurrentDate}
+        onPressRefresh={onPressRefresh}
         onPressDate={() => {
           editDateContent.setIsOpenDate(true);
         }}
@@ -90,36 +93,38 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           />
         </StyledTabList>
         <StyledTabView>
-          <TabView value={calendarTypeIndex} onChange={switchCalendarType}>
-            <TabItem>
-              <StyledContent>
-                {isLoadingSchedulesForMe ? (
-                  <Loading />
-                ) : (
-                  <Calendar
-                    key={Math.random().toString(36).substr(2, 9)}
-                    scheduleData={schedulesForMeData}
-                    currentDate={editDateContent.currentDate}
-                    onPressDate={onPressDate}
-                  />
-                )}
-              </StyledContent>
-            </TabItem>
-            <TabItem>
-              <StyledContent>
-                {isLoadingSchedulesForOthers ? (
-                  <Loading />
-                ) : (
-                  <Calendar
-                    key={Math.random().toString(36).substr(2, 9)}
-                    scheduleData={schedulesForOthersData}
-                    currentDate={editDateContent.currentDate}
-                    onPressDate={onPressDate}
-                  />
-                )}
-              </StyledContent>
-            </TabItem>
-          </TabView>
+          <View {...swipeCalendar.panHandlers} style={{ flex: 1 }}>
+            <TabView value={calendarTypeIndex} onChange={switchCalendarType}>
+              <TabItem>
+                <StyledContent>
+                  {isLoadingSchedulesForMe ? (
+                    <Loading />
+                  ) : (
+                    <Calendar
+                      key={Math.random().toString(36).substr(2, 9)}
+                      scheduleData={schedulesForMeData}
+                      currentDate={editDateContent.currentDate}
+                      onPressDate={onPressDate}
+                    />
+                  )}
+                </StyledContent>
+              </TabItem>
+              <TabItem>
+                <StyledContent>
+                  {isLoadingSchedulesForOthers ? (
+                    <Loading />
+                  ) : (
+                    <Calendar
+                      key={Math.random().toString(36).substr(2, 9)}
+                      scheduleData={schedulesForOthersData}
+                      currentDate={editDateContent.currentDate}
+                      onPressDate={onPressDate}
+                    />
+                  )}
+                </StyledContent>
+              </TabItem>
+            </TabView>
+          </View>
         </StyledTabView>
         <TrackButton
           buttonText="予定追加"

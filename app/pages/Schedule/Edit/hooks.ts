@@ -93,7 +93,10 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         if (!data) return;
         removeQueries(["getScheduleForMe", dayjs(params.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(params.date).format("YYYY-MM-DD")]);
-        scheduleRoute.navigation.goBack();
+        scheduleRoute.navigation.reset({
+          index: 0,
+          routes: [{ name: "top", params: { date: params.date } }],
+        });
       },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);

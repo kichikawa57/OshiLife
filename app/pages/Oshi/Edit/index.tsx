@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { Controller } from "react-hook-form";
 import { Modal } from "react-native";
-import ImagePicker from "react-native-image-crop-picker";
 import { Image } from "@rneui/base";
 
 import { RoutingPropsOfRoot } from "../../../router/types";
@@ -96,6 +95,8 @@ export const Edit: FC<Props> = ({ oshiRoute }) => {
           <Icon
             name="check"
             disabled={isLoading}
+            touchableWidth={300}
+            touchableHeight={100}
             onPress={() => {
               onPressComplete();
             }}

@@ -13,6 +13,7 @@ import { Loading } from "../../../components/Loading";
 import { oshiId } from "../../../model/oshis";
 import { artistId } from "../../../model/artists";
 import { yyyymmddhhmmss } from "../../../shared/constants/date/dayJs";
+import { Header } from "../../../components/Header/Normal";
 
 import {
   StyledCheckBox,
@@ -34,13 +35,25 @@ type Props = {
 export const Date: FC<Props> = ({ scheduleRoute }) => {
   const params = scheduleRoute.route.params;
 
-  const { scheduleData, isLoading, checkBoxItems, getArtistOfOshiById, deleteScheduleMutation } =
-    useScheduleDate(params.date, params.calendarType);
+  const {
+    isExisted,
+    scheduleData,
+    isLoading,
+    checkBoxItems,
+    getArtistOfOshiById,
+    deleteScheduleMutation,
+  } = useScheduleDate(params.date, params.calendarType);
 
   return (
     <>
+      <Header
+        title={dayjs(params.date).format("YYYY年MM月DD日")}
+        onPressLeft={() => {
+          scheduleRoute.navigation.goBack();
+        }}
+      />
       <StyledWrap>
-        {scheduleData.length !== 0 && (
+        {isExisted && (
           <StyledCheckBox>
             <CheckBoxGroup>{checkBoxItems}</CheckBoxGroup>
           </StyledCheckBox>
@@ -73,27 +86,29 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                     avatarUrl={getArtistOfOshiById(schdule.artist_id)?.imageUrl || ""}
                     bottomDivider={scheduleData.length + 1 !== index}
                     rightContent={
-                      <Button
-                        title="Delete"
-                        disabled={deleteScheduleMutation.isLoading}
-                        onPress={() =>
-                          Alert.alert("本当に削除してよろしいでしょうか？", "", [
-                            {
-                              text: "キャンセル",
-                              onPress: () => console.log("User pressed No"),
-                              style: "cancel",
-                            },
-                            {
-                              text: "確定",
-                              onPress: () => {
-                                deleteScheduleMutation.mutate({ id: schdule.id });
+                      params.calendarType === "me" && (
+                        <Button
+                          title="Delete"
+                          disabled={deleteScheduleMutation.isLoading}
+                          onPress={() =>
+                            Alert.alert("本当に削除してよろしいでしょうか？", "", [
+                              {
+                                text: "キャンセル",
+                                onPress: () => console.log("User pressed No"),
+                                style: "cancel",
                               },
-                            },
-                          ])
-                        }
-                        iconName="trash-o"
-                        buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
-                      />
+                              {
+                                text: "確定",
+                                onPress: () => {
+                                  deleteScheduleMutation.mutate({ id: schdule.id });
+                                },
+                              },
+                            ])
+                          }
+                          iconName="trash-o"
+                          buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+                        />
+                      )
                     }
                   />
                 ))}

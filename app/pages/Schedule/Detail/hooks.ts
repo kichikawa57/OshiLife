@@ -23,7 +23,7 @@ export const useScheduleDetail = (
 
   const { removeQueries } = useQueryClient();
 
-  const { data: isConnected, refetch } = useQuery(
+  const { data: isConnected } = useQuery(
     "getConnectedSchedule",
     async () => {
       if (param.id === null) return false;
@@ -62,7 +62,10 @@ export const useScheduleDetail = (
       onSuccess: () => {
         removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
-        refetch();
+        scheduleRoute.navigation.reset({
+          index: 0,
+          routes: [{ name: "top", params: { date: param.date } }],
+        });
       },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);
@@ -90,7 +93,10 @@ export const useScheduleDetail = (
         removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
         removeQueries("getConnectedSchedule");
-        refetch();
+        scheduleRoute.navigation.reset({
+          index: 0,
+          routes: [{ name: "top", params: { date: param.date } }],
+        });
       },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);
@@ -118,7 +124,10 @@ export const useScheduleDetail = (
         removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
         removeQueries("getConnectedSchedule");
-        scheduleRoute.navigation.goBack();
+        scheduleRoute.navigation.reset({
+          index: 0,
+          routes: [{ name: "top", params: { date: param.date } }],
+        });
       },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);

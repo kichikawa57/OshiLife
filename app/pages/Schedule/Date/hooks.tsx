@@ -10,7 +10,7 @@ import { useUserStore } from "../../../store/user";
 import { getDayRange } from "../../../shared/utils";
 import { DEFAULT_MESSAGE, getOshis } from "../../../api";
 import { ScheduleId, convertOrigenalToModelForSchedule } from "../../../model/schedules";
-import { OshiId, convertOrigenalToModelForOshi, getArtistOfOshi } from "../../../model/oshis";
+import { convertOrigenalToModelForOshi, getArtistOfOshi } from "../../../model/oshis";
 import { CalendarType } from "../../../shared/types/components/schedules";
 import { CheckBoxItem } from "../../../components/CheckBox/Item";
 import { ArtistId } from "../../../model/artists";
@@ -18,7 +18,7 @@ import { ArtistId } from "../../../model/artists";
 export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   const userId = useUserStore((store) => store.userId);
 
-  const [displayedOshis, setDisplayedOshis] = useState<OshiId[] | null>(null);
+  const [displayedOshis, setDisplayedOshis] = useState<ArtistId[] | null>(null);
 
   const { getQueryData, removeQueries } = useQueryClient();
 
@@ -61,6 +61,8 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
       },
     },
   );
+
+  const isExisted = data !== undefined && data.length > 0;
 
   const { data: oshiData, isLoading: isLoadingOshiData } = useQuery(
     "getOshis",
@@ -107,7 +109,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
     if (displayedOshis === null) return data;
 
     return data.filter((schedule) =>
-      displayedOshis.some((displayedOshi) => displayedOshi === schedule.oshi_id),
+      displayedOshis.some((displayedOshi) => displayedOshi === schedule.artist_id),
     );
   }, [data, displayedOshis]);
 
@@ -120,17 +122,17 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   );
 
   const updateDisplayedOshis = useCallback(
-    (oshiId: OshiId) => {
+    (artistId: ArtistId) => {
       setDisplayedOshis((props) => {
         const oshis = getQueryData("getOshis");
         if (props === null) {
-          return oshis?.map((oshi) => oshi.id).filter((id) => id !== oshiId) || [];
+          return oshis?.map((oshi) => oshi.artist_id).filter((id) => id !== artistId) || [];
         }
 
-        if (props.some((prop) => prop === oshiId)) {
-          return props.filter((prop) => prop !== oshiId);
+        if (props.some((prop) => prop === artistId)) {
+          return props.filter((prop) => prop !== artistId);
         } else {
-          return [...props, oshiId];
+          return [...props, artistId];
         }
       });
     },
@@ -142,20 +144,20 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
 
     return oshiData
       .filter((oshi) => {
-        return data.some((schedule) => schedule.oshi_id === oshi.id);
+        return data.some((schedule) => schedule.artist_id === oshi.artist_id);
       })
       .map((oshi) => {
         const isSelected =
           displayedOshis === null ||
-          displayedOshis.some((displayedOshi) => displayedOshi === oshi.id);
+          displayedOshis.some((displayedOshi) => displayedOshi === oshi.artist_id);
 
         return (
           <CheckBoxItem
             key={oshi.id}
-            imageUrl={oshi.image_url || ""}
+            imageUrl={oshi.image_url ?? ""}
             isSelected={isSelected}
-            name={oshi.artists?.name || ""}
-            onPress={() => updateDisplayedOshis(oshi.id)}
+            name={oshi.artists?.name ?? ""}
+            onPress={() => updateDisplayedOshis(oshi.artist_id)}
             isMarginRight
           />
         );
@@ -163,6 +165,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   }, [data, displayedOshis, oshiData, updateDisplayedOshis]);
 
   return {
+    isExisted,
     scheduleData,
     isLoading: isLoadingOshiData || isLoading,
     checkBoxItems,
