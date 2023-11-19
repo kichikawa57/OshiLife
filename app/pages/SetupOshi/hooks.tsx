@@ -9,6 +9,7 @@ import { DEFAULT_MESSAGE, createOshi, getUser } from "../../api";
 import { artistId } from "../../model/artists";
 import { useUserStore } from "../../store/user";
 import { uploadImage } from "../../api/image";
+import { onErrorImagePicker } from "../../shared/image-picker";
 
 import { FormData, formValidation } from "./validate";
 
@@ -93,6 +94,8 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
         width: 300,
         height: 300,
         cropping: true,
+        cropperCancelText: "キャンセル",
+        cropperChooseText: "選択",
       });
 
       if (!image.path) return;
@@ -108,9 +111,7 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
         if (!data) return;
         setValue("image", data.publicUrl);
       },
-      onError: () => {
-        Alert.alert("画像のアップロードに失敗しました");
-      },
+      onError: onErrorImagePicker,
     },
   );
 
