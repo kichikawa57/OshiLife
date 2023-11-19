@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Alert, PanResponder } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
 import { getSchedulesForMe, getSchedulesForOthers } from "../../api/schedules";
@@ -239,6 +240,16 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
 
     return currentDate.startOf("month").endOf("day").format(yyyymmddhhmmss);
   }, [currentDate, today]);
+
+  useFocusEffect(
+    useCallback(() => {
+      schedulesForMe.refetch();
+      schedulesForOthers.refetch();
+
+      return () => null;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   return {
     isLoadingSchedulesForMe: schedulesForMe.isLoading,
