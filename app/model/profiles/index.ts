@@ -12,6 +12,7 @@ export const convertOrigenalToModelForProfile: (
   return {
     id: profileId(profile.id),
     email: profile.email,
+    fcr_token: profile.fcr_token,
     sex: profile.sex as Profiles["sex"],
     name: profile.name,
     created_at: profile.created_at,

@@ -1,3 +1,6 @@
+pod 'FirebaseCore', :modular_headers => true
+pod 'GoogleUtilities', :modular_headers => true
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -22,7 +25,7 @@ flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : Flip
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
+  use_frameworks! :linkage => :static
 end
 
 target 'OshiLife' do
@@ -71,3 +74,6 @@ target 'OshiLife' do
     end
   end
 end
+
+
+diABA7vXTUFluzIWy8A_aN:APA91bHD-bK-cDJYIhM-eIIuQI-J1FBoQ33N8S-ZfB5S7eVrM1I9K2aDkxWR6v1d93yALIByaxd8njNpSGFc13QzRlvV7KEikcq8f2qrrcj68DmYsshkCBTYht7gV9Et4I7xmJo9vZm-

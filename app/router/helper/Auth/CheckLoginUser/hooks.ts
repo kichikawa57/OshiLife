@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import SplashScreen from "react-native-splash-screen";
+import messaging from "@react-native-firebase/messaging";
 
 import { DEFAULT_MESSAGE, getOshis, getUser } from "../../../../api";
 import { UseNavigationOfRoot, UseRouteOfRoot } from "../../../types";
@@ -8,9 +9,10 @@ import { useUserStore } from "../../../../store/user";
 import { profileId } from "../../../../model/profiles";
 import { useQuery } from "../../../../query";
 import { convertOrigenalToModelForOshi } from "../../../../model/oshis";
+import { checkFcrToken } from "../../../../shared/fcr";
 
 export const useCheckLoginUser = () => {
-  const setUserId = useUserStore((store) => store.setUserId);
+  const { setUserId } = useUserStore();
   const navigation = useNavigation<UseNavigationOfRoot>();
   const [isFetchedOshisOnce, setIsFetchedOshisOnce] = useState(false);
   const route = useRoute<UseRouteOfRoot>();
@@ -26,9 +28,13 @@ export const useCheckLoginUser = () => {
 
       setUserId(profileId(data.user.id));
 
-      return data.user;
+      return profileId(data.user.id);
     },
     {
+      onSuccess: (profileId) => {
+        if (!profileId) return;
+        checkFcrToken(profileId);
+      },
       onError: () => {
         navigation.reset({ index: 0, routes: [{ name: "login" }] });
       },

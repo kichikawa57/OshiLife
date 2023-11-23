@@ -5,7 +5,7 @@ import { supabase } from "../init";
 export const getProfile = async (userId: ProfileId) => {
   const data = await supabase
     .from("profiles")
-    .select("id, email, name, sex")
+    .select("id, email, name, sex, fcr_token")
     .eq("id", userId)
     .is("deleted_at", null)
     .single();

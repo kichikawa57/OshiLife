@@ -10,6 +10,7 @@ import { artistId } from "../../model/artists";
 import { useUserStore } from "../../store/user";
 import { uploadImage } from "../../api/image";
 import { onErrorImagePicker } from "../../shared/image-picker";
+import { checkFcrToken } from "../../shared/fcr";
 
 import { FormData, formValidation } from "./validate";
 
@@ -58,6 +59,7 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     },
     {
       onSuccess: () => {
+        checkFcrToken(userId);
         rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
       },
       onError: () => {

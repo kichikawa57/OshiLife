@@ -19,6 +19,7 @@ export const useProfile = () => {
 
       return convertOrigenalToModelForProfile({
         ...data,
+        fcr_token: "",
         updated_at: "",
         deleted_at: "",
         created_at: "",

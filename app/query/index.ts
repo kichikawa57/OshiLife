@@ -3,7 +3,7 @@ import { User } from "@supabase/supabase-js";
 
 import { Oshis } from "../model/oshis";
 import { ArtistsGroups } from "../model/artists";
-import { Profiles } from "../model/profiles";
+import { ProfileId, Profiles } from "../model/profiles";
 import { Schedules } from "../model/schedules";
 
 export type QueryKeyName =
@@ -30,7 +30,7 @@ export type ReturnType<K extends QueryKeyName> = K extends string
     : K extends "getProfile"
     ? Profiles | undefined
     : K extends "init"
-    ? User | undefined
+    ? ProfileId | undefined
     : K extends "getConnectedSchedule"
     ? boolean
     : null
