@@ -15,19 +15,19 @@ const { Navigator, Screen } = createStackNavigator<RoutingOfSchedule>();
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"schedule">;
+  appRoute: RoutingPropsOfApp<"appSchedule">;
 };
 
 export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
-    <Navigator initialRouteName="top">
-      <Screen name="top" options={{ headerShown: false }}>
+    <Navigator initialRouteName="appScheduleTop">
+      <Screen name="appScheduleTop" options={{ headerShown: false }}>
         {(props) => (
           <SchedulePage rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />
         )}
       </Screen>
       <Screen
-        name="date"
+        name="appScheduleDate"
         options={{
           headerShown: false,
         }}
@@ -35,7 +35,7 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
         {(props) => <Date rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
       </Screen>
       <Screen
-        name="detail"
+        name="appScheduleDetail"
         options={{
           headerShown: false,
         }}
@@ -43,7 +43,7 @@ export const Schedule: FC<Props> = ({ rootRoute, appRoute }) => {
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} scheduleRoute={props} />}
       </Screen>
       <Screen
-        name="edit"
+        name="appScheduleEdit"
         options={{
           headerShown: false,
         }}

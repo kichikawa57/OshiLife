@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import SplashScreen from "react-native-splash-screen";
+import dayjs from "dayjs";
 import messaging from "@react-native-firebase/messaging";
 
 import { DEFAULT_MESSAGE, getOshis, getUser } from "../../../../api";
@@ -10,6 +11,7 @@ import { profileId } from "../../../../model/profiles";
 import { useQuery } from "../../../../query";
 import { convertOrigenalToModelForOshi } from "../../../../model/oshis";
 import { checkFcrToken } from "../../../../shared/fcr";
+import { yyyymmdd } from "../../../../shared/constants/date/dayJs";
 
 export const useCheckLoginUser = () => {
   const { setUserId } = useUserStore();
@@ -73,7 +75,21 @@ export const useCheckLoginUser = () => {
     if (!isLoadingInit && !isLoadingInit) {
       SplashScreen.hide();
     }
-  }, [isLoadingOshi, isLoadingInit]);
+  }, [isLoadingOshi, isLoadingInit, navigation]);
+
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(async (remoteMessage) => {
+      if (remoteMessage.data?.type === "noticeScheduleForTheDayEveryDay") {
+        setTimeout(() => {
+          navigation.navigate("appScheduleDate", {
+            date: String(remoteMessage.data?.date) || dayjs().format(yyyymmdd),
+            calendarType: "me",
+          });
+        }, 1000);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     isLoading: isLoadingOshi || isLoadingInit,

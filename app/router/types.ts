@@ -1,5 +1,7 @@
 import { Navigation, NavigationProps, TabBarIconProps, UseRoute } from "../shared/types/router";
 
+import { AllRoutingOfApp } from "./app/types";
+
 export type RoutingOfRoot = {
   app: undefined;
   login: undefined;
@@ -10,6 +12,7 @@ export type RoutingOfRoot = {
 export type RoutingPropsOfRoot<K extends keyof RoutingOfRoot> = NavigationProps<RoutingOfRoot, K>;
 export type TabBarIconPropsOfRoot = TabBarIconProps<RoutingOfRoot, keyof RoutingOfRoot>;
 
-export type UseNavigationOfRoot = Navigation<RoutingOfRoot>;
+type AllRouting = RoutingOfRoot & AllRoutingOfApp;
+export type UseNavigationOfRoot = Navigation<AllRouting>;
 
 export type UseRouteOfRoot = UseRoute<RoutingOfRoot>;

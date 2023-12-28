@@ -3,6 +3,7 @@ import type { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { RoutingPropsOfRoot } from "../types";
+import { colors } from "../../shared/styles/color";
 
 import { RoutingOfApp } from "./types";
 import { useRouter } from "./hooks";
@@ -21,19 +22,37 @@ export const App: FC<Props> = ({ rootRoute }) => {
 
   return (
     <Tab.Navigator
-      initialRouteName="schedule"
+      initialRouteName="appSchedule"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: (props) => tabBarIcon(route, props),
       })}
     >
-      <Tab.Screen name="schedule">
+      <Tab.Screen
+        name="appSchedule"
+        options={{
+          tabBarLabel: "スケジュール",
+          tabBarActiveTintColor: colors.primary,
+        }}
+      >
         {(props) => <Schedule rootRoute={rootRoute} appRoute={props} />}
       </Tab.Screen>
-      <Tab.Screen name="oshi">
+      <Tab.Screen
+        name="appOshi"
+        options={{
+          tabBarLabel: "推し",
+          tabBarActiveTintColor: colors.primary,
+        }}
+      >
         {(props) => <Oshi rootRoute={rootRoute} appRoute={props} />}
       </Tab.Screen>
-      <Tab.Screen name="profile">
+      <Tab.Screen
+        name="appProfile"
+        options={{
+          tabBarLabel: "プロフィール",
+          tabBarActiveTintColor: colors.primary,
+        }}
+      >
         {(props) => <Profile rootRoute={rootRoute} appRoute={props} />}
       </Tab.Screen>
     </Tab.Navigator>

@@ -10,7 +10,10 @@ import { useQueryClient } from "../../../query";
 
 import { FormData, formValidation } from "./validate";
 
-export const useProfileEdit = (profileRoute: RoutingPropsOfProfile<"edit">, params: EditParams) => {
+export const useProfileEdit = (
+  profileRoute: RoutingPropsOfProfile<"appProfileEdit">,
+  params: EditParams,
+) => {
   const [isOpen, setIsOpen] = useState(false);
   const userId = useUserStore((store) => store.userId);
 
@@ -53,7 +56,7 @@ export const useProfileEdit = (profileRoute: RoutingPropsOfProfile<"edit">, para
         if (!data) return;
 
         queryClient.removeQueries("getProfile");
-        profileRoute.navigation.navigate("top");
+        profileRoute.navigation.navigate("appProfileTop");
       },
       onError: () => {
         Alert.alert(DEFAULT_MESSAGE);

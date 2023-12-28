@@ -19,7 +19,10 @@ import { artistId } from "../../../model/artists";
 
 import { FormData, formValidation } from "./validate";
 
-export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, params: Params) => {
+export const useScheduleEdit = (
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleEdit">,
+  params: Params,
+) => {
   const [isModal, setIsModal] = useState(false);
   const userId = useUserStore((props) => props.userId);
   const { removeQueries } = useQueryClient();
@@ -95,7 +98,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         removeQueries(["getScheduleAtDateForMe", dayjs(params.date).format("YYYY-MM-DD")]);
         scheduleRoute.navigation.reset({
           index: 0,
-          routes: [{ name: "top", params: { date: params.date } }],
+          routes: [{ name: "appScheduleTop", params: { date: params.date } }],
         });
       },
       onError: () => {
@@ -142,7 +145,7 @@ export const useScheduleEdit = (scheduleRoute: RoutingPropsOfSchedule<"edit">, p
         });
         removeQueries(["getScheduleForMe", dayjs(params.date).format("YYYY-MM")]);
         removeQueries(["getScheduleAtDateForMe", dayjs(params.date).format("YYYY-MM-DD")]);
-        scheduleRoute.navigation.navigate("detail", {
+        scheduleRoute.navigation.navigate("appScheduleDetail", {
           id: params.id,
           oshiId: values.oshiId,
           artistId: values.artistId,

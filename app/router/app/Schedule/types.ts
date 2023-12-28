@@ -16,10 +16,10 @@ export type Params = {
 } & z.infer<typeof formData>;
 
 export type RoutingOfSchedule = {
-  top: { date?: string };
-  date: { date: string; calendarType: CalendarType };
-  detail: Params;
-  edit: Params;
+  appScheduleTop: { date?: string };
+  appScheduleDate: { date: string; calendarType: CalendarType };
+  appScheduleDetail: Params;
+  appScheduleEdit: Params;
 };
 
 export type RoutingPropsOfSchedule<K extends keyof RoutingOfSchedule> = NavigationProps<

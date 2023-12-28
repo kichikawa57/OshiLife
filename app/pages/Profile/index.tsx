@@ -20,8 +20,8 @@ import { useProfile } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"profile">;
-  profileRoute: RoutingPropsOfProfile<"top">;
+  appRoute: RoutingPropsOfApp<"appProfile">;
+  profileRoute: RoutingPropsOfProfile<"appProfileTop">;
 };
 
 export const Profile: FC<Props> = ({ profileRoute }) => {
@@ -40,7 +40,7 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
               <Icon
                 name="gear"
                 onPress={() => {
-                  profileRoute.navigation.navigate("setting");
+                  profileRoute.navigation.navigate("appProfileSetting");
                 }}
                 disabled={isLoading}
                 touchableWidth={300}
@@ -74,7 +74,7 @@ export const Profile: FC<Props> = ({ profileRoute }) => {
             buttonText="編集"
             iconName="pencil"
             onPress={() => {
-              profileRoute.navigation.navigate("edit", {
+              profileRoute.navigation.navigate("appProfileEdit", {
                 id: data.id,
                 name: data.name,
                 email: data.email,

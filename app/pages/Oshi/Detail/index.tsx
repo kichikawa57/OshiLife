@@ -21,8 +21,8 @@ import {
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"oshi">;
-  oshiRoute: RoutingPropsOfOshi<"detail">;
+  appRoute: RoutingPropsOfApp<"appOshi">;
+  oshiRoute: RoutingPropsOfOshi<"appOshiDetail">;
 };
 
 export const Detail: FC<Props> = ({ oshiRoute }) => {
@@ -63,7 +63,7 @@ export const Detail: FC<Props> = ({ oshiRoute }) => {
           buttonText="編集"
           iconName="pencil"
           onPress={() => {
-            oshiRoute.navigation.navigate("edit", {
+            oshiRoute.navigation.navigate("appOshiEdit", {
               id: params.id,
               name: params.name,
               artistId: params.artistId,

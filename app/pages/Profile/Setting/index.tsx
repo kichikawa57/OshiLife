@@ -16,8 +16,8 @@ import { useSetting } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"profile">;
-  profileRoute: RoutingPropsOfProfile<"setting">;
+  appRoute: RoutingPropsOfApp<"appProfile">;
+  profileRoute: RoutingPropsOfProfile<"appProfileSetting">;
 };
 
 export const Setting: FC<Props> = ({ profileRoute, rootRoute }) => {

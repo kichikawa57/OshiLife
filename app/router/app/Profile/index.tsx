@@ -13,7 +13,7 @@ import { RoutingOfProfile } from "./types";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"profile">;
+  appRoute: RoutingPropsOfApp<"appProfile">;
 };
 
 const { Navigator, Screen } = createStackNavigator<RoutingOfProfile>();
@@ -21,18 +21,18 @@ const { Navigator, Screen } = createStackNavigator<RoutingOfProfile>();
 export const Profile: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
     <Navigator
-      initialRouteName="top"
+      initialRouteName="appProfileTop"
       screenOptions={{
         header: () => <Header title={"プロフィール"} />,
       }}
     >
-      <Screen name="top" options={{ headerShown: false }}>
+      <Screen name="appProfileTop" options={{ headerShown: false }}>
         {(props) => <ProfilePage rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
       </Screen>
-      <Screen name="edit" options={{ headerShown: false }}>
+      <Screen name="appProfileEdit" options={{ headerShown: false }}>
         {(props) => <Edit rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
       </Screen>
-      <Screen name="setting" options={{ headerShown: false }}>
+      <Screen name="appProfileSetting" options={{ headerShown: false }}>
         {(props) => <Setting rootRoute={rootRoute} appRoute={appRoute} profileRoute={props} />}
       </Screen>
     </Navigator>

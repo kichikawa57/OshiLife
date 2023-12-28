@@ -14,8 +14,8 @@ import { useOshi } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"oshi">;
-  oshiRoute: RoutingPropsOfOshi<"top">;
+  appRoute: RoutingPropsOfApp<"appOshi">;
+  oshiRoute: RoutingPropsOfOshi<"appOshiTop">;
 };
 
 export const Oshi: FC<Props> = ({ oshiRoute }) => {
@@ -36,7 +36,7 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
                     avatarUrl={oshi.image_url || ""}
                     bottomDivider={true}
                     onPress={() =>
-                      oshiRoute.navigation.navigate("detail", {
+                      oshiRoute.navigation.navigate("appOshiDetail", {
                         id: oshi.id,
                         artistId: oshi.artist_id,
                         name: oshi.artists?.name || "",
@@ -78,7 +78,7 @@ export const Oshi: FC<Props> = ({ oshiRoute }) => {
           buttonText="追加"
           iconName="plus"
           onPress={() => {
-            oshiRoute.navigation.navigate("edit");
+            oshiRoute.navigation.navigate("appOshiEdit");
           }}
         />
       </StyledWrap>

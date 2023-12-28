@@ -20,8 +20,8 @@ import { StyledWrap, StyledContent, StyledTitle, StyledImageTouch, StyledInner }
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"oshi">;
-  oshiRoute: RoutingPropsOfOshi<"edit">;
+  appRoute: RoutingPropsOfApp<"appOshi">;
+  oshiRoute: RoutingPropsOfOshi<"appOshiEdit">;
 };
 
 export const Edit: FC<Props> = ({ oshiRoute }) => {

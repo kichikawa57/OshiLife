@@ -23,8 +23,8 @@ import { useSchedule } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"schedule">;
-  scheduleRoute: RoutingPropsOfSchedule<"top">;
+  appRoute: RoutingPropsOfApp<"appSchedule">;
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleTop">;
 };
 
 export const Schedule: FC<Props> = ({ scheduleRoute }) => {
@@ -130,7 +130,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           buttonText="予定追加"
           iconName="plus"
           onPress={() => {
-            scheduleRoute.navigation.navigate("edit", {
+            scheduleRoute.navigation.navigate("appScheduleEdit", {
               id: null,
               oshiId: oshiId(""),
               artistId: artistId(""),

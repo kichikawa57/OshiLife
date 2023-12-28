@@ -13,21 +13,21 @@ import { RoutingOfOshi } from "./types";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"oshi">;
+  appRoute: RoutingPropsOfApp<"appOshi">;
 };
 
 const { Navigator, Screen } = createStackNavigator<RoutingOfOshi>();
 
 export const Oshi: FC<Props> = ({ rootRoute, appRoute }) => {
   return (
-    <Navigator initialRouteName="top">
-      <Screen name="top" options={{ header: () => <Header title={"推し一覧"} /> }}>
+    <Navigator initialRouteName="appOshiTop">
+      <Screen name="appOshiTop" options={{ header: () => <Header title={"推し一覧"} /> }}>
         {(props) => <OshiPage rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
-      <Screen name="edit" options={{ headerShown: false }}>
+      <Screen name="appOshiEdit" options={{ headerShown: false }}>
         {(props) => <Edit rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
-      <Screen name="detail" options={{ headerShown: false }}>
+      <Screen name="appOshiDetail" options={{ headerShown: false }}>
         {(props) => <Detail rootRoute={rootRoute} appRoute={appRoute} oshiRoute={props} />}
       </Screen>
     </Navigator>

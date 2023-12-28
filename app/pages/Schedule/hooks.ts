@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Alert, PanResponder } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import messaging from "@react-native-firebase/messaging";
 
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
 import { getSchedulesForMe, getSchedulesForOthers } from "../../api/schedules";
@@ -13,9 +12,9 @@ import { DEFAULT_MESSAGE } from "../../api";
 import { useQuery, useQueryClient } from "../../query";
 import { CalendarType } from "../../shared/types/components/schedules";
 import { OshiId } from "../../model/oshis";
-import { yyyymmdd, yyyymmddhhmmss } from "../../shared/constants/date/dayJs";
+import { yyyymmddhhmmss } from "../../shared/constants/date/dayJs";
 
-export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
+export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"appScheduleTop">) => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isOpenDate, setIsOpenDate] = useState(false);
   const [calendarTypeIndex, setCalendarTypeIndex] = useState(0);
@@ -169,7 +168,7 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
         schedules,
       );
 
-      scheduleRoute.navigation.navigate("date", {
+      scheduleRoute.navigation.navigate("appScheduleDate", {
         date: calendarDate,
         calendarType,
       });
@@ -251,20 +250,6 @@ export const useSchedule = (scheduleRoute: RoutingPropsOfSchedule<"top">) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
-
-  useEffect(() => {
-    console.log("test =========>");
-    messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log("test =========>");
-      if (remoteMessage.data?.type === "noticeScheduleForTheDayEveryDay") {
-        scheduleRoute.navigation.navigate("date", {
-          date: String(remoteMessage.data?.date) || today.format(yyyymmdd),
-          calendarType: "me",
-        });
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return {
     isLoadingSchedulesForMe: schedulesForMe.isLoading,

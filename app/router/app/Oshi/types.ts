@@ -7,9 +7,9 @@ export const formData = z.object(validateEditOshi);
 export type EditAndDetailParams = { id: string; isEditColor: boolean } & z.infer<typeof formData>;
 
 export type RoutingOfOshi = {
-  top: undefined;
-  detail: EditAndDetailParams;
-  edit: EditAndDetailParams | undefined;
+  appOshiTop: undefined;
+  appOshiDetail: EditAndDetailParams;
+  appOshiEdit: EditAndDetailParams | undefined;
 };
 
 export type RoutingPropsOfOshi<K extends keyof RoutingOfOshi> = NavigationProps<RoutingOfOshi, K>;

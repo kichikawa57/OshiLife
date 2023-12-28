@@ -16,7 +16,7 @@ import { DEFAULT_MESSAGE } from "../../../api";
 import { useQuery, useQueryClient } from "../../../query";
 
 export const useScheduleDetail = (
-  scheduleRoute: RoutingPropsOfSchedule<"detail">,
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleDetail">,
   param: Params,
 ) => {
   const userId = useUserStore((props) => props.userId);
@@ -64,7 +64,7 @@ export const useScheduleDetail = (
         removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
         scheduleRoute.navigation.reset({
           index: 0,
-          routes: [{ name: "top", params: { date: param.date } }],
+          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
         });
       },
       onError: () => {
@@ -95,7 +95,7 @@ export const useScheduleDetail = (
         removeQueries("getConnectedSchedule");
         scheduleRoute.navigation.reset({
           index: 0,
-          routes: [{ name: "top", params: { date: param.date } }],
+          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
         });
       },
       onError: () => {
@@ -126,7 +126,7 @@ export const useScheduleDetail = (
         removeQueries("getConnectedSchedule");
         scheduleRoute.navigation.reset({
           index: 0,
-          routes: [{ name: "top", params: { date: param.date } }],
+          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
         });
       },
       onError: () => {

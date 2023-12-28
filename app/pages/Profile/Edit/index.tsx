@@ -14,8 +14,8 @@ import { StyledWrap, StyledContent, StyledError, StyledSexWrap, CircleCheckBoxWr
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"profile">;
-  profileRoute: RoutingPropsOfProfile<"edit">;
+  appRoute: RoutingPropsOfApp<"appProfile">;
+  profileRoute: RoutingPropsOfProfile<"appProfileEdit">;
 };
 
 export const Edit: FC<Props> = ({ profileRoute }) => {

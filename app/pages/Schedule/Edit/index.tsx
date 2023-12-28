@@ -21,8 +21,8 @@ import { StyledWrap, StyledContent, StyledDatePickerError, StyledInner } from ".
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"schedule">;
-  scheduleRoute: RoutingPropsOfSchedule<"edit">;
+  appRoute: RoutingPropsOfApp<"appSchedule">;
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleEdit">;
 };
 
 export const Edit: FC<Props> = ({ scheduleRoute }) => {

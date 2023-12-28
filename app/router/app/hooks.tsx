@@ -10,15 +10,15 @@ export const useRouter = () => {
     let iconName: IconName = "calendar";
 
     switch (route.name) {
-      case "schedule":
+      case "appSchedule":
         iconName = "calendar";
         break;
 
-      case "oshi":
+      case "appOshi":
         iconName = "star";
         break;
 
-      case "profile":
+      case "appProfile":
         iconName = "user-circle";
         break;
     }

@@ -20,7 +20,7 @@ interface ImagePickerError extends Error {
 }
 
 export const useOshiEdit = (
-  oshiRoute: RoutingPropsOfOshi<"edit">,
+  oshiRoute: RoutingPropsOfOshi<"appOshiEdit">,
   params: EditAndDetailParams | undefined,
 ) => {
   const [isOpenSelectedColorModal, setIsOpenSelectedColorModal] = useState(false);
@@ -112,7 +112,7 @@ export const useOshiEdit = (
 
         queryClient.removeQueries("getOshis");
 
-        oshiRoute.navigation.navigate("detail", {
+        oshiRoute.navigation.navigate("appOshiDetail", {
           id: params.id,
           name: values.name,
           artistId: values.artistId || "",

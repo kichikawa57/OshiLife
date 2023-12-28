@@ -28,8 +28,8 @@ import { useScheduleDate } from "./hooks";
 
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"schedule">;
-  scheduleRoute: RoutingPropsOfSchedule<"date">;
+  appRoute: RoutingPropsOfApp<"appSchedule">;
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleDate">;
 };
 
 export const Date: FC<Props> = ({ scheduleRoute }) => {
@@ -69,7 +69,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                     key={index}
                     title={schdule.title}
                     onPress={() => {
-                      scheduleRoute.navigation.navigate("detail", {
+                      scheduleRoute.navigation.navigate("appScheduleDetail", {
                         id: schdule.id,
                         oshiId: schdule.oshi_id,
                         oshiName: getArtistOfOshiById(schdule.artist_id)?.name || "",
@@ -125,7 +125,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
             buttonText="予定追加"
             iconName="plus"
             onPress={() => {
-              scheduleRoute.navigation.navigate("edit", {
+              scheduleRoute.navigation.navigate("appScheduleEdit", {
                 id: null,
                 oshiId: oshiId(""),
                 artistId: artistId(""),

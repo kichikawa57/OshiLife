@@ -24,8 +24,8 @@ import {
 import { useScheduleDetail } from "./hooks";
 type Props = {
   rootRoute: RoutingPropsOfRoot<"app">;
-  appRoute: RoutingPropsOfApp<"schedule">;
-  scheduleRoute: RoutingPropsOfSchedule<"detail">;
+  appRoute: RoutingPropsOfApp<"appSchedule">;
+  scheduleRoute: RoutingPropsOfSchedule<"appScheduleDetail">;
 };
 
 export const Detail: FC<Props> = ({ scheduleRoute }) => {
@@ -94,7 +94,7 @@ export const Detail: FC<Props> = ({ scheduleRoute }) => {
           buttonText="編集"
           iconName="pencil"
           onPress={() => {
-            scheduleRoute.navigation.navigate("edit", {
+            scheduleRoute.navigation.navigate("appScheduleEdit", {
               ...params,
             });
           }}
