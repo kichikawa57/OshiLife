@@ -14,15 +14,9 @@ export const checkFcrToken = async (profileId: ProfileId) => {
 
   const fcr_token = await messaging().getToken();
 
-  const { data } = await getProfile(profileId);
-
-  if (data === null) return;
-
-  if (data.fcr_token === null || data.fcr_token !== fcr_token) {
-    updateProfile(profileId, {
-      fcr_token,
-    });
-  }
+  updateProfile(profileId, {
+    fcr_token,
+  });
 };
 
 export const refreshFcrToken = async (profileId: ProfileId, token: string) => {
