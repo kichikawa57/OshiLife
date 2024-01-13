@@ -81,6 +81,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                         date: params.date,
                         isPublic: schdule.is_public,
                         calendarType: params.calendarType,
+                        memo: schdule.memo ? schdule.memo : "",
                       });
                     }}
                     avatarUrl={getArtistOfOshiById(schdule.artist_id)?.imageUrl || ""}
