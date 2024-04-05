@@ -510,7 +510,7 @@
 				CODE_SIGN_ENTITLEMENTS = OshiLife/OshiLife.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6S5BCJRH3Z;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = OshiLife/Info.plist;
@@ -543,7 +543,7 @@
 				CODE_SIGN_ENTITLEMENTS = OshiLife/OshiLife.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6S5BCJRH3Z;
 				INFOPLIST_FILE = OshiLife/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OshiLife;
