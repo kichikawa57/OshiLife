@@ -1,5 +1,6 @@
 pod 'FirebaseCore', :modular_headers => true
 pod 'GoogleUtilities', :modular_headers => true
+pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
 
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
@@ -60,7 +61,7 @@ target 'OshiLife' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    # __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
@@ -74,6 +75,3 @@ target 'OshiLife' do
     end
   end
 end
-
-
-diABA7vXTUFluzIWy8A_aN:APA91bHD-bK-cDJYIhM-eIIuQI-J1FBoQ33N8S-ZfB5S7eVrM1I9K2aDkxWR6v1d93yALIByaxd8njNpSGFc13QzRlvV7KEikcq8f2qrrcj68DmYsshkCBTYht7gV9Et4I7xmJo9vZm-

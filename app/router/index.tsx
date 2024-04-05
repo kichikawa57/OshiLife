@@ -23,7 +23,7 @@ dayjs.extend(isSameOrAfter);
 const Stack = createStackNavigator<RoutingOfRoot>();
 
 if (__DEV__) {
-  NativeModules.DevSettings.setIsDebuggingRemotely(true);
+  NativeModules.DevSettings.setIsDebuggingRemotely(false);
 }
 
 export const Router: FC = () => {
