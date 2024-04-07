@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
 import { useCallback, useMemo, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { useQuery, useQueryClient } from "../../../query";
 import { deleteSchedule, getSchedulesForMe, getSchedulesForOthers } from "../../../api/schedules";
@@ -22,12 +22,16 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
 
   const { getQueryData, removeQueries } = useQueryClient();
 
-  const { data, isLoading } = useQuery(
-    [calendarType === "me" ? "getScheduleAtDateForMe" : "getScheduleAtDateForOthers", date],
+  const { data, isLoading, isError } = useQuery(
+    [
+      calendarType === "me"
+        ? ["getScheduleAtDateForMe", date]
+        : ["getScheduleAtDateForOthers", date],
+    ],
     async () => {
       const { startOfDay, endOfDay } = getDayRange(dayjs(date));
 
-      const oshis = getQueryData("getOshis");
+      const oshis = getQueryData(["getOshis"]);
 
       const getSchedules =
         calendarType === "me"
@@ -55,54 +59,54 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
         ),
       );
     },
-    {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-    },
   );
+
+  useEffect(() => {
+    if (!isError) return;
+
+    Alert.alert(DEFAULT_MESSAGE);
+  }, [isError]);
 
   const isExisted = data !== undefined && data.length > 0;
 
-  const { data: oshiData, isLoading: isLoadingOshiData } = useQuery(
-    "getOshis",
-    async () => {
-      const { data, error } = await getOshis(userId);
+  const {
+    data: oshiData,
+    isLoading: isLoadingOshiData,
+    isError: isErrorOshiData,
+  } = useQuery(["getOshis"], async () => {
+    const { data, error } = await getOshis(userId);
 
-      if (error !== null) throw error;
+    if (error !== null) throw error;
 
-      return data.map((oshi) =>
-        convertOrigenalToModelForOshi(
-          { ...oshi, created_at: "", updated_at: "", user_id: userId },
-          oshi.artists,
-        ),
-      );
-    },
-    {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-    },
-  );
+    return data.map((oshi) =>
+      convertOrigenalToModelForOshi(
+        { ...oshi, created_at: "", updated_at: "", user_id: userId },
+        oshi.artists,
+      ),
+    );
+  });
 
-  const deleteScheduleMutation = useMutation(
-    async ({ id }: { id: ScheduleId }) => {
+  useEffect(() => {
+    if (!isErrorOshiData) return;
+
+    Alert.alert(DEFAULT_MESSAGE);
+  }, [isErrorOshiData]);
+
+  const deleteScheduleMutation = useMutation({
+    mutationFn: async ({ id }: { id: ScheduleId }) => {
       const { error } = await deleteSchedule(id);
 
       if (error !== null) throw error;
 
       return id;
     },
-    {
-      onSuccess: () => {
-        removeQueries(["getScheduleForMe", dayjs(date).format("YYYY-MM")]);
-        removeQueries(["getScheduleAtDateForMe", dayjs(date).format("YYYY-MM-DD")]);
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: () => {
+      removeQueries([["getScheduleAtDateForMe", dayjs(date).format("YYYY-MM-DD")]]);
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
   const scheduleData = useMemo(() => {
     if (!data) return [];
@@ -124,7 +128,7 @@ export const useScheduleDate = (date: string, calendarType: CalendarType) => {
   const updateDisplayedOshis = useCallback(
     (artistId: ArtistId) => {
       setDisplayedOshis((props) => {
-        const oshis = getQueryData("getOshis");
+        const oshis = getQueryData(["getOshis"]);
         if (props === null) {
           return oshis?.map((oshi) => oshi.artist_id).filter((id) => id !== artistId) || [];
         }

@@ -1,203 +1,237 @@
 import React, { FC, Fragment, memo, useMemo } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import { isHoliday } from "japanese-holidays";
+import { Text } from "@rneui/base";
+import { TouchableOpacity, View } from "react-native";
 
-import { nonNullable, sortDates } from "../../shared/utils";
+import { getTextStyle } from "../../shared/utils";
 import {
-  ScheduleForCalendar,
+  ScheduleResult,
   Schedules,
   convertScheduleForCalendarToModel,
 } from "../../model/schedules";
-import { colors } from "../../shared/styles/color";
-
-import {
-  StyledCalendarBorder,
-  StyledCalendarContent,
-  StyledCalendarContentBg,
-  StyledCalendarContentInner,
-  StyledCalendarContentWrap,
-  StyledCalendarEventPanel,
-  StyledCalendarWeek,
-  StyledScheduleDetail,
-  StyledText,
-  StyledTextWrap,
-  StyledView,
-} from "./style";
-import { useCalendar } from "./hooks";
+import { colors, dateColors } from "../../shared/styles/color";
+import { OshiId } from "../../model/oshis";
 
 type Props = {
-  currentDate: Dayjs;
-  scheduleData: Schedules[];
+  scheduleData: ScheduleResult;
+  displayedOshis: OshiId[] | null;
   onPressDate: (calendarDate: string, schedules: Schedules[]) => void;
 };
 
-type ResultData = {
-  date: Dayjs;
-  schedules: ScheduleForCalendar[];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const arraysEqual = (arr1: any[], arr2: any[]): boolean => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 };
 
-const CalendarComponent: FC<Props> = ({ scheduleData, currentDate, onPressDate }) => {
-  const currentMonth = currentDate.month();
-  const today = dayjs();
-  const { getMonth } = useCalendar(currentDate);
+const selectColor = ({
+  isCurrent,
+  isOtherMonth,
+  isSunday,
+  isSaturday,
+  isHoliday,
+}: {
+  isCurrent: boolean;
+  isOtherMonth: boolean;
+  isSunday: boolean;
+  isSaturday: boolean;
+  isHoliday: boolean;
+}) => {
+  if (isOtherMonth) return colors.textDarkSecondary;
+  if (isSunday) return dateColors.sunday;
+  if (isSaturday) return dateColors.saturday;
+  if (isHoliday) return dateColors.holiday;
+  if (isCurrent) return colors.textDark;
+
+  return colors.textDark;
+};
+
+const CalendarComponent: FC<Props> = ({ scheduleData, displayedOshis, onPressDate }) => {
+  const currentMonth = scheduleData.month;
 
   const calendar = useMemo(() => {
-    const months = getMonth();
-
-    return months.map((dates, datesIndex) => {
-      const orderedDates = sortDates(dates);
-
-      // カレンダーの形を変形したデータ
-      const results: ResultData[] = [];
-
-      // 取得した日付データを開始日、終了日を確認して
-      // 該当する日付のデータを日付毎にまとめる
-      orderedDates.forEach((currentDate, currentDateIndex) => {
-        const schedulesForTheDay = scheduleData
-          // 開始日、終了日を確認する
-          .filter((schedule) => {
-            const startDate = dayjs(schedule.start_at).format("YYYY-MM-DD");
-            const endDate = dayjs(schedule.end_at).format("YYYY-MM-DD");
-            return currentDate.isSameOrAfter(startDate) && currentDate.isSameOrBefore(endDate);
-          })
-          // 該当する日付をまとめる
-          .map<ScheduleForCalendar>((schedule) => {
-            const weekEndDate = orderedDates[orderedDates.length - 1];
-
-            const startDate = dayjs(schedule.start_at);
-            const endDate = dayjs(schedule.end_at);
-            const startDateYmd = startDate.format("YYYY-MM-DD");
-
-            // 開始日と週の初めのみ表示
-            const isTransparent = !(currentDate.isSame(startDateYmd) || currentDateIndex === 0);
-            // 週の最終日がスケジュールの期間中か確認
-            const isDurringSchedule = weekEndDate.isSameOrBefore(endDate);
-
-            return {
-              ...schedule,
-              isTransparent,
-              startWeekIndex: currentDateIndex !== 0 ? startDate.day() : 0,
-              endWeekIndex: isDurringSchedule ? 6 : endDate.day(),
-            };
-          });
-
-        results.push({
-          date: currentDate,
-          schedules: schedulesForTheDay,
-        });
-      });
-
-      // 前日の日付を確認して表示する位置を修正
-      const orderResults = results.map<ResultData>((result, resultIndex) => {
-        const previousResult = resultIndex !== 0 ? results[resultIndex - 1] : null;
-
-        if (!previousResult) return result;
-
-        // 前日に同じ内容のデータがあるのだけ抽出
-        const mappingDates = result.schedules
-          .map((schedule) => {
-            const findIndex = previousResult.schedules.findIndex(
-              (previousResultSchedule) => previousResultSchedule.id === schedule.id,
-            );
-
-            if (findIndex === -1) return null;
-
-            return {
-              schedule,
-              index: findIndex,
-            };
-          })
-          .filter(nonNullable);
-
-        if (mappingDates.length === 0) return result;
-
-        // 前日に無い内容のデータだけ抽出
-        const schedulesWithoutPreviousSchedules = result.schedules.filter((schedule) => {
-          return !mappingDates.map((mappingDate) => mappingDate.schedule.id).includes(schedule.id);
-        });
-
-        // 前日のデータを割り込ませる
-        for (const mappingDate of mappingDates) {
-          schedulesWithoutPreviousSchedules.splice(mappingDate.index, 0, mappingDate.schedule);
-        }
-
-        result.schedules = schedulesWithoutPreviousSchedules;
-
-        return result;
-      });
-      const week = orderResults.map((orderResult, dateIndex) => {
-        const calendarDate = orderResult.date.format("YYYY-MM-DD");
-
-        const isCurrent = dayjs(today.format("YYYY-MM-DD")).isSame(calendarDate);
-        const isOtherMonth = !(orderResult.date.month() === currentMonth);
-        const holiday = isHoliday(orderResult.date.toDate());
-
+    return scheduleData.data.map((weekData, datesIndex) => {
+      const week = weekData.map((dayData, dateIndex) => {
         return (
           <Fragment key={`${datesIndex}-${dateIndex}`}>
-            {isCurrent && <StyledCalendarContentBg index={dateIndex} />}
-            <StyledCalendarEventPanel
-              index={dateIndex}
+            {dayData.isToday && (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: `${14.2857 * dateIndex}%`,
+                  zIndex: 1,
+                  width: "14.2857%",
+                  height: "100%",
+                  borderColor: colors.primary,
+                  borderWidth: 2,
+                  borderStyle: "solid",
+                }}
+              />
+            )}
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                top: 0,
+                left: `${14.2857 * dateIndex}%`,
+                zIndex: 3,
+                width: "14.2857%",
+                height: "100%",
+                opacity: 0,
+              }}
               activeOpacity={1}
               onPress={() => {
                 onPressDate(
-                  calendarDate,
-                  orderResult.schedules.map((schedule) =>
-                    convertScheduleForCalendarToModel(schedule),
-                  ),
+                  dayData.dateFormat,
+                  dayData.schedules.map((schedule) => convertScheduleForCalendarToModel(schedule)),
                 );
               }}
             />
-            <StyledCalendarContent>
-              <StyledCalendarContentInner>
-                <StyledTextWrap>
-                  <StyledText
-                    isCurrent={isCurrent}
-                    isOtherMonth={isOtherMonth}
-                    isSaturday={orderResult.date.day() === 6}
-                    isSunday={orderResult.date.day() === 0}
-                    isHoliday={!!holiday}
+            <View
+              style={{
+                position: "relative",
+                zIndex: 2,
+                width: "14.2857%",
+              }}
+            >
+              <View
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  width: "100%",
+                  paddingTop: 5,
+                  paddingBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: selectColor({
+                        isOtherMonth: dayData.isOtherMonth,
+                        isCurrent: dayData.isToday && !dayData.isOtherMonth,
+                        isSaturday: dayData.isSaturday,
+                        isSunday: dayData.isSunday,
+                        isHoliday: !!dayData.holiday,
+                      }),
+                      fontSize: 14,
+                    }}
                   >
-                    {orderResult.date.format("D")}
-                  </StyledText>
-                </StyledTextWrap>
-                {orderResult.schedules.map((schedule, scheduleIndex) => {
+                    {dayData.day}
+                  </Text>
+                </View>
+                {dayData.schedules.map((schedule, scheduleIndex) => {
+                  if (
+                    displayedOshis &&
+                    !displayedOshis.some((oshiId) => oshiId === schedule.oshi_id)
+                  )
+                    return null;
+
                   return (
                     scheduleIndex <= 2 && (
-                      <StyledScheduleDetail
+                      <Text
                         key={`${datesIndex}-${dateIndex}-${scheduleIndex}`}
+                        style={{
+                          width: `${
+                            (schedule.isTransparent
+                              ? 98
+                              : schedule.endWeekIndex + 1 - schedule.startWeekIndex) * 98
+                          }%`,
+                          marginTop: 4,
+                          overflow: "hidden",
+                          fontSize: 12,
+                          backgroundColor: schedule.oshi?.color || colors.primary,
+                          opacity: schedule.isTransparent ? 0 : 1,
+                          color: getTextStyle(schedule.oshi?.color || colors.primary),
+                        }}
                         numberOfLines={1}
-                        backgroundColor={schedule.oshi?.color || colors.primary}
-                        isTransparent={schedule.isTransparent}
-                        startWeekIndex={schedule.startWeekIndex}
-                        endWeekIndex={schedule.endWeekIndex}
                       >
                         {schedule.title}
-                      </StyledScheduleDetail>
+                      </Text>
                     )
                   );
                 })}
-              </StyledCalendarContentInner>
-            </StyledCalendarContent>
+              </View>
+            </View>
           </Fragment>
         );
       });
 
       return (
-        <StyledCalendarWeek key={`weeks-${datesIndex}`} isFirstWeek={datesIndex === 0}>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <StyledCalendarBorder key={`border-${index}`} index={index} />
-          ))}
+        <View
+          key={`weeks-${datesIndex}`}
+          style={{
+            position: "relative",
+            flexDirection: "row",
+            width: "100%",
+            borderBottomColor: colors.borderDarkSecondary,
+            borderBottomWidth: 1,
+            borderTopColor: datesIndex === 0 ? colors.borderDarkSecondary : "#fff",
+            borderTopWidth: datesIndex === 0 ? 1 : 0,
+          }}
+        >
           {week}
-        </StyledCalendarWeek>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: `${14.2857 * (index + 1)}%`,
+                zIndex: 0,
+                width: 1,
+                height: "100%",
+                backgroundColor: colors.borderDarkSecondary,
+              }}
+              key={`border-${index}`}
+            />
+          ))}
+        </View>
       );
     });
-  }, [currentMonth, getMonth, onPressDate, scheduleData, today]);
+  }, [displayedOshis, onPressDate, scheduleData.data]);
 
   return (
-    <StyledView>
-      <StyledCalendarContentWrap>{calendar}</StyledCalendarContentWrap>
-    </StyledView>
+    <View
+      style={{
+        width: "100%",
+        marginBottom: 20,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 20,
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingBottom: 20,
+        }}
+      >
+        {currentMonth + 1}月
+      </Text>
+      <View
+        style={{
+          flexWrap: "wrap",
+          width: "100%",
+        }}
+      >
+        {calendar}
+      </View>
+    </View>
   );
 };
 
-export const Calendar = memo(CalendarComponent);
+export const Calendar = memo(CalendarComponent, (prevProps, nextProps) => {
+  return (
+    JSON.stringify(prevProps.scheduleData) === JSON.stringify(nextProps.scheduleData) &&
+    arraysEqual(prevProps.displayedOshis ?? [], nextProps.displayedOshis ?? [])
+  );
+});

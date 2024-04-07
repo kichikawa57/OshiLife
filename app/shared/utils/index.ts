@@ -1,6 +1,7 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 import { colors } from "../styles/color";
+import { yyyymmddhhmmssForApi } from "../constants/date/dayJs";
 
 export const nonNullable = <T>(value: T): value is NonNullable<T> => value != null;
 
@@ -50,14 +51,14 @@ export const getCalendarBounds = (date: Dayjs) => {
   const endOfCalendar = endOfMonth.endOf("week");
 
   return {
-    start: startOfCalendar.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
-    end: endOfCalendar.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
+    start: startOfCalendar.format(yyyymmddhhmmssForApi),
+    end: endOfCalendar.format(yyyymmddhhmmssForApi),
   };
 };
 
 export const getDayRange = (date: Dayjs) => {
-  const startOfDay = date.startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-  const endOfDay = date.endOf("day").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+  const startOfDay = date.startOf("day").format(yyyymmddhhmmssForApi);
+  const endOfDay = date.endOf("day").format(yyyymmddhhmmssForApi);
 
   return { startOfDay, endOfDay };
 };
@@ -90,7 +91,7 @@ const convertHexToRGB = (hex: string) => {
 };
 
 /**
- * 背景色に合わせた文字色のスタイルを返す
+ * return the text color style that matches the background color you provided.
  */
 export const getTextStyle = (backgroundColor: string) => {
   const [red, green, blue] = convertHexToRGB(backgroundColor);
@@ -99,4 +100,22 @@ export const getTextStyle = (backgroundColor: string) => {
     return colors.textLight;
   }
   return colors.textDark;
+};
+
+/**
+ * can get the date 1 year ago and 1 year later from the date you provided.
+ */
+export const getDateOneYearAgoAndOneYearLater = (date: string | Dayjs) => {
+  const now = dayjs(date);
+
+  const oneYearAgo = now.subtract(1, "year");
+  const oneYearLater = now.add(1, "year");
+
+  // const oneYearAgo = now.subtract(1, "month");
+  // const oneYearLater = now.add(2, "month");
+
+  return {
+    oneYearAgo: oneYearAgo.format(yyyymmddhhmmssForApi),
+    oneYearLater: oneYearLater.format(yyyymmddhhmmssForApi),
+  };
 };

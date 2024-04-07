@@ -4,8 +4,8 @@ import { colors, dateColors } from "../../shared/styles/color";
 import { getTextStyle } from "../../shared/utils";
 
 export const StyledView = styled.View`
-  flex: 1;
-  width: auto;
+  width: 100%;
+  margin-bottom: 20px;
 `;
 
 export const StyledCalendarContentWrap = styled.View`
@@ -36,6 +36,11 @@ export const StyledCalendarContent = styled.View`
 
 export const StyledCalendar = styled.View`
   display: block;
+`;
+
+export const StyledMonth = styled.Text`
+  font-size: 20px;
+  padding: 0 10px 20px;
 `;
 
 export const StyledCalendarEventPanel = styled.TouchableOpacity<{ index: number }>`

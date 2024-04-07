@@ -19,32 +19,39 @@ export const useCheckLoginUser = () => {
   const [isFetchedOshisOnce, setIsFetchedOshisOnce] = useState(false);
   const route = useRoute<UseRouteOfRoot>();
 
-  const { isLoading: isLoadingInit, isError } = useQuery(
-    "init",
-    async () => {
-      if (route.name !== "app") return;
+  const {
+    data,
+    isLoading: isLoadingInit,
+    isError,
+    isSuccess,
+  } = useQuery(["init"], async () => {
+    if (route.name !== "app") return;
 
-      const { data } = await getUser();
+    const { data } = await getUser();
 
-      if (data.user === null) throw new Error(DEFAULT_MESSAGE);
+    if (data.user === null) throw new Error(DEFAULT_MESSAGE);
 
-      setUserId(profileId(data.user.id));
+    setUserId(profileId(data.user.id));
 
-      return profileId(data.user.id);
-    },
-    {
-      onSuccess: (profileId) => {
-        if (!profileId) return;
-        checkFcrToken(profileId);
-      },
-      onError: () => {
-        navigation.reset({ index: 0, routes: [{ name: "login" }] });
-      },
-    },
-  );
+    return profileId(data.user.id);
+  });
+
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    if (!data) return;
+    checkFcrToken(data);
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (!isError) return;
+
+    navigation.reset({ index: 0, routes: [{ name: "login" }] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError]);
 
   const { isLoading: isLoadingOshi } = useQuery(
-    "getOshis",
+    ["getOshis"],
     async () => {
       if (route.name !== "app") return;
       setIsFetchedOshisOnce(true);

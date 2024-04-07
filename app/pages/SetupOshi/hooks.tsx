@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 
@@ -32,8 +32,8 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
     },
   });
 
-  const onPress = useMutation(
-    async () => {
+  const onPress = useMutation({
+    mutationFn: async () => {
       const values = getValues();
       const validateError = formValidation(values);
 
@@ -57,41 +57,37 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
 
       return null;
     },
-    {
-      onSuccess: () => {
-        checkFcrToken(userId);
-        rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: () => {
+      checkFcrToken(userId);
+      rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
-  const validateSession = useMutation(
-    async () => {
+  const validateSession = useMutation({
+    mutationFn: async () => {
       const { error } = await getUser();
 
       if (error !== null) throw error;
 
       return null;
     },
-    {
-      onError: () => {
-        Alert.alert("アクセス権限がありません", "", [
-          {
-            text: "OK",
-            onPress: () => {
-              rootRoute.navigation.reset({ index: 0, routes: [{ name: "login" }] });
-            },
+    onError: () => {
+      Alert.alert("アクセス権限がありません", "", [
+        {
+          text: "OK",
+          onPress: () => {
+            rootRoute.navigation.reset({ index: 0, routes: [{ name: "login" }] });
           },
-        ]);
-      },
+        },
+      ]);
     },
-  );
+  });
 
-  const uploadImageMutation = useMutation(
-    async () => {
+  const uploadImageMutation = useMutation({
+    mutationFn: async () => {
       const image = await ImagePicker.openPicker({
         width: 300,
         height: 300,
@@ -108,14 +104,12 @@ export const useSetupOshi = (rootRoute: RoutingPropsOfRoot<"setupOshi">) => {
 
       return data;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
-        setValue("image", data.publicUrl);
-      },
-      onError: onErrorImagePicker,
+    onSuccess: (data) => {
+      if (!data) return;
+      setValue("image", data.publicUrl);
     },
-  );
+    onError: onErrorImagePicker,
+  });
 
   useEffect(() => {
     validateSession.mutate();

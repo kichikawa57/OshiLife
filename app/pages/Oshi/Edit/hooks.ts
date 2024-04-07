@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
-import { useMutation } from "react-query";
-import { Alert, Linking } from "react-native";
+import { useMutation } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 
 import { EditAndDetailParams, RoutingPropsOfOshi } from "../../../router/app/Oshi/types";
@@ -14,10 +14,6 @@ import { uploadImage } from "../../../api/image";
 import { onErrorImagePicker } from "../../../shared/image-picker";
 
 import { FormData, formValidation } from "./validate";
-
-interface ImagePickerError extends Error {
-  code?: string;
-}
 
 export const useOshiEdit = (
   oshiRoute: RoutingPropsOfOshi<"appOshiEdit">,
@@ -54,8 +50,8 @@ export const useOshiEdit = (
     return values;
   }, [getValues, setError]);
 
-  const createOshiMutation = useMutation(
-    async () => {
+  const createOshiMutation = useMutation({
+    mutationFn: async () => {
       const values = validationValues();
 
       if (values === null) return;
@@ -73,22 +69,20 @@ export const useOshiEdit = (
 
       return values;
     },
-    {
-      onSuccess: (data) => {
-        if (data === undefined) return;
+    onSuccess: (data) => {
+      if (data === undefined) return;
 
-        queryClient.removeQueries("getOshis");
+      queryClient.removeQueries(["getOshis"]);
 
-        oshiRoute.navigation.goBack();
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+      oshiRoute.navigation.goBack();
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
-  const updateOshiMutation = useMutation(
-    async () => {
+  const updateOshiMutation = useMutation({
+    mutationFn: async () => {
       const values = validationValues();
 
       if (values === null || !params) return;
@@ -105,28 +99,26 @@ export const useOshiEdit = (
 
       return data;
     },
-    {
-      onSuccess: (data) => {
-        if (data === undefined || params === undefined) return;
-        const values = getValues();
+    onSuccess: (data) => {
+      if (data === undefined || params === undefined) return;
+      const values = getValues();
 
-        queryClient.removeQueries("getOshis");
+      queryClient.removeQueries(["getOshis"]);
 
-        oshiRoute.navigation.navigate("appOshiDetail", {
-          id: params.id,
-          name: values.name,
-          artistId: values.artistId || "",
-          image: values.image || "",
-          color: values.color,
-          memo: values.memo || "",
-          isEditColor: isEditColor,
-        });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+      oshiRoute.navigation.navigate("appOshiDetail", {
+        id: params.id,
+        name: values.name,
+        artistId: values.artistId || "",
+        image: values.image || "",
+        color: values.color,
+        memo: values.memo || "",
+        isEditColor: isEditColor,
+      });
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
   const onPressComplete = useCallback(() => {
     if (params) {
@@ -136,8 +128,8 @@ export const useOshiEdit = (
     }
   }, [createOshiMutation, params, updateOshiMutation]);
 
-  const uploadImageMutation = useMutation(
-    async () => {
+  const uploadImageMutation = useMutation({
+    mutationFn: async () => {
       const image = await ImagePicker.openPicker({
         width: 300,
         height: 300,
@@ -154,17 +146,15 @@ export const useOshiEdit = (
 
       return data;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
-        setValue("image", data.publicUrl);
-      },
-      onError: onErrorImagePicker,
+    onSuccess: (data) => {
+      if (!data) return;
+      setValue("image", data.publicUrl);
     },
-  );
+    onError: onErrorImagePicker,
+  });
 
   return {
-    isLoading: createOshiMutation.isLoading || updateOshiMutation.isLoading,
+    isLoading: createOshiMutation.isPending || updateOshiMutation.isPending,
     isOpenSelectedColorModal,
     isOpenSelectedOshiModal,
     control,

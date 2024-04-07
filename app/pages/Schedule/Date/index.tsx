@@ -64,33 +64,33 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
           ) : scheduleData.length !== 0 ? (
             <StyledScrollView>
               <StyledScrollViewInner>
-                {scheduleData.map((schdule, index) => (
+                {scheduleData.map((Schedule, index) => (
                   <ListItem
                     key={index}
-                    title={schdule.title}
+                    title={Schedule.title}
                     onPress={() => {
                       scheduleRoute.navigation.navigate("appScheduleDetail", {
-                        id: schdule.id,
-                        oshiId: schdule.oshi_id,
-                        oshiName: getArtistOfOshiById(schdule.artist_id)?.name || "",
-                        artistId: schdule.artist_id,
-                        connectedScheduleId: schdule.connected_schedule_id,
-                        title: schdule.title,
-                        startDate: schdule.start_at,
-                        endDate: schdule.end_at,
+                        id: Schedule.id,
+                        oshiId: Schedule.oshi_id,
+                        oshiName: getArtistOfOshiById(Schedule.artist_id)?.name || "",
+                        artistId: Schedule.artist_id,
+                        connectedScheduleId: Schedule.connected_schedule_id,
+                        title: Schedule.title,
+                        startDate: Schedule.start_at,
+                        endDate: Schedule.end_at,
                         date: params.date,
-                        isPublic: schdule.is_public,
+                        isPublic: Schedule.is_public,
                         calendarType: params.calendarType,
-                        memo: schdule.memo ? schdule.memo : "",
+                        memo: Schedule.memo ? Schedule.memo : "",
                       });
                     }}
-                    avatarUrl={getArtistOfOshiById(schdule.artist_id)?.imageUrl || ""}
+                    avatarUrl={getArtistOfOshiById(Schedule.artist_id)?.imageUrl || ""}
                     bottomDivider={scheduleData.length + 1 !== index}
                     rightContent={
                       params.calendarType === "me" && (
                         <Button
                           title="Delete"
-                          disabled={deleteScheduleMutation.isLoading}
+                          disabled={deleteScheduleMutation.isPending}
                           onPress={() =>
                             Alert.alert("本当に削除してよろしいでしょうか？", "", [
                               {
@@ -101,7 +101,7 @@ export const Date: FC<Props> = ({ scheduleRoute }) => {
                               {
                                 text: "確定",
                                 onPress: () => {
-                                  deleteScheduleMutation.mutate({ id: schdule.id });
+                                  deleteScheduleMutation.mutate({ id: Schedule.id });
                                 },
                               },
                             ])

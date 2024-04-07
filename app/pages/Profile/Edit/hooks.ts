@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
 import { EditParams, RoutingPropsOfProfile } from "../../../router/app/Profile/types";
@@ -27,8 +27,8 @@ export const useProfileEdit = (
     },
   });
 
-  const updateProfileMutation = useMutation(
-    async () => {
+  const updateProfileMutation = useMutation({
+    mutationFn: async () => {
       const values = getValues();
       const validateError = formValidation(values);
 
@@ -51,18 +51,16 @@ export const useProfileEdit = (
 
       return userId;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
+    onSuccess: (data) => {
+      if (!data) return;
 
-        queryClient.removeQueries("getProfile");
-        profileRoute.navigation.navigate("appProfileTop");
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+      queryClient.removeQueries(["getProfile"]);
+      profileRoute.navigation.navigate("appProfileTop");
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
   const onPressCancel = () => {
     setIsOpen(false);
@@ -70,7 +68,7 @@ export const useProfileEdit = (
   };
 
   return {
-    isLoading: updateProfileMutation.isLoading,
+    isLoading: updateProfileMutation.isPending,
     isOpen,
     control,
     setValue,

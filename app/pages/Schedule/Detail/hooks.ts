@@ -1,5 +1,4 @@
-import { useMutation } from "react-query";
-import dayjs from "dayjs";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 import { useCallback } from "react";
 
@@ -13,7 +12,7 @@ import { Params, RoutingPropsOfSchedule } from "../../../router/app/Schedule/typ
 import { oshiId } from "../../../model/oshis";
 import { artistId } from "../../../model/artists";
 import { DEFAULT_MESSAGE } from "../../../api";
-import { useQuery, useQueryClient } from "../../../query";
+import { useQuery } from "../../../query";
 
 export const useScheduleDetail = (
   scheduleRoute: RoutingPropsOfSchedule<"appScheduleDetail">,
@@ -21,10 +20,8 @@ export const useScheduleDetail = (
 ) => {
   const userId = useUserStore((props) => props.userId);
 
-  const { removeQueries } = useQueryClient();
-
   const { data: isConnected } = useQuery(
-    "getConnectedSchedule",
+    ["getConnectedSchedule"],
     async () => {
       if (param.id === null) return false;
 
@@ -40,8 +37,8 @@ export const useScheduleDetail = (
     },
   );
 
-  const createScheduleMutation = useMutation(
-    async () => {
+  const createScheduleMutation = useMutation({
+    mutationFn: async () => {
       const { error } = await createSchedule({
         userId,
         oshiId: oshiId(param.oshiId),
@@ -58,23 +55,18 @@ export const useScheduleDetail = (
 
       return userId;
     },
-    {
-      onSuccess: () => {
-        removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
-        removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
-        scheduleRoute.navigation.reset({
-          index: 0,
-          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
-        });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: () => {
+      scheduleRoute.navigation.navigate("appScheduleTop", {
+        date: param.date,
+      });
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
-  const deleteConnectedScheduleMutationForOthers = useMutation(
-    async () => {
+  const deleteConnectedScheduleMutationForOthers = useMutation({
+    mutationFn: async () => {
       if (param.id === null) return;
 
       const { error } = await deleteConnectedSchedule({
@@ -86,26 +78,19 @@ export const useScheduleDetail = (
 
       return userId;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
-
-        removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
-        removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
-        removeQueries("getConnectedSchedule");
-        scheduleRoute.navigation.reset({
-          index: 0,
-          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
-        });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: (data) => {
+      if (!data) return;
+      scheduleRoute.navigation.navigate("appScheduleTop", {
+        date: param.date,
+      });
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
-  const deleteConnectedScheduleMutationForMe = useMutation(
-    async () => {
+  const deleteConnectedScheduleMutationForMe = useMutation({
+    mutationFn: async () => {
       if (param.connectedScheduleId === null) return;
 
       const { error } = await deleteConnectedSchedule({
@@ -117,23 +102,16 @@ export const useScheduleDetail = (
 
       return userId;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
-
-        removeQueries(["getScheduleForMe", dayjs(param.date).format("YYYY-MM")]);
-        removeQueries(["getScheduleAtDateForMe", dayjs(param.date).format("YYYY-MM-DD")]);
-        removeQueries("getConnectedSchedule");
-        scheduleRoute.navigation.reset({
-          index: 0,
-          routes: [{ name: "appScheduleTop", params: { date: param.date } }],
-        });
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: (data) => {
+      if (!data) return;
+      scheduleRoute.navigation.navigate("appScheduleTop", {
+        date: param.date,
+      });
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
   const onPressConnectedButton = useCallback(() => {
     if (isConnected) {
@@ -145,7 +123,7 @@ export const useScheduleDetail = (
 
   return {
     isConnected,
-    isLoading: createScheduleMutation.isLoading,
+    isLoading: createScheduleMutation.isPending,
     onPressConnectedButton,
     onPressUnConnectedButtonForMe: deleteConnectedScheduleMutationForMe.mutate,
   };

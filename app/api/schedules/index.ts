@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import { OshiId } from "../../model/oshis";
 import { ProfileId } from "../../model/profiles";
-import { ScheduleId } from "../../model/schedules";
+import { ScheduleResult, ScheduleId } from "../../model/schedules";
 import { supabase } from "../init";
 import { ArtistId } from "../../model/artists";
 
@@ -192,4 +192,14 @@ export const deleteConnectedSchedule = async (params: DeleteConnectedSchedule) =
     .eq("connected_schedule_id", connectedScheduleId);
 
   return data;
+};
+
+export const getSchedulesFromApi = async (id: ProfileId) => {
+  const response = await fetch(
+    `http://127.0.0.1:5001/supporting-my-fave-app/us-central1/getSchedules?user_id=${id}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch schedules");
+  }
+  return response.json() as Promise<ScheduleResult[]>;
 };

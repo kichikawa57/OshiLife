@@ -1,24 +1,22 @@
-import React, { FC, useState } from "react";
-import { Modal, View } from "react-native";
+import React, { FC, useRef } from "react";
+import { FlatList, Modal } from "react-native";
 import dayjs from "dayjs";
 
 import { RoutingPropsOfRoot } from "../../router/types";
 import { RoutingPropsOfApp } from "../../router/app/types";
 import { RoutingPropsOfSchedule } from "../../router/app/Schedule/types";
-import { TabView } from "../../components/Tab/View";
-import { TabItem } from "../../components/Tab/View/Item";
 import { Calendar } from "../../components/Calendar";
 import { TrackButton } from "../../components/TrackButton";
 import { FilterScheduleContent } from "../../components/BottomSheetContents/FilterScheduleContent";
 import { EditDateContent } from "../../components/BottomSheetContents/EditDateContent";
-import { Loading } from "../../components/Loading";
 import { oshiId } from "../../model/oshis";
 import { artistId } from "../../model/artists";
-import { TabList } from "../../components/Tab/List";
 import { yyyymmdd } from "../../shared/constants/date/dayJs";
+import { Loading } from "../../components/Loading";
+import { sleep } from "../../shared/utils";
 
 import { ScheduleHeader } from "./components/ScheduleHeader";
-import { StyledContent, StyledTabList, StyledTabView, StyledWrap } from "./style";
+import { StyledContent, StyledTabView, StyledWrap } from "./style";
 import { useSchedule } from "./hooks";
 
 type Props = {
@@ -28,26 +26,21 @@ type Props = {
 };
 
 export const Schedule: FC<Props> = ({ scheduleRoute }) => {
-  const [dateType, setDateType] = useState(0);
+  const flatListRef = useRef<FlatList | null>(null);
+
   const {
-    onPressDate,
-    isLoadingSchedulesForMe,
-    isLoadingSchedulesForOthers,
-    editDateContent,
-    filetrContent,
-    schedulesForMeData,
-    schedulesForOthersData,
-    calendarTypeIndex,
+    isLoading,
+    schedules,
     displayedOshis,
     startDate,
     endDate,
-    swipeCalendar,
+    currentDate,
+    isFirstRender,
+    onPressDate,
+    setIsFirstRender,
     updateDisplayedOshis,
-    switchCalendarType,
-    onPressNextButton,
-    onPressPrevButton,
-    onPressCurrentDate,
-    onPressRefresh,
+    filterContent,
+    editDateContent,
   } = useSchedule(scheduleRoute);
 
   return (
@@ -59,72 +52,55 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
           onPressComplete={editDateContent.onPressCompleteForDate}
         />
       </Modal>
-      <Modal animationType="fade" visible={filetrContent.isOpenFilter} transparent={true}>
+      <Modal animationType="fade" visible={filterContent.isOpenFilter} transparent={true}>
         <FilterScheduleContent
-          dateType={dateType}
           displayedOshis={displayedOshis}
           updateDisplayedOshis={updateDisplayedOshis}
-          setDateType={setDateType}
-          calendarType={calendarTypeIndex}
-          setCalendarType={switchCalendarType}
-          onPressCancel={() => filetrContent.setIsOpenFilter(false)}
+          onPressCancel={() => filterContent.setIsOpenFilter(false)}
         />
       </Modal>
       <ScheduleHeader
-        currentDate={editDateContent.currentDate}
-        onPressNextButton={onPressNextButton}
-        onPressPrevButton={onPressPrevButton}
-        onPressCurrentDate={onPressCurrentDate}
-        onPressRefresh={onPressRefresh}
-        onPressDate={() => {
-          editDateContent.setIsOpenDate(true);
-        }}
         onPressFilter={async () => {
-          filetrContent.setIsOpenFilter(true);
+          filterContent.setIsOpenFilter(true);
         }}
       />
       <StyledWrap>
-        <StyledTabList>
-          <TabList
-            list={["自分の", "それ以外"]}
-            value={calendarTypeIndex}
-            onClick={switchCalendarType}
-            type="panel"
-          />
-        </StyledTabList>
         <StyledTabView>
-          <View {...swipeCalendar.panHandlers} style={{ flex: 1 }}>
-            <TabView value={calendarTypeIndex} onChange={switchCalendarType}>
-              <TabItem>
-                <StyledContent>
-                  {isLoadingSchedulesForMe ? (
-                    <Loading />
-                  ) : (
-                    <Calendar
-                      key={Math.random().toString(36).substr(2, 9)}
-                      scheduleData={schedulesForMeData}
-                      currentDate={editDateContent.currentDate}
-                      onPressDate={onPressDate}
-                    />
-                  )}
-                </StyledContent>
-              </TabItem>
-              <TabItem>
-                <StyledContent>
-                  {isLoadingSchedulesForOthers ? (
-                    <Loading />
-                  ) : (
-                    <Calendar
-                      key={Math.random().toString(36).substr(2, 9)}
-                      scheduleData={schedulesForOthersData}
-                      currentDate={editDateContent.currentDate}
-                      onPressDate={onPressDate}
-                    />
-                  )}
-                </StyledContent>
-              </TabItem>
-            </TabView>
-          </View>
+          <StyledContent>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <FlatList
+                ref={flatListRef}
+                data={schedules ?? []}
+                keyExtractor={(item) => `${item.year}${item.month}`}
+                renderItem={({ item }) => (
+                  <Calendar
+                    scheduleData={item}
+                    displayedOshis={displayedOshis}
+                    onPressDate={onPressDate}
+                  />
+                )}
+                onContentSizeChange={async () => {
+                  const today = dayjs();
+
+                  if (
+                    flatListRef.current &&
+                    today.year() === currentDate.year() &&
+                    !isFirstRender
+                  ) {
+                    console.log("発火");
+                    setIsFirstRender(true);
+                    await sleep(500);
+                    flatListRef.current.scrollToIndex({
+                      animated: false,
+                      index: currentDate.month(),
+                    });
+                  }
+                }}
+              />
+            )}
+          </StyledContent>
         </StyledTabView>
         <TrackButton
           buttonText="予定追加"

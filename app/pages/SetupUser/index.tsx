@@ -42,7 +42,6 @@ export const SetupUser: FC<Props> = ({ rootRoute }) => {
                     title="ユーザー名"
                     value={value}
                     onChangeText={(value) => {
-                      console.log("tetst");
                       onChange(value);
                       clearErrors("name");
                     }}

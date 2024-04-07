@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert } from "react-native";
 
 import { DEFAULT_MESSAGE, getArtistsGroups } from "../../../api";
@@ -15,26 +15,24 @@ export const useSelectArtistListContent = () => {
 
   const { getQueryData } = useQueryClient();
 
-  const { data, isLoading } = useQuery(
-    "getArtists",
-    async () => {
-      const { data, error } = await getArtistsGroups();
+  const { data, isLoading, isError } = useQuery(["getArtists"], async () => {
+    const { data, error } = await getArtistsGroups();
 
-      if (error !== null) throw error;
+    if (error !== null) throw error;
 
-      return data.map<ArtistsGroups>((group) => {
-        return convertOrigenalToModelForArtistGroup(
-          { ...group, updated_at: "", created_at: "" },
-          group.artists,
-        );
-      });
-    },
-    {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-    },
-  );
+    return data.map<ArtistsGroups>((group) => {
+      return convertOrigenalToModelForArtistGroup(
+        { ...group, updated_at: "", created_at: "" },
+        group.artists,
+      );
+    });
+  });
+
+  useEffect(() => {
+    if (!isError) return;
+
+    Alert.alert(DEFAULT_MESSAGE);
+  }, [isError]);
 
   const searchArtists = () => {
     setPrevSearchText(searchText);
@@ -46,7 +44,7 @@ export const useSelectArtistListContent = () => {
 
   const checkUnselectedOshi = useCallback(
     (artist: Artists) => {
-      const oshis = getQueryData("getOshis");
+      const oshis = getQueryData(["getOshis"]);
       if (!oshis) return true;
 
       const isSelected = oshis.some((oshi) => artist.id === oshi.artist_id);

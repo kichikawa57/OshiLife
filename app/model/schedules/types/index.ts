@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 import { Phantom } from "../../helper";
 import { ProfileId } from "../../profiles";
 import { Database } from "../../../api/schema";
@@ -24,4 +26,22 @@ export type ScheduleForCalendar = Schedules & {
   isTransparent: boolean;
   startWeekIndex: number;
   endWeekIndex: number;
+};
+
+type ScheduleResultData = {
+  date: Dayjs;
+  isToday: boolean;
+  isOtherMonth: boolean;
+  holiday: string | null;
+  isSaturday: boolean;
+  isSunday: boolean;
+  day: string;
+  dateFormat: string;
+  schedules: ScheduleForCalendar[];
+};
+
+export type ScheduleResult = {
+  data: ScheduleResultData[][];
+  year: number;
+  month: number;
 };

@@ -1,47 +1,14 @@
 import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
-import { colors } from "../../../../shared/styles/color";
+import { colors, dateColors } from "../../../../shared/styles/color";
 
 export const StyledHeader = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
   width: 100%;
-  padding: ${getStatusBarHeight() + 5}px 10px 0 5px;
-`;
-
-export const StyledHeaderLeft = styled.View`
-  flex-direction: row;
-  align-items: center;
-`;
-
-export const StyledIcon = styled.TouchableOpacity`
-  width: 28px;
-  height: 28px;
-  border: solid 1px ${colors.borderDark};
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-`;
-
-export const StyledIconRefresh = styled.View`
-  margin-left: 30px;
-`;
-
-export const StyledIconLeft = styled(StyledIcon)`
-  margin-right: 14px;
-`;
-
-export const StyledIconCenter = styled(StyledIcon)`
-  margin-right: 14px;
-`;
-
-export const StyledIconLeftInner = styled.View`
-  margin-left: -3px;
-`;
-
-export const StyledIconRightInner = styled.View`
-  margin-right: -3px;
+  padding: ${getStatusBarHeight() + 5}px 0 0 0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: ${colors.borderDarkSecondary};
 `;
 
 export const StyledHeaderTextWrap = styled.TouchableOpacity`
@@ -49,10 +16,30 @@ export const StyledHeaderTextWrap = styled.TouchableOpacity`
   margin-right: 20px;
 `;
 
-export const StyledText = styled.Text`
-  font-size: 24px;
+export const StyledFilterWrap = styled.View`
+  width: 100%;
+  padding: 0 20px;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
-export const StyledFilterWrap = styled.View`
-  width: auto;
+export const StyledWeekWrap = styled.View`
+  width: 100%;
+  flex-direction: row;
+  padding: 10px 0 0;
+`;
+
+export const StyledWeekText = styled.Text`
+  width: 14.2857%;
+  font-size: 12px;
+  text-align: center;
+  color: ${colors.textDark};
+`;
+
+export const StyledWeekTextForSunday = styled(StyledWeekText)`
+  color: ${dateColors.sunday};
+`;
+
+export const StyledWeekTextForSaturday = styled(StyledWeekText)`
+  color: ${dateColors.saturday};
 `;

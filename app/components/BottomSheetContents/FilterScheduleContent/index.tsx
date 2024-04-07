@@ -9,12 +9,8 @@ import { useQueryClient } from "../../../query";
 import { StyledContent, StyledContentWrap } from "./style";
 
 type Props = {
-  dateType: number;
-  calendarType: number;
   displayedOshis: OshiId[] | null;
   updateDisplayedOshis: (oshiId: OshiId) => void;
-  setDateType: (index: number) => void;
-  setCalendarType: (index: number) => void;
   onPressCancel: () => void;
 };
 
@@ -24,7 +20,7 @@ export const FilterScheduleContent: FC<Props> = ({
   updateDisplayedOshis,
 }) => {
   const { getQueryData } = useQueryClient();
-  const oshis = getQueryData("getOshis");
+  const oshis = getQueryData(["getOshis"]);
 
   return (
     <ContentBase

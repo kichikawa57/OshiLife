@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
 import { DEFAULT_MESSAGE, signin } from "../../api";
@@ -15,8 +15,8 @@ export const useLogin = (rootRoute: RoutingPropsOfRoot<"login">) => {
     },
   });
 
-  const singinMutation = useMutation(
-    async () => {
+  const singinMutation = useMutation({
+    mutationFn: async () => {
       const values = getValues();
       const ValidationError = formValidation(values);
 
@@ -34,19 +34,17 @@ export const useLogin = (rootRoute: RoutingPropsOfRoot<"login">) => {
 
       return data;
     },
-    {
-      onSuccess: (data) => {
-        if (!data) return;
-        rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
-      },
-      onError: () => {
-        Alert.alert("メールアドレス、パスワードのどちらかが間違っています");
-      },
+    onSuccess: (data) => {
+      if (!data) return;
+      rootRoute.navigation.reset({ index: 0, routes: [{ name: "app" }] });
     },
-  );
+    onError: () => {
+      Alert.alert("メールアドレス、パスワードのどちらかが間違っています");
+    },
+  });
 
   return {
-    isLoading: singinMutation.isLoading,
+    isLoading: singinMutation.isPending,
     control,
     clearErrors,
     onPress: singinMutation.mutate,

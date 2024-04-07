@@ -1,4 +1,5 @@
 import { Alert } from "react-native";
+import { useEffect } from "react";
 
 import { useQuery } from "../../query";
 import { getProfile } from "../../api/profile";
@@ -10,8 +11,8 @@ import { convertOrigenalToModelForProfile } from "../../model/profiles";
 export const useProfile = () => {
   const userId = useUserStore((store) => store.userId);
 
-  const { isLoading, data } = useQuery(
-    "getProfile",
+  const { isLoading, data, isError } = useQuery(
+    ["getProfile"],
     async () => {
       const { data, error } = await getProfile(userId);
 
@@ -26,13 +27,15 @@ export const useProfile = () => {
       });
     },
     {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-      cacheTime: getMinutes(30),
       staleTime: getMinutes(5),
     },
   );
+
+  useEffect(() => {
+    if (!isError) return;
+
+    Alert.alert(DEFAULT_MESSAGE);
+  }, [isError]);
 
   return {
     data,

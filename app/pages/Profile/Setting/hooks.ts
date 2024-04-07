@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
 import { signout } from "../../../api/users/signout";
@@ -6,8 +6,8 @@ import { RoutingPropsOfRoot } from "../../../router/types";
 import { DEFAULT_MESSAGE } from "../../../api";
 
 export const useSetting = (rootRoute: RoutingPropsOfRoot<"app">) => {
-  const signoutMutation = useMutation(
-    async () => {
+  const signoutMutation = useMutation({
+    mutationFn: async () => {
       const { error } = await signout();
 
       if (error !== null) throw error;
@@ -21,12 +21,10 @@ export const useSetting = (rootRoute: RoutingPropsOfRoot<"app">) => {
         ],
       });
     },
-    {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
     },
-  );
+  });
 
   return {
     signoutMutation,

@@ -1,5 +1,6 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert } from "react-native";
+import { useEffect } from "react";
 
 import { useUserStore } from "../../store/user";
 import { getOshis, deleteOshi, DEFAULT_MESSAGE } from "../../api";
@@ -12,29 +13,27 @@ export const useOshi = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = useQuery(
-    "getOshis",
-    async () => {
-      const { data, error } = await getOshis(userId);
+  const { data, isLoading, isError, refetch } = useQuery(["getOshis"], async () => {
+    const { data, error } = await getOshis(userId);
 
-      if (error !== null) throw error;
+    if (error !== null) throw error;
 
-      return data.map((oshi) =>
-        convertOrigenalToModelForOshi(
-          { ...oshi, created_at: "", updated_at: "", user_id: userId },
-          oshi.artists,
-        ),
-      );
-    },
-    {
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
-    },
-  );
+    return data.map((oshi) =>
+      convertOrigenalToModelForOshi(
+        { ...oshi, created_at: "", updated_at: "", user_id: userId },
+        oshi.artists,
+      ),
+    );
+  });
 
-  const deleteOshiMutation = useMutation(
-    async (params: { id: OshiId }) => {
+  useEffect(() => {
+    if (!isError) return;
+
+    Alert.alert(DEFAULT_MESSAGE);
+  }, [isError]);
+
+  const deleteOshiMutation = useMutation({
+    mutationFn: async (params: { id: OshiId }) => {
       const { error } = await deleteOshi(params.id);
 
       if (error !== null) throw error;
@@ -49,21 +48,19 @@ export const useOshi = () => {
 
       return params.id;
     },
-    {
-      onSuccess: () => {
-        queryClient.removeQueries("getOshis");
-        queryClient.removeAllQueriesForSchedules();
-        refetch();
-      },
-      onError: () => {
-        Alert.alert(DEFAULT_MESSAGE);
-      },
+    onSuccess: () => {
+      queryClient.removeQueries(["getOshis"]);
+      queryClient.removeAllQueriesForSchedules();
+      refetch();
     },
-  );
+    onError: () => {
+      Alert.alert(DEFAULT_MESSAGE);
+    },
+  });
 
   return {
     isLoading,
-    isLoadingDeletedOshi: deleteOshiMutation.isLoading,
+    isLoadingDeletedOshi: deleteOshiMutation.isPending,
     oshis: data || [],
     onPressDeletedOshiButton: deleteOshiMutation.mutate,
   };
