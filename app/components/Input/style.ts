@@ -8,7 +8,7 @@ export const StyledWrap = styled.View`
 
 export const StyledTitle = styled.Text`
   width: 100%;
-  font-size: 12px;
+  font-size: 16px;
   color: ${colors.textDark};
 `;
 

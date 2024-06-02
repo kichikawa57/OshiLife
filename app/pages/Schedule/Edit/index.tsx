@@ -113,7 +113,7 @@ export const Edit: FC<Props> = ({ scheduleRoute }) => {
                 name={"isPublic"}
                 render={({ field: { value, onChange } }) => (
                   <SwitchList
-                    text="このスケジュールを他のユーザーに共有する"
+                    text="みんなのためにこの予定を共有しますか"
                     switchProps={{
                       value,
                       onChange: () => {

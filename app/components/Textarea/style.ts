@@ -14,6 +14,6 @@ export const StyledTitle = styled.Text`
   width: 100%;
   padding: 0 10px;
   margin-bottom: 20px;
-  font-size: 12px;
+  font-size: 16px;
   color: ${colors.textDark};
 `;

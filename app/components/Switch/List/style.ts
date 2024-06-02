@@ -10,6 +10,6 @@ export const StyledWrap = styled.View`
 `;
 
 export const StyledText = styled.Text`
-  font-size: 14px;
+  font-size: 16px;
   color: ${colors.textDark};
 `;
