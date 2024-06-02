@@ -72,6 +72,7 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
             ) : (
               <FlatList
                 ref={flatListRef}
+                initialNumToRender={schedules.length}
                 data={schedules ?? []}
                 keyExtractor={(item) => `${item.year}${item.month}`}
                 renderItem={({ item }) => (
@@ -82,19 +83,18 @@ export const Schedule: FC<Props> = ({ scheduleRoute }) => {
                   />
                 )}
                 onContentSizeChange={async () => {
-                  const today = dayjs();
+                  if (flatListRef.current && !isFirstRender) {
+                    const moveIndex = schedules.findIndex(
+                      (schedule) =>
+                        schedule.year === currentDate.year() &&
+                        schedule.month === currentDate.month(),
+                    );
 
-                  if (
-                    flatListRef.current &&
-                    today.year() === currentDate.year() &&
-                    !isFirstRender
-                  ) {
-                    console.log("発火");
                     setIsFirstRender(true);
                     await sleep(500);
                     flatListRef.current.scrollToIndex({
                       animated: false,
-                      index: currentDate.month(),
+                      index: moveIndex,
                     });
                   }
                 }}

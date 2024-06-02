@@ -60,7 +60,7 @@ const CalendarComponent: FC<Props> = ({ scheduleData, displayedOshis, onPressDat
       const week = weekData.map((dayData, dateIndex) => {
         return (
           <Fragment key={`${datesIndex}-${dateIndex}`}>
-            {dayData.isToday && (
+            {!dayData.isOtherMonth && dayData.isToday && (
               <View
                 style={{
                   position: "absolute",
@@ -204,7 +204,6 @@ const CalendarComponent: FC<Props> = ({ scheduleData, displayedOshis, onPressDat
     <View
       style={{
         width: "100%",
-        marginBottom: 20,
       }}
     >
       <Text
@@ -213,9 +212,10 @@ const CalendarComponent: FC<Props> = ({ scheduleData, displayedOshis, onPressDat
           paddingLeft: 10,
           paddingRight: 10,
           paddingBottom: 20,
+          paddingTop: 20,
         }}
       >
-        {currentMonth + 1}月
+        {`${scheduleData.year}年${currentMonth + 1}月`}
       </Text>
       <View
         style={{
